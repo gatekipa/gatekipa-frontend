@@ -1,0 +1,120 @@
+import { z } from "zod";
+import { Button } from "../../../ui/button";
+import {
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  Card,
+} from "../../../ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "../../../ui/form";
+import { Label } from "../../../ui/label";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAppDispatch } from "../../../../app/hooks";
+import React, { useCallback } from "react";
+import { toast } from "sonner";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "../../../ui/input-otp";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { verifyTokenThunk } from "../../../../app/features/auth/thunk";
+
+const verifyTokenFormSchema = z.object({
+  token: z.string(),
+});
+
+export type IVerifyTokenForm = z.infer<typeof verifyTokenFormSchema>;
+
+const VerifyTokenForm: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { tempTokenId } = useParams<{ tempTokenId: string }>();
+  const navigate = useNavigate();
+
+  const form = useForm<IVerifyTokenForm>({
+    resolver: zodResolver(verifyTokenFormSchema),
+    defaultValues: {
+      token: "",
+    },
+  });
+
+  const onSubmit = useCallback(
+    async (values: IVerifyTokenForm) => {
+      try {
+        await dispatch(
+          verifyTokenThunk({ token: values.token, tempTokenId: tempTokenId! })
+        ).unwrap();
+
+        toast.success("Please Check Your Email to Reset Password.");
+        form.reset();
+        navigate("/auth/update-password");
+      } catch (error: any) {
+        toast.error(error);
+      }
+    },
+    [tempTokenId]
+  );
+
+  return (
+    <div className="h-full flex flex-col justify-around items-center md:mt-40">
+      <Card className="w-[350px] md:w-[600px]">
+        <CardHeader className="space-y-2">
+          <CardTitle>Verify Token</CardTitle>
+          <CardDescription>
+            Please enter the token sent to your email to reset your password.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="grid w-full items-center gap-4">
+                <div className="flex flex-col space-y-1.5">
+                  <FormField
+                    control={form.control}
+                    name="token"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Label id="token">Token</Label>
+                        <FormControl>
+                          <InputOTP maxLength={6} {...field}>
+                            <InputOTPGroup className="w-3/4">
+                              <InputOTPSlot index={0} className="w-1/2" />
+                              <InputOTPSlot index={1} className="w-1/2" />
+                              <InputOTPSlot index={2} className="w-1/2" />
+                              <InputOTPSlot index={3} className="w-1/2" />
+                              <InputOTPSlot index={4} className="w-1/2" />
+                              <InputOTPSlot index={5} className="w-1/2" />
+                            </InputOTPGroup>
+                          </InputOTP>
+                        </FormControl>
+                        <FormMessage className="text-xs" />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <Button type="submit" className="w-full">
+                  Submit
+                </Button>
+                <p className="text-xs">
+                  Back to{" "}
+                  <Link
+                    to="/auth/login"
+                    className="underline underline-offset-4 font-semibold transition-opacity hover:opacity-75"
+                  >
+                    Login
+                  </Link>
+                </p>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default VerifyTokenForm;
