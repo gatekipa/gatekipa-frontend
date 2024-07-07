@@ -50,7 +50,7 @@ const router = createBrowserRouter([
         element: <UpdatePasswordPage />,
       },
       {
-        path: "verify-token/:tempTokenId",
+        path: "verify-token",
         element: <VerifyTokenPage />,
       },
     ],

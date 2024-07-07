@@ -2,7 +2,6 @@ import { createAsyncThunk, AsyncThunk } from "@reduxjs/toolkit";
 import NetworkManager from "../../../api";
 import AuthNetworkManager from "../../../api/auth";
 import { IChangePasswordForm } from "../../../components/features/auth/changePasswordForm";
-import { string } from "zod";
 import { AxiosError } from "axios";
 
 export interface IBaseResponse<T> {
@@ -32,7 +31,7 @@ interface IForgotPasswordRequest {
 
 interface IVerifyTokenRequest {
   token: string;
-  tempTokenId: string;
+  email: string;
 }
 
 interface IUpdatePasswordRequest {
@@ -45,16 +44,13 @@ const registerUserThunk: AsyncThunk<
   IBaseResponse<IUser>,
   IUserRequest,
   {}
-> = createAsyncThunk(
-  "users/register",
-  async (userDetails: IUserRequest, thunkAPI) => {
-    const response = await NetworkManager.post<
-      IBaseResponse<IUser>,
-      IUserRequest
-    >(`/users/signup`, userDetails);
-    return response.data;
-  }
-);
+> = createAsyncThunk("users/register", async (userDetails: IUserRequest) => {
+  const response = await NetworkManager.post<
+    IBaseResponse<IUser>,
+    IUserRequest
+  >(`/users/signup`, userDetails);
+  return response.data;
+});
 
 const loginThunk: AsyncThunk<IUser, ILoginRequest, {}> = createAsyncThunk(
   "users/login",
@@ -86,7 +82,7 @@ const changePasswordThunk: AsyncThunk<
   {}
 > = createAsyncThunk(
   "users/change-password",
-  async (loginDetails: IChangePasswordForm, thunkAPI) => {
+  async (loginDetails: IChangePasswordForm) => {
     const response = await NetworkManager.post<
       IBaseResponse<IUser>,
       IChangePasswordForm

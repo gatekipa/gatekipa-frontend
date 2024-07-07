@@ -17,12 +17,15 @@ import {
 import { Label } from "../../../ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAppDispatch } from "../../../../app/hooks";
-import React, { useCallback } from "react";
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
+import React, { useCallback, useState, useEffect } from "react";
 import { toast } from "sonner";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "../../../ui/input-otp";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { verifyTokenThunk } from "../../../../app/features/auth/thunk";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  forgotPasswordThunk,
+  verifyTokenThunk,
+} from "../../../../app/features/auth/thunk";
 
 const verifyTokenFormSchema = z.object({
   token: z.string(),
@@ -32,32 +35,72 @@ export type IVerifyTokenForm = z.infer<typeof verifyTokenFormSchema>;
 
 const VerifyTokenForm: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { tempTokenId } = useParams<{ tempTokenId: string }>();
   const navigate = useNavigate();
+  const { forgotPasswordUserEmail } = useAppSelector((state) => state.auth);
 
   const form = useForm<IVerifyTokenForm>({
     resolver: zodResolver(verifyTokenFormSchema),
     defaultValues: {
       token: "",
     },
+    mode: "onChange",
   });
 
-  const onSubmit = useCallback(
-    async (values: IVerifyTokenForm) => {
-      try {
-        await dispatch(
-          verifyTokenThunk({ token: values.token, tempTokenId: tempTokenId! })
-        ).unwrap();
+  useEffect(() => {
+    if (!forgotPasswordUserEmail) {
+      navigate("/auth/forgot-password");
+    }
+  }, []);
 
-        toast.success("Please Check Your Email to Reset Password.");
-        form.reset();
-        navigate("/auth/update-password");
-      } catch (error: any) {
-        toast.error(error);
-      }
-    },
-    [tempTokenId]
-  );
+  const [countdown, setCountdown] = useState<number>(10);
+  const [shouldStartCountdown, setShouldStartCountdown] =
+    useState<boolean>(false);
+
+  const onSubmit = useCallback(async (values: IVerifyTokenForm) => {
+    try {
+      await dispatch(
+        verifyTokenThunk({
+          token: values.token,
+          email: forgotPasswordUserEmail!,
+        })
+      ).unwrap();
+
+      toast.success("Please Check Your Email to Reset Password.");
+      form.reset();
+      navigate("/auth/update-password");
+    } catch (error: any) {
+      toast.error(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      setCountdown((prevCountdown) => {
+        if (prevCountdown > 0) {
+          return prevCountdown - 1;
+        } else {
+          clearInterval(timerId);
+          return 0;
+        }
+      });
+    }, 1000);
+    return () => clearInterval(timerId);
+  }, [shouldStartCountdown]);
+
+  const onResendEmailHandler = useCallback(async () => {
+    try {
+      await dispatch(
+        forgotPasswordThunk({ emailAddress: forgotPasswordUserEmail! })
+      ).unwrap();
+
+      setCountdown(10);
+      setShouldStartCountdown(true);
+
+      toast.success("Please Check Your Email to Reset Password.");
+    } catch (error: any) {
+      toast.error(error);
+    }
+  }, [shouldStartCountdown]);
 
   return (
     <div className="h-full flex flex-col justify-around items-center md:mt-40">
@@ -81,7 +124,7 @@ const VerifyTokenForm: React.FC = () => {
                         <Label id="token">Token</Label>
                         <FormControl>
                           <InputOTP maxLength={6} {...field}>
-                            <InputOTPGroup className="w-3/4">
+                            <InputOTPGroup className="w-full">
                               <InputOTPSlot index={0} className="w-1/2" />
                               <InputOTPSlot index={1} className="w-1/2" />
                               <InputOTPSlot index={2} className="w-1/2" />
@@ -96,18 +139,34 @@ const VerifyTokenForm: React.FC = () => {
                     )}
                   />
                 </div>
-                <Button type="submit" className="w-full">
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={!form.formState.isValid}
+                >
                   Submit
                 </Button>
-                <p className="text-xs">
-                  Back to{" "}
-                  <Link
-                    to="/auth/login"
-                    className="underline underline-offset-4 font-semibold transition-opacity hover:opacity-75"
-                  >
-                    Login
-                  </Link>
-                </p>
+                <div className="flex justify-between items-center">
+                  <p className="text-xs">
+                    Back to{" "}
+                    <Link
+                      to="/auth/login"
+                      className="underline underline-offset-4 font-semibold transition-opacity hover:opacity-75"
+                    >
+                      Login
+                    </Link>
+                  </p>
+                  {!countdown ? (
+                    <p
+                      className="text-xs transition-opacity cursor-pointer hover:opacity-75 underline underline-offset-4"
+                      onClick={onResendEmailHandler}
+                    >
+                      Resend Token
+                    </p>
+                  ) : (
+                    <div className="text-xs">Resend ({countdown})s</div>
+                  )}
+                </div>
               </div>
             </form>
           </Form>

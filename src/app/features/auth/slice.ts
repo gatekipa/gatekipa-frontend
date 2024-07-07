@@ -13,6 +13,7 @@ import {
 export interface AuthState {
   user?: IUser | null;
   loading: boolean;
+  forgotPasswordUserEmail?: string | null;
   resetPasswordCredentials: { token: string; email: string };
 }
 
@@ -28,6 +29,9 @@ export const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.user = null;
+    },
+    setForgotPasswordUserEmail: (state, action: PayloadAction<string>) => {
+      state.forgotPasswordUserEmail = action.payload;
     },
   },
   extraReducers(builder) {
@@ -103,6 +107,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, setForgotPasswordUserEmail } = authSlice.actions;
 
 export default authSlice.reducer;

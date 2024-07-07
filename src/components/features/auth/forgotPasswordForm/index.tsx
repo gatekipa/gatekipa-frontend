@@ -20,9 +20,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../../../ui/button";
 import { useAppDispatch } from "../../../../app/hooks";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Label } from "../../../ui/label";
 import { forgotPasswordThunk } from "../../../../app/features/auth/thunk";
+import { setForgotPasswordUserEmail } from "@/app/features/auth/slice";
 
 const forgotPasswordFormSchema = z.object({
   email: z.string().email(),
@@ -40,14 +41,20 @@ const ForgotPasswordForm: React.FC = () => {
     },
   });
 
+  const navigate = useNavigate();
+
   const onSubmit = useCallback(async (values: IForgotPasswordForm) => {
     try {
       await dispatch(
         forgotPasswordThunk({ emailAddress: values.email })
       ).unwrap();
 
+      dispatch(setForgotPasswordUserEmail(values.email));
+
       toast.success("Please Check Your Email to Reset Password.");
       form.reset();
+
+      navigate("/auth/verify-token");
     } catch (error: any) {
       toast.error(error);
     }
