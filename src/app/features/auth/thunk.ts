@@ -44,13 +44,29 @@ const registerUserThunk: AsyncThunk<
   IBaseResponse<IUser>,
   IUserRequest,
   {}
-> = createAsyncThunk("users/register", async (userDetails: IUserRequest) => {
-  const response = await NetworkManager.post<
-    IBaseResponse<IUser>,
-    IUserRequest
-  >(`/users/signup`, userDetails);
-  return response.data;
-});
+> = createAsyncThunk(
+  "users/register",
+  async (userDetails: IUserRequest, thunkAPI) => {
+    try {
+      const response = await NetworkManager.post<
+        IBaseResponse<IUser>,
+        IUserRequest
+      >(`/users/signup`, userDetails);
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
 
 const loginThunk: AsyncThunk<IUser, ILoginRequest, {}> = createAsyncThunk(
   "users/login",
