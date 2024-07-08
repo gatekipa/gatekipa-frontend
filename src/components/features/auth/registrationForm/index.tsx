@@ -49,11 +49,15 @@ const RegistrationForm: React.FC = () => {
     },
   });
 
-  const onSubmit = useCallback((values: IRegistrationForm) => {
-    dispatch(registerUserThunk(values));
-    toast.success("Registration Successfull");
-    form.reset();
-    navigate("/auth/login");
+  const onSubmit = useCallback(async (values: IRegistrationForm) => {
+    try {
+      await dispatch(registerUserThunk(values)).unwrap();
+      toast.success("Registration Successfull");
+      form.reset();
+      navigate("/auth/login");
+    } catch (err) {
+      toast.error(err as string);
+    }
   }, []);
 
   return (
