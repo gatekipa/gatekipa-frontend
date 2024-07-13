@@ -19,6 +19,11 @@ const routes: Route[] = [
     icon: <User2Icon size={18} />,
   },
   {
+    label: "Visitors",
+    href: "/dashboard/visitors",
+    icon: <User2Icon size={18} />,
+  },
+  {
     label: "Change Password",
     href: "/dashboard/change-password",
     icon: <EyeIcon size={18} />,

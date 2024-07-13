@@ -9,6 +9,7 @@ import ForgotPasswordPage from "../pages/auth/forgotPassword";
 import VerifyTokenPage from "../pages/auth/verifyToken";
 import UpdatePasswordPage from "../pages/auth/updatePassword";
 import HomePage from "../pages/home";
+import VisitorsPage from "@/pages/dashboard/visitors";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "change-password",
         element: <ChangePasswordPage />,
+      },
+      {
+        path: "visitors",
+        element: <VisitorsPage />,
       },
     ],
   },
