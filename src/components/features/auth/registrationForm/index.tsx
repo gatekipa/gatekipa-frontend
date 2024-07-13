@@ -1,6 +1,18 @@
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { z } from "zod";
+import { registerUserThunk } from "../../../../app/features/auth/thunk";
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { Button } from "../../../ui/button";
 import {
   Card,
@@ -18,18 +30,20 @@ import {
   FormMessage,
 } from "../../../ui/form";
 import { Input } from "../../../ui/input";
-import { useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../../../app/hooks";
-import { registerUserThunk } from "../../../../app/features/auth/thunk";
-import { toast } from "sonner";
+
+enum UserType {
+  VISITOR = "VISITOR",
+  EMPLOYEE = "EMPLOYEE",
+}
 
 const registrationFormSchema = z.object({
   firstName: z.string().min(3),
   lastName: z.string().min(3),
+  companyId: z.string().min(3),
   emailAddress: z.string().email(),
   password: z.string().min(8),
   mobileNo: z.string().min(10),
+  userType: z.nativeEnum(UserType),
 });
 
 type IRegistrationForm = z.infer<typeof registrationFormSchema>;
@@ -38,14 +52,18 @@ const RegistrationForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const { companies } = useAppSelector((state) => state.company);
+
   const form = useForm<IRegistrationForm>({
     resolver: zodResolver(registrationFormSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
+      companyId: "",
       emailAddress: "",
       password: "",
       mobileNo: "",
+      userType: UserType.EMPLOYEE,
     },
   });
 
@@ -131,6 +149,61 @@ const RegistrationForm: React.FC = () => {
                           {...field}
                         />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <FormField
+                  control={form.control}
+                  name="companyId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Company</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0">
+                            <SelectValue placeholder="Please select your company" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {companies.map((company) => (
+                            <SelectItem key={company.id} value={company.id}>
+                              {company.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <FormField
+                  control={form.control}
+                  name="userType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>User Type</FormLabel>
+                      <Select onValueChange={field.onChange}>
+                        <FormControl>
+                          <SelectTrigger className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0">
+                            <SelectValue placeholder="Please select your user type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {Object.values(UserType).map((userType) => (
+                            <SelectItem key={userType} value={userType}>
+                              {userType}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
