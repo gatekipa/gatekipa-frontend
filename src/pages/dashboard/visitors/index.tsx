@@ -2,8 +2,10 @@ import { fetchVisitorsThunk, IVisitor } from "@/app/features/company/thunk";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import VisitorToolbar from "@/components/features/visitors/toolbar";
 import PaginatedTable from "@/components/shared/paginatedTable";
+import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const columns: ColumnDef<IVisitor>[] = [
   {
@@ -28,6 +30,19 @@ const columns: ColumnDef<IVisitor>[] = [
     cell: ({ getValue }) => {
       const createdAt = getValue() as Date;
       return <span>{new Date(createdAt).toLocaleString()}</span>;
+    },
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      const visitor = row.original;
+      return (
+        <div className="flex gap-2">
+          <Link to={`/dashboard/visits/${visitor.id}`}>Visits</Link>
+          <Button>Create Visit</Button>
+        </div>
+      );
     },
   },
 ];
