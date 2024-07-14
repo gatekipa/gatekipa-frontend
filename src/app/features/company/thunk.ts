@@ -23,6 +23,22 @@ export interface IVisitor {
   updatedAt: string;
 }
 
+export interface IVisit {
+  visitorId: string;
+  employeeId: string | null;
+  purposeOfVisit: string;
+  personToMeet: string;
+  personToMeetMobileNo: string;
+  personToMeetEmail: string;
+  checkInTime: string;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+  updatedBy: string;
+  checkoutTime: string;
+  id: string;
+}
+
 const fetchCompanyThunk: AsyncThunk<ICompany[], void, {}> = createAsyncThunk(
   "company/",
   async (_, thunkAPI) => {
@@ -94,4 +110,30 @@ const addVisitorThunk: AsyncThunk<IVisitor, IVisitorForm, {}> =
     }
   );
 
-export { fetchCompanyThunk, fetchVisitorsThunk, addVisitorThunk };
+const fetchVisitsThunk: AsyncThunk<IVisit[], { visitorId: string }, {}> =
+  createAsyncThunk("company/visits", async ({ visitorId }, thunkAPI) => {
+    try {
+      const response = await NetworkManager.get<IBaseResponse<IVisit[]>>(
+        `/visits/${visitorId}`
+      );
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  });
+
+export {
+  fetchCompanyThunk,
+  fetchVisitorsThunk,
+  addVisitorThunk,
+  fetchVisitsThunk,
+};
