@@ -2,6 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import {
   ICompany,
   IVisitor,
+  addVisitorThunk,
   fetchCompanyThunk,
   fetchVisitorsThunk,
 } from "./thunk";
@@ -47,6 +48,19 @@ export const companySlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchVisitorsThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      addVisitorThunk.fulfilled,
+      (state, action: PayloadAction<IVisitor>) => {
+        state.visitors = [...state.visitors, action.payload];
+        state.loading = false;
+      }
+    );
+    builder.addCase(addVisitorThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(addVisitorThunk.rejected, (state) => {
       state.loading = false;
     });
   },

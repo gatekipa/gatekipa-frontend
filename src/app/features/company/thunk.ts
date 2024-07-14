@@ -2,6 +2,7 @@ import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
 import { IBaseResponse } from "../auth/thunk";
 import NetworkManager from "@/api";
 import { AxiosError } from "axios";
+import { IVisitorForm } from "@/components/features/visitors/toolbar";
 
 export interface ICompany {
   id: string;
@@ -68,4 +69,29 @@ const fetchVisitorsThunk: AsyncThunk<IVisitor[], void, {}> = createAsyncThunk(
   }
 );
 
-export { fetchCompanyThunk, fetchVisitorsThunk };
+const addVisitorThunk: AsyncThunk<IVisitor, IVisitorForm, {}> =
+  createAsyncThunk(
+    "company/visitors/create",
+    async (payload: IVisitorForm, thunkAPI) => {
+      try {
+        const response = await NetworkManager.post<
+          IBaseResponse<IVisitor>,
+          IVisitorForm
+        >(`/visitor/create`, payload);
+        return response.data.data;
+      } catch (error) {
+        const axiosError = error as AxiosError<{ message: string }>;
+        if (
+          axiosError.response &&
+          axiosError.response.data &&
+          axiosError.response.data.message
+        ) {
+          return thunkAPI.rejectWithValue(axiosError.response.data.message);
+        } else {
+          return thunkAPI.rejectWithValue("An unexpected error occurred");
+        }
+      }
+    }
+  );
+
+export { fetchCompanyThunk, fetchVisitorsThunk, addVisitorThunk };
