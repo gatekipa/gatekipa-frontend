@@ -3,6 +3,7 @@ import {
   ICompany,
   IVisit,
   IVisitor,
+  addNewVisitThunk,
   addVisitorThunk,
   fetchCompanyThunk,
   fetchVisitorsThunk,
@@ -78,6 +79,19 @@ export const companySlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchVisitsThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      addNewVisitThunk.fulfilled,
+      (state, action: PayloadAction<IVisit>) => {
+        state.visits = [...state.visits, action.payload];
+        state.loading = false;
+      }
+    );
+    builder.addCase(addNewVisitThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(addNewVisitThunk.rejected, (state) => {
       state.loading = false;
     });
   },

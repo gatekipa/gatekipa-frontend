@@ -57,7 +57,7 @@ const VisitsPage: React.FC = () => {
           Visits Page
         </h1>
         <div>
-          <VisitsToolbar />
+          <VisitsToolbar visitorId={visitorId!} />
         </div>
       </div>
       <div>
