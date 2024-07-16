@@ -6,7 +6,6 @@ import ConfirmModal, {
 } from "@/components/features/visits/confirmModal";
 import VisitsToolbar from "@/components/features/visits/toolbar";
 import PaginatedTable from "@/components/shared/paginatedTable";
-import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowLeft } from "lucide-react";
 import React, { useEffect } from "react";

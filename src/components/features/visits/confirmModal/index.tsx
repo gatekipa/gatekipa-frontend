@@ -1,4 +1,5 @@
-import { IVisit } from "@/app/features/company/thunk";
+import { IVisit, markVisitThunk } from "@/app/features/company/thunk";
+import { useAppDispatch } from "@/app/hooks";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,7 +12,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useCallback } from "react";
+import { toast } from "sonner";
 
 export enum ModalType {
   CHECK_IN = "check-in",
@@ -25,6 +27,16 @@ type ConfirmModalProps = {
 };
 
 const ConfirmModal: React.FC<ConfirmModalProps> = ({ label, type, visit }) => {
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = useCallback(async () => {
+    try {
+      await dispatch(markVisitThunk({ visitId: visit.id })).unwrap();
+      toast.success("Visit marked successfully");
+    } catch (error) {
+      toast.error(error as string);
+    }
+  }, []);
   return (
     <AlertDialog>
       <AlertDialogTrigger>
@@ -36,13 +48,13 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ label, type, visit }) => {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            This action cannot be undone. This will mark the check action that
+            you have performed.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={handleSubmit}>Submit</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
