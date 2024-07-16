@@ -1,5 +1,5 @@
 import { addNewVisitThunk } from "@/app/features/company/thunk";
-import { useAppDispatch } from "@/app/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -38,7 +38,7 @@ import {
   EnvelopeOpenIcon,
 } from "@radix-ui/react-icons";
 import { Label } from "@radix-ui/react-label";
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -58,20 +58,9 @@ type IVisitsToolbarProps = {
   visitorId: string;
 };
 
-const languages = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
-] as const;
-
 const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
   const dispatch = useAppDispatch();
+  const { employees } = useAppSelector((state) => state.employee);
 
   const form = useForm<IVisitForm>({
     resolver: zodResolver(visitFormSchema),
@@ -95,6 +84,14 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
     }
   }, []);
 
+  const transformedEmployees = useMemo(
+    () =>
+      employees.map((employee) => ({
+        label: `${employee.firstName} ${employee.lastName}`,
+        value: employee.id,
+      })),
+    [employees]
+  );
   return (
     <div>
       <Dialog>
@@ -129,11 +126,11 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
                                   )}
                                 >
                                   {field.value
-                                    ? languages.find(
-                                        (language) =>
-                                          language.value === field.value
-                                      )?.label
-                                    : "Select language"}
+                                    ? transformedEmployees.find(
+                                        (employee) =>
+                                          employee.value === field.value
+                                      )?.value
+                                    : "Select Employee"}
                                   <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                 </Button>
                               </FormControl>
@@ -141,30 +138,30 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
                             <PopoverContent className="w-[200px] p-0">
                               <Command>
                                 <CommandInput
-                                  placeholder="Search framework..."
+                                  placeholder="Search employee..."
                                   className="h-9"
                                 />
                                 <CommandList>
                                   <CommandEmpty>
-                                    No framework found.
+                                    No employees found.
                                   </CommandEmpty>
                                   <CommandGroup>
-                                    {languages.map((language) => (
+                                    {transformedEmployees.map((employee) => (
                                       <CommandItem
-                                        value={language.label}
-                                        key={language.value}
+                                        value={employee.value}
+                                        key={employee.value}
                                         onSelect={() => {
                                           form.setValue(
                                             "employeeId",
-                                            language.value
+                                            employee.value
                                           );
                                         }}
                                       >
-                                        {language.label}
+                                        {employee.value}
                                         <CheckIcon
                                           className={cn(
                                             "ml-auto h-4 w-4",
-                                            language.value === field.value
+                                            employee.value === field.value
                                               ? "opacity-100"
                                               : "opacity-0"
                                           )}

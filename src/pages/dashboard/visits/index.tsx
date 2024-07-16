@@ -1,10 +1,10 @@
 import { fetchVisitsThunk, IVisit } from "@/app/features/company/thunk";
+import { fetchEmployeesThunk } from "@/app/features/employee/thunk";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import VisitsToolbar from "@/components/features/visits/toolbar";
 import PaginatedTable from "@/components/shared/paginatedTable";
-import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowBigLeft, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -45,6 +45,7 @@ const VisitsPage: React.FC = () => {
     if (!visitorId) return;
 
     dispatch(fetchVisitsThunk({ visitorId: visitorId! }));
+    dispatch(fetchEmployeesThunk());
   }, [visitorId]);
 
   return (
