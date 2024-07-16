@@ -58,6 +58,7 @@ type IVisitsToolbarProps = {
 const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
   const dispatch = useAppDispatch();
   const { employees } = useAppSelector((state) => state.employee);
+  const { user } = useAppSelector((state) => state.auth);
 
   const form = useForm<IVisitForm>({
     resolver: zodResolver(visitFormSchema),
@@ -273,31 +274,33 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
                     />
                   </div>
 
-                  <div className="flex items-center">
-                    <FormField
-                      control={form.control}
-                      name="checkInWithVisitCreation"
-                      render={({ field }) => (
-                        <FormItem className="space-x-2">
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
+                  {user?.userType !== "VISITOR" && (
+                    <div className="flex items-center">
+                      <FormField
+                        control={form.control}
+                        name="checkInWithVisitCreation"
+                        render={({ field }) => (
+                          <FormItem className="space-x-2">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                                id="checkInWithVisitCreation"
+                                className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                              />
+                            </FormControl>
+                            <Label
                               id="checkInWithVisitCreation"
-                              className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                            />
-                          </FormControl>
-                          <Label
-                            id="checkInWithVisitCreation"
-                            className="text-sm align-top"
-                          >
-                            With Check In
-                          </Label>
-                          <FormMessage className="text-xs" />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                              className="text-sm align-top"
+                            >
+                              With Check In
+                            </Label>
+                            <FormMessage className="text-xs" />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
                 </div>
                 <div className="mt-4">
                   <Button className="w-full" type="submit">
