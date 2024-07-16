@@ -43,16 +43,20 @@ const columns: ColumnDef<IVisit>[] = [
       const visit = row.original;
       return (
         <div className="flex items-center gap-2">
-          <ConfirmModal
-            label="Check In"
-            type={ModalType.CHECK_IN}
-            visit={visit}
-          />
-          <ConfirmModal
-            label="Check Out"
-            type={ModalType.CHECK_OUT}
-            visit={visit}
-          />
+          {!visit.checkInTime && (
+            <ConfirmModal
+              label="Check In"
+              type={ModalType.CHECK_IN}
+              visit={visit}
+            />
+          )}
+          {!visit.checkoutTime && (
+            <ConfirmModal
+              label="Check Out"
+              type={ModalType.CHECK_OUT}
+              visit={visit}
+            />
+          )}
         </div>
       );
     },

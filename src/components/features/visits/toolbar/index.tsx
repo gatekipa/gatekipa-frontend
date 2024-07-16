@@ -119,7 +119,7 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
                                   variant="outline"
                                   role="combobox"
                                   className={cn(
-                                    "w-full justify-between",
+                                    "w-full justify-between text-xs",
                                     !field.value && "text-muted-foreground"
                                   )}
                                 >
@@ -137,10 +137,10 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
                               <Command>
                                 <CommandInput
                                   placeholder="Search employee..."
-                                  className="h-9"
+                                  className="h-9 text-xs"
                                 />
                                 <CommandList>
-                                  <CommandEmpty>
+                                  <CommandEmpty className="text-xs">
                                     No employees found.
                                   </CommandEmpty>
                                   <CommandGroup>

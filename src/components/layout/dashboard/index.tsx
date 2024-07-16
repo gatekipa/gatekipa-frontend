@@ -6,6 +6,7 @@ import { adminRoutes, visitorRoutes } from "../../../constants/routes";
 import { Button } from "../../ui/button";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { logout } from "../../../app/features/auth/slice";
+import { getUserInitials, getUsername } from "@/utils";
 
 const DashboardLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -100,13 +101,10 @@ const DashboardLayout: React.FC = () => {
           <div className="flex items-center gap-x-2 pr-6">
             <Avatar>
               <AvatarFallback className="bg-primary text-white">
-                {user?.firstName[0]}
-                {user?.lastName[0]}
+                {getUserInitials()}
               </AvatarFallback>
             </Avatar>
-            <p className="text-sm text-gray-900">
-              {user?.firstName} {user?.lastName}
-            </p>
+            <p className="text-sm text-gray-900">{getUsername()}</p>
           </div>
         </header>
 
