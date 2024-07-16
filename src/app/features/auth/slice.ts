@@ -29,6 +29,7 @@ export const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.user = null;
+      localStorage.removeItem("userInfo");
     },
     setForgotPasswordUserEmail: (state, action: PayloadAction<string>) => {
       state.forgotPasswordUserEmail = action.payload;
@@ -39,6 +40,7 @@ export const authSlice = createSlice({
       loginThunk.fulfilled,
       (state, action: PayloadAction<IUser>) => {
         state.user = action.payload;
+        localStorage.setItem("userInfo", JSON.stringify(action.payload));
         state.loading = false;
       }
     );

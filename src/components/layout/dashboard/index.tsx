@@ -16,10 +16,12 @@ const DashboardLayout: React.FC = () => {
   const user = useAppSelector((state) => state.auth.user);
 
   useEffect(() => {
-    if (!user) {
+    const userInfo = localStorage.getItem("userInfo");
+
+    if (!user && !userInfo) {
       navigate("/auth/login");
     }
-  }, [user, navigate]);
+  }, [user]);
 
   const handleLogout = useCallback(() => {
     dispatch(logout());
