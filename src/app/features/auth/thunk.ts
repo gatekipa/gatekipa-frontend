@@ -22,7 +22,8 @@ export interface IUser {
   employeeId: string | null;
 }
 
-interface IUserRequest extends Omit<IUser, "userType"> {
+interface IUserRequest
+  extends Omit<IUser, "userType" | "id" | "visitorId" | "employeeId"> {
   password: string;
   mobileNo: string;
 }
