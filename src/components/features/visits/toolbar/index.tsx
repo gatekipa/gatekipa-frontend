@@ -1,6 +1,7 @@
 import { addNewVisitThunk } from "@/app/features/company/thunk";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Command,
@@ -32,8 +33,9 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { Label } from "@radix-ui/react-label";
+import { format } from "date-fns";
 import { PlusCircleIcon } from "lucide-react";
 import React, { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
@@ -47,6 +49,7 @@ const visitFormSchema = z.object({
   personToMeetMobileNo: z.string().min(10),
   checkInWithVisitCreation: z.boolean().default(false),
   employeeId: z.string().nullable(),
+  visitDate: z.date(),
 });
 
 export type IVisitForm = z.infer<typeof visitFormSchema>;
@@ -69,6 +72,7 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
       personToMeetMobileNo: "",
       checkInWithVisitCreation: false,
       employeeId: null,
+      visitDate: new Date(),
     },
   });
 
@@ -269,6 +273,55 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
                             />
                           </FormControl>
                           <FormMessage className="text-xs" />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="flex flex-col space-y-1.5">
+                    <FormField
+                      control={form.control}
+                      name="visitDate"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <Label id="visitDate" className="text-sm">
+                            Visit Date
+                          </Label>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant={"outline"}
+                                  className={cn(
+                                    "w-full pl-3 text-left font-normal",
+                                    !field.value && "text-muted-foreground"
+                                  )}
+                                >
+                                  {field.value ? (
+                                    format(field.value, "PPP")
+                                  ) : (
+                                    <span>Pick a date</span>
+                                  )}
+                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto p-0"
+                              align="start"
+                            >
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                disabled={(date) => date < new Date()}
+                                className="text-xs"
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
