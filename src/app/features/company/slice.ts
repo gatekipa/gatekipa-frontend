@@ -8,6 +8,7 @@ import {
   fetchCompanyThunk,
   fetchVisitorsThunk,
   fetchVisitsThunk,
+  markVisitCheckoutThunk,
   markVisitThunk,
 } from "./thunk";
 
@@ -102,6 +103,15 @@ export const companySlice = createSlice({
       state.loading = true;
     });
     builder.addCase(markVisitThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(markVisitCheckoutThunk.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(markVisitCheckoutThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(markVisitCheckoutThunk.rejected, (state) => {
       state.loading = false;
     });
   },

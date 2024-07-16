@@ -49,7 +49,16 @@ const visitFormSchema = z.object({
   personToMeetMobileNo: z.string().min(10),
   checkInWithVisitCreation: z.boolean().default(false),
   employeeId: z.string().nullable(),
-  visitDate: z.date(),
+  visitDate: z.date().refine(
+    (date) => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return date >= today;
+    },
+    {
+      message: "Visit date must be today or in the future",
+    }
+  ),
 });
 
 export type IVisitForm = z.infer<typeof visitFormSchema>;

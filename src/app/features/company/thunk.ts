@@ -182,6 +182,31 @@ const markVisitThunk: AsyncThunk<any, { visitId: string }, {}> =
     }
   });
 
+const markVisitCheckoutThunk: AsyncThunk<any, { visitId: string }, {}> =
+  createAsyncThunk(
+    "company/visits/mark/checkout",
+    async ({ visitId }, thunkAPI) => {
+      try {
+        const response = await NetworkManager.post<IBaseResponse<any>, any>(
+          `/visits/checkout/${visitId}`,
+          {}
+        );
+        return response.data.data;
+      } catch (error) {
+        const axiosError = error as AxiosError<{ message: string }>;
+        if (
+          axiosError.response &&
+          axiosError.response.data &&
+          axiosError.response.data.message
+        ) {
+          return thunkAPI.rejectWithValue(axiosError.response.data.message);
+        } else {
+          return thunkAPI.rejectWithValue("An unexpected error occurred");
+        }
+      }
+    }
+  );
+
 export {
   fetchCompanyThunk,
   fetchVisitorsThunk,
@@ -189,4 +214,5 @@ export {
   fetchVisitsThunk,
   addNewVisitThunk,
   markVisitThunk,
+  markVisitCheckoutThunk,
 };

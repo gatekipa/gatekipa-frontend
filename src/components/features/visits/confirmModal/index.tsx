@@ -1,4 +1,8 @@
-import { IVisit, markVisitThunk } from "@/app/features/company/thunk";
+import {
+  IVisit,
+  markVisitCheckoutThunk,
+  markVisitThunk,
+} from "@/app/features/company/thunk";
 import { useAppDispatch } from "@/app/hooks";
 import {
   AlertDialog,
@@ -31,12 +35,17 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ label, type, visit }) => {
 
   const handleSubmit = useCallback(async () => {
     try {
-      await dispatch(markVisitThunk({ visitId: visit.id })).unwrap();
+      if (type === ModalType.CHECK_IN)
+        await dispatch(markVisitThunk({ visitId: visit.id })).unwrap();
+      else {
+        await dispatch(markVisitCheckoutThunk({ visitId: visit.id })).unwrap();
+      }
       toast.success("Visit marked successfully");
     } catch (error) {
       toast.error(error as string);
     }
-  }, []);
+  }, [type, visit]);
+
   return (
     <AlertDialog>
       <AlertDialogTrigger>
