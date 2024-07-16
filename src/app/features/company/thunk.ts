@@ -1,6 +1,6 @@
 import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
-import { IBaseResponse } from "../auth/thunk";
-import NetworkManager from "@/api";
+// import { IBaseResponse } from "../auth/thunk";
+// import NetworkManager from "@/api";
 import axios, { AxiosError } from "axios";
 import { IVisitorForm } from "@/components/features/visitors/toolbar";
 import { IVisitForm } from "@/components/features/visits/toolbar";
@@ -44,8 +44,15 @@ const fetchCompanyThunk: AsyncThunk<ICompany[], void, {}> = createAsyncThunk(
   "company/",
   async (_, thunkAPI) => {
     try {
-      const response = await NetworkManager.get<IBaseResponse<ICompany[]>>(
-        `/company`
+      // const response = await NetworkManager.get<IBaseResponse<ICompany[]>>(
+      //   `/company`
+      // );
+
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_API_URL}/company`,
+        {
+          withCredentials: true,
+        }
       );
       return response.data.data;
     } catch (error) {
@@ -97,10 +104,17 @@ const addVisitorThunk: AsyncThunk<IVisitor, IVisitorForm, {}> =
     "company/visitors/create",
     async (payload: IVisitorForm, thunkAPI) => {
       try {
-        const response = await NetworkManager.post<
-          IBaseResponse<IVisitor>,
-          IVisitorForm
-        >(`/visitor/create`, payload);
+        // const response = await NetworkManager.post<
+        //   IBaseResponse<IVisitor>,
+        //   IVisitorForm
+        // >(`/visitor/create`, payload);
+        const response = await axios.post(
+          `${import.meta.env.VITE_BASE_API_URL}/visitor/create`,
+          payload,
+          {
+            withCredentials: true,
+          }
+        );
         return response.data.data;
       } catch (error) {
         const axiosError = error as AxiosError<{ message: string }>;
@@ -120,9 +134,17 @@ const addVisitorThunk: AsyncThunk<IVisitor, IVisitorForm, {}> =
 const fetchVisitsThunk: AsyncThunk<IVisit[], { visitorId: string }, {}> =
   createAsyncThunk("company/visits", async ({ visitorId }, thunkAPI) => {
     try {
-      const response = await NetworkManager.get<IBaseResponse<IVisit[]>>(
-        `/visits/${visitorId}`
+      // const response = await NetworkManager.get<IBaseResponse<IVisit[]>>(
+      //   `/visits/${visitorId}`
+      // );
+
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_API_URL}/visits/${visitorId}`,
+        {
+          withCredentials: true,
+        }
       );
+
       return response.data.data;
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
@@ -146,10 +168,19 @@ const addNewVisitThunk: AsyncThunk<
   "company/visits/create",
   async ({ visitorId, payload }, thunkAPI) => {
     try {
-      const response = await NetworkManager.post<
-        IBaseResponse<IVisit>,
-        IVisitForm
-      >(`/visits/${visitorId}`, payload);
+      // const response = await NetworkManager.post<
+      //   IBaseResponse<IVisit>,
+      //   IVisitForm
+      // >(`/visits/${visitorId}`, payload);
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL}/visits/${visitorId}`,
+        payload,
+        {
+          withCredentials: true,
+        }
+      );
+
       return response.data.data;
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
@@ -169,10 +200,19 @@ const addNewVisitThunk: AsyncThunk<
 const markVisitThunk: AsyncThunk<any, { visitId: string }, {}> =
   createAsyncThunk("company/visits/mark", async ({ visitId }, thunkAPI) => {
     try {
-      const response = await NetworkManager.post<IBaseResponse<any>, any>(
-        `/visits/checkin/${visitId}`,
-        {}
+      // const response = await NetworkManager.post<IBaseResponse<any>, any>(
+      //   `/visits/checkin/${visitId}`,
+      //   {}
+      // );
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL}/visits/checkin/${visitId}`,
+        {},
+        {
+          withCredentials: true,
+        }
       );
+
       return response.data.data;
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
@@ -193,9 +233,17 @@ const markVisitCheckoutThunk: AsyncThunk<any, { visitId: string }, {}> =
     "company/visits/mark/checkout",
     async ({ visitId }, thunkAPI) => {
       try {
-        const response = await NetworkManager.post<IBaseResponse<any>, any>(
-          `/visits/checkout/${visitId}`,
-          {}
+        // const response = await NetworkManager.post<IBaseResponse<any>, any>(
+        //   `/visits/checkout/${visitId}`,
+        //   {}
+        // );
+
+        const response = await axios.post(
+          `${import.meta.env.VITE_BASE_API_URL}/visits/checkout/${visitId}}`,
+          {},
+          {
+            withCredentials: true,
+          }
         );
         return response.data.data;
       } catch (error) {

@@ -1,7 +1,7 @@
-import NetworkManager from "@/api";
+// import NetworkManager from "@/api";
 import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
-import { AxiosError } from "axios";
-import { IBaseResponse } from "../auth/thunk";
+import axios, { AxiosError } from "axios";
+// import { IBaseResponse } from "../auth/thunk";
 
 export interface IEmployee {
   id: string;
@@ -23,8 +23,15 @@ const fetchEmployeesThunk: AsyncThunk<IEmployee[], void, {}> = createAsyncThunk(
   "employee/",
   async (_, thunkAPI) => {
     try {
-      const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
-        `/employee`
+      // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
+      //   `/employee`
+      // );
+
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_API_URL}/employee`,
+        {
+          withCredentials: true,
+        }
       );
       return response.data.data;
     } catch (error) {
