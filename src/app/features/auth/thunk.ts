@@ -2,7 +2,7 @@ import { createAsyncThunk, AsyncThunk } from "@reduxjs/toolkit";
 import NetworkManager from "../../../api";
 import AuthNetworkManager from "../../../api/auth";
 import { IChangePasswordForm } from "../../../components/features/auth/changePasswordForm";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 
 export interface IBaseResponse<T> {
   data: T;
@@ -77,9 +77,14 @@ const loginThunk: AsyncThunk<IUser, ILoginRequest, {}> = createAsyncThunk(
   "users/login",
   async (loginDetails: ILoginRequest, thunkAPI) => {
     try {
-      const response = await AuthNetworkManager.post<IUser, ILoginRequest>(
-        `/users/signin`,
-        loginDetails
+      // const response = await AuthNetworkManager.post<IUser, ILoginRequest>(
+      //   `/users/signin`,
+      //   loginDetails
+      // );
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL}/users/signin`,
+        loginDetails,
+        { withCredentials: true }
       );
       return response.data;
     } catch (error) {
