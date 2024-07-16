@@ -32,12 +32,9 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  CaretSortIcon,
-  CheckIcon,
-  EnvelopeOpenIcon,
-} from "@radix-ui/react-icons";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { Label } from "@radix-ui/react-label";
+import { PlusCircleIcon } from "lucide-react";
 import React, { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -96,9 +93,9 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
     <div>
       <Dialog>
         <DialogTrigger>
-          <Button size="sm">
-            <EnvelopeOpenIcon className="mr-2" />
-            Create
+          <Button size="sm" className="text-xs">
+            <PlusCircleIcon size={16} className="mr-2" />
+            Create Visit
           </Button>
         </DialogTrigger>
         <DialogContent>

@@ -1,8 +1,10 @@
 import { fetchVisitorsThunk, IVisitor } from "@/app/features/company/thunk";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import VisitorToolbar from "@/components/features/visitors/toolbar";
+import VisitsToolbar from "@/components/features/visits/toolbar";
 import PaginatedTable from "@/components/shared/paginatedTable";
 import { Button } from "@/components/ui/button";
+import { Link1Icon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -38,9 +40,12 @@ const columns: ColumnDef<IVisitor>[] = [
     cell: ({ row }) => {
       const visitor = row.original;
       return (
-        <div className="flex gap-2">
-          <Link to={`/dashboard/visits/${visitor.id}`}>Visits</Link>
-          <Button>Create Visit</Button>
+        <div className="flex items-center gap-2">
+          <Button size="sm" className="text-xs">
+            <Link1Icon className="mr-2" />
+            <Link to={`/dashboard/visits/${visitor.id}`}>Visits</Link>
+          </Button>
+          <VisitsToolbar visitorId={visitor.id} />
         </div>
       );
     },
