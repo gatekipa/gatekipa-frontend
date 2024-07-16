@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { EnvelopeOpenIcon } from "@radix-ui/react-icons";
+import { PlusCircledIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -61,7 +61,7 @@ const VisitorToolbar: React.FC = () => {
       <Dialog>
         <DialogTrigger>
           <Button size="sm">
-            <EnvelopeOpenIcon className="mr-2" />
+            <PlusCircledIcon className="mr-2" />
             Create
           </Button>
         </DialogTrigger>
