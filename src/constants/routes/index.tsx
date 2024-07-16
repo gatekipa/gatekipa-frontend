@@ -13,11 +13,11 @@ const adminRoutes: Route[] = [
     href: "/dashboard",
     icon: <LayoutDashboardIcon size={18} />,
   },
-  {
-    label: "Profile",
-    href: "/profile",
-    icon: <User2Icon size={18} />,
-  },
+  // {
+  //   label: "Profile",
+  //   href: "/profile",
+  //   icon: <User2Icon size={18} />,
+  // },
   {
     label: "Visitors",
     href: "/dashboard/visitors",
@@ -36,11 +36,11 @@ const visitorRoutes: Route[] = [
     href: "/dashboard",
     icon: <LayoutDashboardIcon size={18} />,
   },
-  {
-    label: "Profile",
-    href: "/profile",
-    icon: <User2Icon size={18} />,
-  },
+  // {
+  //   label: "Profile",
+  //   href: "/profile",
+  //   icon: <User2Icon size={18} />,
+  // },
   {
     label: "Visits",
     href: "/dashboard/visits/:visitorId",
