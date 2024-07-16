@@ -1,8 +1,12 @@
 import { fetchVisitsThunk, IVisit } from "@/app/features/company/thunk";
 import { fetchEmployeesThunk } from "@/app/features/employee/thunk";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import ConfirmModal, {
+  ModalType,
+} from "@/components/features/visits/confirmModal";
 import VisitsToolbar from "@/components/features/visits/toolbar";
 import PaginatedTable from "@/components/shared/paginatedTable";
+import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowLeft } from "lucide-react";
 import React, { useEffect } from "react";
@@ -31,6 +35,27 @@ const columns: ColumnDef<IVisit>[] = [
     cell: ({ getValue }) => {
       const createdAt = getValue() as Date;
       return <span>{new Date(createdAt).toLocaleString()}</span>;
+    },
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      const visit = row.original;
+      return (
+        <div className="flex items-center gap-2">
+          <ConfirmModal
+            label="Check In"
+            type={ModalType.CHECK_IN}
+            visit={visit}
+          />
+          <ConfirmModal
+            label="Check Out"
+            type={ModalType.CHECK_OUT}
+            visit={visit}
+          />
+        </div>
+      );
     },
   },
 ];
