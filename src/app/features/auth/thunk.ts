@@ -12,10 +12,14 @@ export interface IBaseResponse<T> {
 }
 
 export interface IUser {
+  id: string;
   emailAddress: string;
   firstName: string;
   lastName: string;
   userType: string;
+  visitorId: string | null;
+  companyId: string | null;
+  employeeId: string | null;
 }
 
 interface IUserRequest extends Omit<IUser, "userType"> {

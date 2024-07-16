@@ -40,21 +40,29 @@ const VisitsPage: React.FC = () => {
   const { visitorId } = useParams<{ visitorId: string }>();
 
   const { visits } = useAppSelector((state) => state.company);
+  const { user } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!visitorId) return;
+    if (!visitorId && !user?.id) return;
 
-    dispatch(fetchVisitsThunk({ visitorId: visitorId! }));
+    dispatch(
+      fetchVisitsThunk({
+        visitorId: visitorId !== ":visitorId" ? visitorId! : user?.visitorId!,
+      })
+    );
+
     dispatch(fetchEmployeesThunk());
-  }, [visitorId]);
+  }, [user, visitorId]);
 
   return (
     <div>
       <div className="flex items-center justify-between">
         <h1 className="flex items-center gap-x-3 text-xl">
-          <Link to="/dashboard/visitors">
-            <ArrowLeft size={16} />
-          </Link>
+          {user?.userType !== "VISITOR" && (
+            <Link to="/dashboard/visitors">
+              <ArrowLeft size={16} />
+            </Link>
+          )}
           Visits Page
         </h1>
         <div>

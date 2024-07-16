@@ -1,8 +1,8 @@
 import { LogOutIcon, Menu } from "lucide-react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback } from "../../ui/avatar";
-import routes from "../../../constants/routes";
+import { adminRoutes, visitorRoutes } from "../../../constants/routes";
 import { Button } from "../../ui/button";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { logout } from "../../../app/features/auth/slice";
@@ -27,6 +27,11 @@ const DashboardLayout: React.FC = () => {
     dispatch(logout());
     navigate("/auth/login");
   }, []);
+
+  const routes = useMemo(
+    () => (user?.userType === "VISITOR" ? visitorRoutes : adminRoutes),
+    [user]
+  );
 
   return (
     <div className="flex h-screen bg-gray-100">
