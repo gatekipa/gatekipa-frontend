@@ -129,7 +129,7 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
                                     ? transformedEmployees.find(
                                         (employee) =>
                                           employee.value === field.value
-                                      )?.value
+                                      )?.label
                                     : "Select Employee"}
                                   <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                 </Button>
@@ -157,7 +157,7 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
                                           );
                                         }}
                                       >
-                                        {employee.value}
+                                        {employee.label}
                                         <CheckIcon
                                           className={cn(
                                             "ml-auto h-4 w-4",
