@@ -1,7 +1,7 @@
 import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
 import { IBaseResponse } from "../auth/thunk";
 import NetworkManager from "@/api";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { IVisitorForm } from "@/components/features/visitors/toolbar";
 import { IVisitForm } from "@/components/features/visits/toolbar";
 
@@ -67,8 +67,14 @@ const fetchVisitorsThunk: AsyncThunk<IVisitor[], void, {}> = createAsyncThunk(
   "company/visitors",
   async (_, thunkAPI) => {
     try {
-      const response = await NetworkManager.get<IBaseResponse<IVisitor[]>>(
-        `/visitor`
+      // const response = await NetworkManager.get<IBaseResponse<IVisitor[]>>(
+      //   `/visitor`
+      // );
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_API_URL}/visitor`,
+        {
+          withCredentials: true,
+        }
       );
       return response.data.data;
     } catch (error) {
