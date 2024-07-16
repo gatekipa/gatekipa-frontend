@@ -1,6 +1,5 @@
 import axios, { AxiosResponse } from "axios";
 
-axios.defaults.withCredentials = true;
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_BASE_API_URL,
   withCredentials: true,

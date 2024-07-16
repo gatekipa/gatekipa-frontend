@@ -86,7 +86,7 @@ const loginThunk: AsyncThunk<IUser, ILoginRequest, {}> = createAsyncThunk(
         loginDetails,
         { withCredentials: true }
       );
-      console.log("response", response.data);
+
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
