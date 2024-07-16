@@ -1,6 +1,6 @@
 import { createAsyncThunk, AsyncThunk } from "@reduxjs/toolkit";
 import NetworkManager from "../../../api";
-import AuthNetworkManager from "../../../api/auth";
+//import AuthNetworkManager from "../../../api/auth";
 import { IChangePasswordForm } from "../../../components/features/auth/changePasswordForm";
 import axios, { AxiosError } from "axios";
 
