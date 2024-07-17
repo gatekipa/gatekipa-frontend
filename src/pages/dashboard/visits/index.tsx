@@ -29,11 +29,27 @@ const columns: ColumnDef<IVisit>[] = [
     header: "Person to Meet's Mobile",
   },
   {
-    accessorKey: "createdAt",
-    header: "Created At",
+    accessorKey: "checkInTime",
+    header: "Check In Time",
     cell: ({ getValue }) => {
       const createdAt = getValue() as Date;
-      return <span>{new Date(createdAt).toLocaleString()}</span>;
+      return createdAt ? (
+        <span>{new Date(createdAt).toLocaleString()}</span>
+      ) : (
+        <span>-</span>
+      );
+    },
+  },
+  {
+    accessorKey: "checkoutTime",
+    header: "Check Out Time",
+    cell: ({ getValue }) => {
+      const createdAt = getValue() as Date;
+      return createdAt ? (
+        <span>{new Date(createdAt).toLocaleString()}</span>
+      ) : (
+        <span>-</span>
+      );
     },
   },
   {
