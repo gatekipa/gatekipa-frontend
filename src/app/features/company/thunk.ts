@@ -37,6 +37,7 @@ export interface IVisit {
   updatedAt: string;
   updatedBy: string;
   checkoutTime: string;
+  visitDate: string | null;
   id: string;
 }
 

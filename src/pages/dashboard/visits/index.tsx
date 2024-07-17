@@ -29,6 +29,18 @@ const columns: ColumnDef<IVisit>[] = [
     header: "Person to Meet's Mobile",
   },
   {
+    accessorKey: "visitDate",
+    header: "Visit Date",
+    cell: ({ getValue }) => {
+      const createdAt = getValue() as Date;
+      return createdAt ? (
+        <span>{new Date(createdAt).toLocaleString()}</span>
+      ) : (
+        <span>-</span>
+      );
+    },
+  },
+  {
     accessorKey: "checkInTime",
     header: "Check In Time",
     cell: ({ getValue }) => {
@@ -57,9 +69,14 @@ const columns: ColumnDef<IVisit>[] = [
     header: "Actions",
     cell: ({ row }) => {
       const visit = row.original;
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0); // Reset time to midnight for comparison
+
+      const visitCheckInDate = new Date(visit.checkInTime);
+      visitCheckInDate.setHours(0, 0, 0, 0);
       return (
         <div className="flex items-center gap-2">
-          {!visit.checkInTime && (
+          {!visit.checkInTime && visitCheckInDate >= currentDate && (
             <ConfirmModal
               label="Check In"
               type={ModalType.CHECK_IN}
