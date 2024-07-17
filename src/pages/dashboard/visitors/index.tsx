@@ -5,9 +5,10 @@ import VisitorToolbar from "@/components/features/visitors/toolbar";
 import VisitsToolbar from "@/components/features/visits/toolbar";
 import PaginatedTable from "@/components/shared/paginatedTable";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Link1Icon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const columns: ColumnDef<IVisitor>[] = [
@@ -56,12 +57,21 @@ const columns: ColumnDef<IVisitor>[] = [
 const VisitorsPage: React.FC = () => {
   const dispatch = useAppDispatch();
 
+  const [emailSearch, setEmailSearch] = useState("");
+  const [phoneSearch, setPhoneSearch] = useState("");
+
+  const { visitors, loading } = useAppSelector((state) => state.company);
+
   useEffect(() => {
-    dispatch(fetchVisitorsThunk());
+    dispatch(fetchVisitorsThunk({}));
     dispatch(fetchEmployeesThunk());
   }, []);
 
-  const { visitors } = useAppSelector((state) => state.company);
+  const handleSearch = useCallback(() => {
+    dispatch(
+      fetchVisitorsThunk({ email: emailSearch, phoneNumber: phoneSearch })
+    );
+  }, [emailSearch, phoneSearch]);
 
   return (
     <div>
@@ -70,7 +80,24 @@ const VisitorsPage: React.FC = () => {
         <VisitorToolbar />
       </div>
       <div>
-        <PaginatedTable data={visitors} columns={columns} />
+        <div className="flex gap-x-3 my-4">
+          <Input
+            placeholder="Search By Email"
+            value={emailSearch}
+            onChange={(e) => setEmailSearch(e.target.value)}
+          />
+          <Input
+            placeholder="Search By Phone Number"
+            value={phoneSearch}
+            onChange={(e) => setPhoneSearch(e.target.value)}
+          />
+          <Button onClick={handleSearch}>Search</Button>
+        </div>
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          <PaginatedTable data={visitors} columns={columns} />
+        )}
       </div>
     </div>
   );

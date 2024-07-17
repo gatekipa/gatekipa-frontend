@@ -40,6 +40,11 @@ export interface IVisit {
   id: string;
 }
 
+interface FetchVisitorsParams {
+  email?: string;
+  phoneNumber?: string;
+}
+
 const fetchCompanyThunk: AsyncThunk<ICompany[], void, {}> = createAsyncThunk(
   "company/",
   async (_, thunkAPI) => {
@@ -70,15 +75,22 @@ const fetchCompanyThunk: AsyncThunk<ICompany[], void, {}> = createAsyncThunk(
   }
 );
 
-const fetchVisitorsThunk: AsyncThunk<IVisitor[], void, {}> = createAsyncThunk(
-  "company/visitors",
-  async (_, thunkAPI) => {
+const fetchVisitorsThunk: AsyncThunk<IVisitor[], FetchVisitorsParams, {}> =
+  createAsyncThunk("company/visitors", async (params, thunkAPI) => {
     try {
       // const response = await NetworkManager.get<IBaseResponse<IVisitor[]>>(
       //   `/visitor`
       // );
+
+      const queryParams = new URLSearchParams();
+      if (params.email) queryParams.append("emailAddress", params.email);
+      if (params.phoneNumber)
+        queryParams.append("mobileNo", params.phoneNumber);
+
       const response = await axios.get(
-        `${import.meta.env.VITE_BASE_API_URL}/visitor`,
+        `${
+          import.meta.env.VITE_BASE_API_URL
+        }/visitor?${queryParams.toString()}`,
         {
           withCredentials: true,
         }
@@ -96,8 +108,7 @@ const fetchVisitorsThunk: AsyncThunk<IVisitor[], void, {}> = createAsyncThunk(
         return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
-  }
-);
+  });
 
 const addVisitorThunk: AsyncThunk<IVisitor, IVisitorForm, {}> =
   createAsyncThunk(
