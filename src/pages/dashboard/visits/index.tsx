@@ -76,8 +76,8 @@ const columns: ColumnDef<IVisit>[] = [
       visitCheckInDate.setHours(0, 0, 0, 0);
       return (
         <div className="flex items-center gap-2">
-          {!visit.checkInTime && visitCheckInDate >= currentDate && (
-            <ConfirmModal
+          {!visit.checkInTime && (
+            /*visitCheckInDate >= currentDate &&*/ <ConfirmModal
               label="Check In"
               type={ModalType.CHECK_IN}
               visit={visit}
