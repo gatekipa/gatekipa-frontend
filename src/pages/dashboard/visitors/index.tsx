@@ -1,4 +1,5 @@
 import { fetchVisitorsThunk, IVisitor } from "@/app/features/company/thunk";
+import { fetchEmployeesThunk } from "@/app/features/employee/thunk";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import VisitorToolbar from "@/components/features/visitors/toolbar";
 import VisitsToolbar from "@/components/features/visits/toolbar";
@@ -57,6 +58,7 @@ const VisitorsPage: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchVisitorsThunk());
+    dispatch(fetchEmployeesThunk());
   }, []);
 
   const { visitors } = useAppSelector((state) => state.company);

@@ -58,7 +58,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ label, type, visit }) => {
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
             Are you sure you want to{" "}
-            {type === ModalType.CHECK_IN ? "checkin" : "checkout"} the visitor.?
+            {type === ModalType.CHECK_IN ? "checkin" : "checkout"} the visitor?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

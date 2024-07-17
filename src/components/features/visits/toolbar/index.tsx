@@ -33,6 +33,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { getUserRole } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { Label } from "@radix-ui/react-label";
@@ -288,7 +289,7 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
                     />
                   </div>
 
-                  {user?.userType !== "ADMIN" && (
+                  {getUserRole() !== "ADMIN" && (
                     <div className="flex flex-col space-y-1.5">
                       <FormField
                         control={form.control}
@@ -339,7 +340,7 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
                     </div>
                   )}
 
-                  {user?.userType !== "VISITOR" && (
+                  {getUserRole() !== "VISITOR" && (
                     <div className="flex items-center">
                       <FormField
                         control={form.control}
