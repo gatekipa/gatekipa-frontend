@@ -73,6 +73,12 @@ const VisitorsPage: React.FC = () => {
     );
   }, [emailSearch, phoneSearch]);
 
+  const handleReset = useCallback(() => {
+    dispatch(fetchVisitorsThunk({}));
+    setPhoneSearch("");
+    setEmailSearch("");
+  }, []);
+
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -92,6 +98,7 @@ const VisitorsPage: React.FC = () => {
             onChange={(e) => setPhoneSearch(e.target.value)}
           />
           <Button onClick={handleSearch}>Search</Button>
+          <Button onClick={handleReset}>Reset</Button>
         </div>
         {loading ? (
           <div>Loading...</div>
