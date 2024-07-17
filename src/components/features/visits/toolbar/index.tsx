@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/command";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -367,9 +368,11 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
                   )}
                 </div>
                 <div className="mt-4">
-                  <Button className="w-full" type="submit">
-                    Submit
-                  </Button>
+                  <DialogClose>
+                    <Button className="w-full" type="submit">
+                      Submit
+                    </Button>
+                  </DialogClose>
                 </div>
               </form>
             </Form>
