@@ -6,6 +6,7 @@ import VisitsToolbar from "@/components/features/visits/toolbar";
 import PaginatedTable from "@/components/shared/paginatedTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getUserRole } from "@/utils";
 import { Link1Icon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
 import { useCallback, useEffect, useState } from "react";
@@ -43,10 +44,13 @@ const columns: ColumnDef<IVisitor>[] = [
       const visitor = row.original;
       return (
         <div className="flex items-center gap-2">
-          <Button size="sm" className="text-xs">
-            <Link1Icon className="mr-2" />
-            <Link to={`/dashboard/visits/${visitor.id}`}>Visits</Link>
-          </Button>
+          <Link to={`/dashboard/visits/${visitor.id}`}>
+            <Button size="sm" className="text-xs">
+              <Link1Icon className="mr-2" />
+              Visits
+            </Button>
+          </Link>
+
           <VisitsToolbar visitorId={visitor.id} />
         </div>
       );
@@ -82,7 +86,11 @@ const VisitorsPage: React.FC = () => {
   return (
     <div>
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl text-gray-950 font-semibold">Visitors</h2>
+        <h2 className="text-2xl text-gray-950 font-semibold">
+          {getUserRole() === "ADMIN"
+            ? "Visitor Management"
+            : "Visit Management"}
+        </h2>
         <VisitorToolbar />
       </div>
       <div>

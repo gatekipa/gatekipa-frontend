@@ -369,7 +369,13 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
                 </div>
                 <div className="mt-4">
                   <DialogClose className="w-full">
-                    <Button type="submit">Submit</Button>
+                    <Button
+                      type="submit"
+                      className="w-full"
+                      disabled={!form.formState.isValid}
+                    >
+                      Submit
+                    </Button>
                   </DialogClose>
                 </div>
               </form>
