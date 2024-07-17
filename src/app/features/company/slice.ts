@@ -96,18 +96,36 @@ export const companySlice = createSlice({
     builder.addCase(addNewVisitThunk.rejected, (state) => {
       state.loading = false;
     });
-    builder.addCase(markVisitThunk.fulfilled, (state) => {
-      state.loading = false;
-    });
+    builder.addCase(
+      markVisitThunk.fulfilled,
+      (state, action: PayloadAction<string>) => {
+        state.loading = false;
+        const index = state.visits.findIndex(
+          (visit) => visit.id === action.payload
+        );
+        if (index !== -1) {
+          state.visits[index].checkInTime = new Date().toISOString();
+        }
+      }
+    );
     builder.addCase(markVisitThunk.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(markVisitThunk.rejected, (state) => {
       state.loading = false;
     });
-    builder.addCase(markVisitCheckoutThunk.fulfilled, (state) => {
-      state.loading = false;
-    });
+    builder.addCase(
+      markVisitCheckoutThunk.fulfilled,
+      (state, action: PayloadAction<string>) => {
+        state.loading = false;
+        const index = state.visits.findIndex(
+          (visit) => visit.id === action.payload
+        );
+        if (index !== -1) {
+          state.visits[index].checkoutTime = new Date().toISOString();
+        }
+      }
+    );
     builder.addCase(markVisitCheckoutThunk.pending, (state) => {
       state.loading = true;
     });

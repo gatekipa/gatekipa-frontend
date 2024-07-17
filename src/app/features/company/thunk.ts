@@ -205,7 +205,7 @@ const markVisitThunk: AsyncThunk<any, { visitId: string }, {}> =
       //   {}
       // );
 
-      const response = await axios.post(
+      await axios.post(
         `${import.meta.env.VITE_BASE_API_URL}/visits/checkin/${visitId}`,
         {},
         {
@@ -213,7 +213,7 @@ const markVisitThunk: AsyncThunk<any, { visitId: string }, {}> =
         }
       );
 
-      return response.data.data;
+      return visitId;
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
       if (
@@ -238,14 +238,14 @@ const markVisitCheckoutThunk: AsyncThunk<any, { visitId: string }, {}> =
         //   {}
         // );
 
-        const response = await axios.post(
+        await axios.post(
           `${import.meta.env.VITE_BASE_API_URL}/visits/checkout/${visitId}`,
           {},
           {
             withCredentials: true,
           }
         );
-        return response.data.data;
+        return visitId;
       } catch (error) {
         const axiosError = error as AxiosError<{ message: string }>;
         if (
