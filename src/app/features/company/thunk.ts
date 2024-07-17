@@ -239,7 +239,7 @@ const markVisitCheckoutThunk: AsyncThunk<any, { visitId: string }, {}> =
         // );
 
         const response = await axios.post(
-          `${import.meta.env.VITE_BASE_API_URL}/visits/checkout/${visitId}}`,
+          `${import.meta.env.VITE_BASE_API_URL}/visits/checkout/${visitId}`,
           {},
           {
             withCredentials: true,
