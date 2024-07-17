@@ -72,7 +72,6 @@ type IVisitsToolbarProps = {
 const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
   const dispatch = useAppDispatch();
   const { employees } = useAppSelector((state) => state.employee);
-  const { user } = useAppSelector((state) => state.auth);
 
   const form = useForm<IVisitForm>({
     resolver: zodResolver(visitFormSchema),
