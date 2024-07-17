@@ -165,10 +165,8 @@ const VisitorToolbar: React.FC = ({}) => {
                   </div>
                 </div>
                 <div className="mt-4">
-                  <DialogClose>
-                    <Button className="w-full" type="submit">
-                      Submit
-                    </Button>
+                  <DialogClose className="w-full">
+                    <Button type="submit">Submit</Button>
                   </DialogClose>
                 </div>
               </form>
