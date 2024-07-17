@@ -57,8 +57,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ label, type, visit }) => {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will mark the check action that
-            you have performed.
+            Are you sure you want to{" "}
+            {type === ModalType.CHECK_IN ? "checkin" : "checkout"} the visitor.?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
