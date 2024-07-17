@@ -3,6 +3,7 @@ import { PlusCircledIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -33,7 +34,7 @@ const visitorFormSchema = z.object({
 
 export type IVisitorForm = z.infer<typeof visitorFormSchema>;
 
-const VisitorToolbar: React.FC = () => {
+const VisitorToolbar: React.FC = ({}) => {
   const dispatch = useAppDispatch();
 
   const form = useForm<IVisitorForm>({
@@ -59,7 +60,7 @@ const VisitorToolbar: React.FC = () => {
   return (
     <div>
       <Dialog>
-        <DialogTrigger>
+        <DialogTrigger asChild>
           <Button size="sm">
             <PlusCircledIcon className="mr-2" />
             Create
@@ -164,9 +165,11 @@ const VisitorToolbar: React.FC = () => {
                   </div>
                 </div>
                 <div className="mt-4">
-                  <Button className="w-full" type="submit">
-                    Submit
-                  </Button>
+                  <DialogClose>
+                    <Button className="w-full" type="submit">
+                      Submit
+                    </Button>
+                  </DialogClose>
                 </div>
               </form>
             </Form>
