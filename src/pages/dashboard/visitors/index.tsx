@@ -101,7 +101,7 @@ const VisitorsPage: React.FC = () => {
             onChange={(e) => setEmailSearch(e.target.value)}
           />
           <Input
-            placeholder="Search By Phone Number"
+            placeholder="Search By Mobile Number"
             value={phoneSearch}
             onChange={(e) => setPhoneSearch(e.target.value)}
           />
