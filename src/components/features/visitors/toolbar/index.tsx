@@ -24,6 +24,7 @@ import { Label } from "@/components/ui/label";
 import { useAppDispatch } from "@/app/hooks";
 import { addVisitorThunk } from "@/app/features/company/thunk";
 import { toast } from "sonner";
+import { User2 } from "lucide-react";
 
 const visitorFormSchema = z.object({
   firstName: z.string().min(3),
@@ -62,8 +63,8 @@ const VisitorToolbar: React.FC = ({}) => {
       <Dialog>
         <DialogTrigger asChild>
           <Button size="sm">
-            <PlusCircledIcon className="mr-2" />
-            Create
+            <User2 className="mr-2" size={16} />
+            New Visitor
           </Button>
         </DialogTrigger>
         <DialogContent>
