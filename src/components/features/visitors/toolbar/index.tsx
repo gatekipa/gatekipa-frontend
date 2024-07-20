@@ -172,7 +172,7 @@ const VisitorToolbar: React.FC = ({}) => {
                       className="w-full"
                       disabled={!form.formState.isValid}
                     >
-                      Submit
+                      Save Changes
                     </Button>
                   </DialogClose>
                 </div>

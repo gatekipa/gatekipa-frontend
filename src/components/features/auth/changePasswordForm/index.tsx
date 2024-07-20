@@ -110,7 +110,7 @@ const ChangePasswordForm: React.FC = () => {
                   />
                 </div>
                 <Button type="submit" className="w-full">
-                  Submit
+                  Save Changes
                 </Button>
               </div>
             </form>

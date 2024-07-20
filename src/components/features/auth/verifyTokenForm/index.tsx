@@ -144,7 +144,7 @@ const VerifyTokenForm: React.FC = () => {
                   className="w-full"
                   disabled={!form.formState.isValid}
                 >
-                  Submit
+                  Save Changes
                 </Button>
                 <div className="flex justify-between items-center">
                   <p className="text-xs">

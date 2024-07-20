@@ -63,7 +63,9 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ label, type, visit }) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleSubmit}>Submit</AlertDialogAction>
+          <AlertDialogAction onClick={handleSubmit}>
+            Save Changes
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -100,7 +100,7 @@ const ForgotPasswordForm: React.FC = () => {
                   />
                 </div>
                 <Button type="submit" className="w-full">
-                  Submit
+                  Save Changes
                 </Button>
                 <p className="text-xs">
                   Back to{" "}
