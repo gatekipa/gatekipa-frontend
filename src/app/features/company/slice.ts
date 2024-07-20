@@ -86,7 +86,7 @@ export const companySlice = createSlice({
     builder.addCase(
       addNewVisitThunk.fulfilled,
       (state, action: PayloadAction<IVisit>) => {
-        state.visits = [...state.visits, action.payload];
+        state.visits = [action.payload, ...state.visits];
         state.loading = false;
       }
     );
