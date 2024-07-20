@@ -3,6 +3,7 @@ import { fetchEmployeesThunk } from "@/app/features/employee/thunk";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import VisitorToolbar from "@/components/features/visitors/toolbar";
 import VisitsToolbar from "@/components/features/visits/toolbar";
+import LoadingButton from "@/components/shared/loadingButton";
 import PaginatedTable from "@/components/shared/paginatedTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -105,7 +106,12 @@ const VisitorsPage: React.FC = () => {
             value={phoneSearch}
             onChange={(e) => setPhoneSearch(e.target.value)}
           />
-          <Button onClick={handleSearch}>Search</Button>
+          {/* <Button onClick={handleSearch}>Search</Button> */}
+          <LoadingButton
+            onClick={handleSearch}
+            loading={loading}
+            label="Search"
+          />
           <Button onClick={handleReset}>Reset</Button>
         </div>
         {loading ? (
