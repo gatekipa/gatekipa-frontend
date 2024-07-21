@@ -8,8 +8,8 @@ import PaginatedTable from "@/components/shared/paginatedTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatDate, getUserRole } from "@/utils";
-import { Link1Icon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
+import { ExternalLink } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -46,8 +46,13 @@ const columns: ColumnDef<IVisitor>[] = [
       return (
         <div className="flex items-center gap-2">
           <Link to={`/dashboard/visits/${visitor.id}`}>
-            <Button size="sm" className="text-xs">
-              <Link1Icon className="mr-2" />
+            <Button
+              size="sm"
+              className="text-xs"
+              variant="link"
+              title="Display visits"
+            >
+              <ExternalLink className="mr-2" size={12} />
               Visits
             </Button>
           </Link>
@@ -64,6 +69,8 @@ const VisitorsPage: React.FC = () => {
 
   const [emailSearch, setEmailSearch] = useState("");
   const [phoneSearch, setPhoneSearch] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   const { visitors, loading } = useAppSelector((state) => state.company);
 
@@ -74,9 +81,14 @@ const VisitorsPage: React.FC = () => {
 
   const handleSearch = useCallback(() => {
     dispatch(
-      fetchVisitorsThunk({ email: emailSearch, phoneNumber: phoneSearch })
+      fetchVisitorsThunk({
+        email: emailSearch,
+        phoneNumber: phoneSearch,
+        firstName,
+        lastName,
+      })
     );
-  }, [emailSearch, phoneSearch]);
+  }, [emailSearch, phoneSearch, firstName, lastName]);
 
   const handleReset = useCallback(() => {
     dispatch(fetchVisitorsThunk({}));
@@ -106,7 +118,16 @@ const VisitorsPage: React.FC = () => {
             value={phoneSearch}
             onChange={(e) => setPhoneSearch(e.target.value)}
           />
-          {/* <Button onClick={handleSearch}>Search</Button> */}
+          <Input
+            placeholder="Search By First Name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <Input
+            placeholder="Search By Last Name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
           <LoadingButton
             onClick={handleSearch}
             loading={loading}

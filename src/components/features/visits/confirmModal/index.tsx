@@ -49,7 +49,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ label, type, visit }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger>
-        <Button size="sm" className="text-xs">
+        <Button size="sm" className="text-xs" variant="link">
           {label}
         </Button>
       </AlertDialogTrigger>

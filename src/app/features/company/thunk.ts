@@ -44,6 +44,8 @@ export interface IVisit {
 interface FetchVisitorsParams {
   email?: string;
   phoneNumber?: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 const fetchCompanyThunk: AsyncThunk<ICompany[], void, {}> = createAsyncThunk(
@@ -84,9 +86,12 @@ const fetchVisitorsThunk: AsyncThunk<IVisitor[], FetchVisitorsParams, {}> =
       // );
 
       const queryParams = new URLSearchParams();
-      if (params.email) queryParams.append("emailAddress", params.email);
-      if (params.phoneNumber)
-        queryParams.append("mobileNo", params.phoneNumber);
+
+      Object.entries(params).forEach(([key, value]) => {
+        if (value) {
+          queryParams.append(key, value.toString());
+        }
+      });
 
       const response = await axios.get(
         `${
@@ -96,6 +101,7 @@ const fetchVisitorsThunk: AsyncThunk<IVisitor[], FetchVisitorsParams, {}> =
           withCredentials: true,
         }
       );
+
       return response.data.data;
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;

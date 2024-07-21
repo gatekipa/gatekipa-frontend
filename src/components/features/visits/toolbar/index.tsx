@@ -110,8 +110,13 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
     <div>
       <Dialog>
         <DialogTrigger>
-          <Button size="sm" className="text-xs">
-            <PlusCircleIcon size={16} className="mr-2" />
+          <Button
+            size="sm"
+            className="text-xs"
+            variant="link"
+            title="Create a new visit"
+          >
+            <PlusCircleIcon size={12} className="mr-2" />
             Create Visit
           </Button>
         </DialogTrigger>
