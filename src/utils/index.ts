@@ -16,4 +16,15 @@ function getUserRole(): string {
   return user.data.userType;
 }
 
-export { getUserInitials, getUsername, getUserRole };
+function formatDate(date: Date): string {
+  return new Intl.DateTimeFormat("en-US", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  }).format(date);
+}
+
+export { getUserInitials, getUsername, getUserRole, formatDate };

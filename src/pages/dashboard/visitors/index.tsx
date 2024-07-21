@@ -7,7 +7,7 @@ import LoadingButton from "@/components/shared/loadingButton";
 import PaginatedTable from "@/components/shared/paginatedTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { getUserRole } from "@/utils";
+import { formatDate, getUserRole } from "@/utils";
 import { Link1Icon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
 import { useCallback, useEffect, useState } from "react";
@@ -35,7 +35,7 @@ const columns: ColumnDef<IVisitor>[] = [
     header: "Created At",
     cell: ({ getValue }) => {
       const createdAt = getValue() as Date;
-      return <span>{new Date(createdAt).toLocaleString()}</span>;
+      return <span>{formatDate(new Date(createdAt))}</span>;
     },
   },
   {

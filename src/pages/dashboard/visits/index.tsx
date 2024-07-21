@@ -6,6 +6,7 @@ import ConfirmModal, {
 } from "@/components/features/visits/confirmModal";
 import VisitsToolbar from "@/components/features/visits/toolbar";
 import PaginatedTable from "@/components/shared/paginatedTable";
+import { formatDate } from "@/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowLeft } from "lucide-react";
 import React, { useEffect } from "react";
@@ -34,7 +35,7 @@ const columns: ColumnDef<IVisit>[] = [
     cell: ({ getValue }) => {
       const createdAt = getValue() as Date;
       return createdAt ? (
-        <span>{new Date(createdAt).toLocaleString()}</span>
+        <span>{formatDate(new Date(createdAt))}</span>
       ) : (
         <span>-</span>
       );
@@ -46,7 +47,7 @@ const columns: ColumnDef<IVisit>[] = [
     cell: ({ getValue }) => {
       const createdAt = getValue() as Date;
       return createdAt ? (
-        <span>{new Date(createdAt).toLocaleString()}</span>
+        <span>{formatDate(new Date(createdAt))}</span>
       ) : (
         <span>-</span>
       );
@@ -58,7 +59,7 @@ const columns: ColumnDef<IVisit>[] = [
     cell: ({ getValue }) => {
       const createdAt = getValue() as Date;
       return createdAt ? (
-        <span>{new Date(createdAt).toLocaleString()}</span>
+        <span>{formatDate(new Date(createdAt))}</span>
       ) : (
         <span>-</span>
       );
