@@ -109,7 +109,7 @@ export default function PaginatedTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="text-xs">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

@@ -6,6 +6,7 @@ import VisitsToolbar from "@/components/features/visits/toolbar";
 import LoadingButton from "@/components/shared/loadingButton";
 import PaginatedTable from "@/components/shared/paginatedTable";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { formatDate, getUserRole } from "@/utils";
 import { ColumnDef } from "@tanstack/react-table";
@@ -94,54 +95,58 @@ const VisitorsPage: React.FC = () => {
     dispatch(fetchVisitorsThunk({}));
     setPhoneSearch("");
     setEmailSearch("");
+    setFirstName("");
+    setLastName("");
   }, []);
 
   return (
-    <div>
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl text-gray-950 font-semibold">
-          {getUserRole() === "ADMIN"
-            ? "Visitor Management"
-            : "Visit Management"}
-        </h2>
-        <VisitorToolbar />
-      </div>
-      <div>
-        <div className="flex gap-x-3 my-4">
-          <Input
-            placeholder="Search By Email"
-            value={emailSearch}
-            onChange={(e) => setEmailSearch(e.target.value)}
-          />
-          <Input
-            placeholder="Search By Mobile Number"
-            value={phoneSearch}
-            onChange={(e) => setPhoneSearch(e.target.value)}
-          />
-          <Input
-            placeholder="Search By First Name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-          <Input
-            placeholder="Search By Last Name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-          <LoadingButton
-            onClick={handleSearch}
-            loading={loading}
-            label="Search"
-          />
-          <Button onClick={handleReset}>Reset</Button>
+    <Card>
+      <CardContent>
+        <div className="flex justify-between items-center p-3 mt-8">
+          <h2 className="text-2xl text-gray-950 font-semibold">
+            {getUserRole() === "ADMIN"
+              ? "Visitor Management"
+              : "Visit Management"}
+          </h2>
+          <VisitorToolbar />
         </div>
-        {loading ? (
-          <div>Loading...</div>
-        ) : (
-          <PaginatedTable data={visitors} columns={columns} />
-        )}
-      </div>
-    </div>
+        <div>
+          <div className="flex gap-x-3 my-4">
+            <Input
+              placeholder="Search By Email"
+              value={emailSearch}
+              onChange={(e) => setEmailSearch(e.target.value)}
+            />
+            <Input
+              placeholder="Search By Mobile Number"
+              value={phoneSearch}
+              onChange={(e) => setPhoneSearch(e.target.value)}
+            />
+            <Input
+              placeholder="Search By First Name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+            <Input
+              placeholder="Search By Last Name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+            <LoadingButton
+              onClick={handleSearch}
+              loading={loading}
+              label="Search"
+            />
+            <Button onClick={handleReset}>Reset</Button>
+          </div>
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            <PaginatedTable data={visitors} columns={columns} />
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
