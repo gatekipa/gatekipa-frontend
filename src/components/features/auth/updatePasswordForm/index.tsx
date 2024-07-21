@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import { Button } from "../../../ui/button";
 import {
   Form,
   FormControl,
@@ -24,6 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../../../ui/input";
 import { updatePasswordThunk } from "../../../../app/features/auth/thunk";
 import { useNavigate } from "react-router-dom";
+import LoadingButton from "@/components/shared/loadingButton";
 
 const updatePasswordFormSchema = z.object({
   password: z.string().min(8),
@@ -38,6 +38,8 @@ const UpdatePasswordForm: React.FC = () => {
   const resetPasswordCredentials = useAppSelector(
     (state) => state.auth.resetPasswordCredentials
   );
+
+  const { loading } = useAppSelector((state) => state.auth);
 
   const form = useForm<IUpdatePasswordForm>({
     resolver: zodResolver(updatePasswordFormSchema),
@@ -110,9 +112,11 @@ const UpdatePasswordForm: React.FC = () => {
                     )}
                   />
                 </div>
-                <Button type="submit" className="w-full">
-                  Save Changes
-                </Button>
+                <LoadingButton
+                  loading={loading}
+                  type="submit"
+                  className="w-full"
+                />
               </div>
             </form>
           </Form>

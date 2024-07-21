@@ -1,5 +1,6 @@
 import { addNewVisitThunk } from "@/app/features/company/thunk";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import LoadingButton from "@/components/shared/loadingButton";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -72,6 +73,7 @@ type IVisitsToolbarProps = {
 const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
   const dispatch = useAppDispatch();
   const { employees } = useAppSelector((state) => state.employee);
+  const { loading } = useAppSelector((state) => state.company);
 
   const form = useForm<IVisitForm>({
     resolver: zodResolver(visitFormSchema),
@@ -369,13 +371,12 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
                 </div>
                 <div className="mt-4">
                   <DialogClose className="w-full">
-                    <Button
+                    <LoadingButton
+                      disabled={form.formState.isSubmitting}
+                      loading={loading}
                       type="submit"
                       className="w-full"
-                      disabled={!form.formState.isValid}
-                    >
-                      Save Changes
-                    </Button>
+                    />
                   </DialogClose>
                 </div>
               </form>

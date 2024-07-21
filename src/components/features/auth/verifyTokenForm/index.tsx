@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { Button } from "../../../ui/button";
 import {
   CardContent,
   CardHeader,
@@ -26,6 +25,7 @@ import {
   forgotPasswordThunk,
   verifyTokenThunk,
 } from "../../../../app/features/auth/thunk";
+import LoadingButton from "@/components/shared/loadingButton";
 
 const verifyTokenFormSchema = z.object({
   token: z.string(),
@@ -36,7 +36,9 @@ export type IVerifyTokenForm = z.infer<typeof verifyTokenFormSchema>;
 const VerifyTokenForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { forgotPasswordUserEmail } = useAppSelector((state) => state.auth);
+  const { forgotPasswordUserEmail, loading } = useAppSelector(
+    (state) => state.auth
+  );
 
   const form = useForm<IVerifyTokenForm>({
     resolver: zodResolver(verifyTokenFormSchema),
@@ -139,13 +141,12 @@ const VerifyTokenForm: React.FC = () => {
                     )}
                   />
                 </div>
-                <Button
+                <LoadingButton
+                  loading={loading}
                   type="submit"
                   className="w-full"
                   disabled={!form.formState.isValid}
-                >
-                  Save Changes
-                </Button>
+                />
                 <div className="flex justify-between items-center">
                   <p className="text-xs">
                     Back to{" "}

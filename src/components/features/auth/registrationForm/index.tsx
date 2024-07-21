@@ -13,7 +13,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { registerUserThunk } from "../../../../app/features/auth/thunk";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
-import { Button } from "../../../ui/button";
 import {
   Card,
   CardContent,
@@ -30,6 +29,7 @@ import {
   FormMessage,
 } from "../../../ui/form";
 import { Input } from "../../../ui/input";
+import LoadingButton from "@/components/shared/loadingButton";
 
 enum UserType {
   VISITOR = "VISITOR",
@@ -53,6 +53,7 @@ const RegistrationForm: React.FC = () => {
   const navigate = useNavigate();
 
   const { companies } = useAppSelector((state) => state.company);
+  const { loading } = useAppSelector((state) => state.auth);
 
   const form = useForm<IRegistrationForm>({
     resolver: zodResolver(registrationFormSchema),
@@ -266,10 +267,12 @@ const RegistrationForm: React.FC = () => {
               </div>
             </div>
             <div className="mt-4">
-              <Button className="w-full" type="submit">
-                Register
-              </Button>
-
+              <LoadingButton
+                loading={loading}
+                type="submit"
+                className="w-full"
+                label="Register"
+              />
               <div className="flex justify-between items-center mt-3">
                 <Link
                   to="/auth/forgot-password"

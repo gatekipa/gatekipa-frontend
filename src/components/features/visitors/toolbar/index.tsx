@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import { PlusCircledIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,10 +20,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAppDispatch } from "@/app/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { addVisitorThunk } from "@/app/features/company/thunk";
 import { toast } from "sonner";
 import { User2 } from "lucide-react";
+import LoadingButton from "@/components/shared/loadingButton";
 
 const visitorFormSchema = z.object({
   firstName: z.string().min(3),
@@ -37,6 +37,7 @@ export type IVisitorForm = z.infer<typeof visitorFormSchema>;
 
 const VisitorToolbar: React.FC = ({}) => {
   const dispatch = useAppDispatch();
+  const { loading } = useAppSelector((state) => state.company);
 
   const form = useForm<IVisitorForm>({
     resolver: zodResolver(visitorFormSchema),
@@ -167,13 +168,12 @@ const VisitorToolbar: React.FC = ({}) => {
                 </div>
                 <div className="mt-4">
                   <DialogClose className="w-full">
-                    <Button
+                    <LoadingButton
+                      loading={loading}
                       type="submit"
                       className="w-full"
                       disabled={!form.formState.isValid}
-                    >
-                      Save Changes
-                    </Button>
+                    />
                   </DialogClose>
                 </div>
               </form>

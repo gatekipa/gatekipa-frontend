@@ -4,7 +4,6 @@ import { z } from "zod";
 import { useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { Button } from "../../../ui/button";
 import {
   Card,
   CardContent,
@@ -21,8 +20,9 @@ import {
   FormMessage,
 } from "../../../ui/form";
 import { Input } from "../../../ui/input";
-import { useAppDispatch } from "../../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { loginThunk } from "../../../../app/features/auth/thunk";
+import LoadingButton from "@/components/shared/loadingButton";
 
 const loginFormSchema = z.object({
   emailAddress: z.string().email(),
@@ -34,6 +34,8 @@ type ILoginForm = z.infer<typeof loginFormSchema>;
 const LoginForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const { loading } = useAppSelector((state) => state.auth);
 
   const form = useForm<ILoginForm>({
     resolver: zodResolver(loginFormSchema),
@@ -123,10 +125,12 @@ const LoginForm: React.FC = () => {
               </div>
             </div>
             <div className="mt-4">
-              <Button className="w-full" type="submit">
-                Login
-              </Button>
-
+              <LoadingButton
+                loading={loading}
+                type="submit"
+                className="w-full"
+                label="Login"
+              />
               <div className="flex justify-between items-center mt-3">
                 <Link
                   to="/auth/forgot-password"

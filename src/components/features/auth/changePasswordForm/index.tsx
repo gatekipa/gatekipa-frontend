@@ -18,12 +18,12 @@ import { Input } from "../../../ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "../../../ui/button";
 import { changePasswordThunk } from "../../../../app/features/auth/thunk";
-import { useAppDispatch } from "../../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../../../app/features/auth/slice";
+import LoadingButton from "@/components/shared/loadingButton";
 
 const changePasswordFormSchema = z.object({
   oldPassword: z.string().min(8),
@@ -43,6 +43,8 @@ const ChangePasswordForm: React.FC = () => {
       newPassword: "",
     },
   });
+
+  const { loading } = useAppSelector((state) => state.auth);
 
   const onSubmit = useCallback((values: IChangePasswordForm) => {
     dispatch(changePasswordThunk(values));
@@ -109,9 +111,11 @@ const ChangePasswordForm: React.FC = () => {
                     )}
                   />
                 </div>
-                <Button type="submit" className="w-full">
-                  Save Changes
-                </Button>
+                <LoadingButton
+                  loading={loading}
+                  type="submit"
+                  className="w-full"
+                />
               </div>
             </form>
           </Form>

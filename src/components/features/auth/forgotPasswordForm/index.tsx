@@ -17,13 +17,13 @@ import { Input } from "../../../ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "../../../ui/button";
-import { useAppDispatch } from "../../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import { Label } from "../../../ui/label";
 import { forgotPasswordThunk } from "../../../../app/features/auth/thunk";
 import { setForgotPasswordUserEmail } from "@/app/features/auth/slice";
+import LoadingButton from "@/components/shared/loadingButton";
 
 const forgotPasswordFormSchema = z.object({
   email: z.string().email(),
@@ -40,6 +40,8 @@ const ForgotPasswordForm: React.FC = () => {
       email: "",
     },
   });
+
+  const { loading } = useAppSelector((state) => state.auth);
 
   const navigate = useNavigate();
 
@@ -99,9 +101,11 @@ const ForgotPasswordForm: React.FC = () => {
                     )}
                   />
                 </div>
-                <Button type="submit" className="w-full">
-                  Save Changes
-                </Button>
+                <LoadingButton
+                  loading={loading}
+                  type="submit"
+                  className="w-full"
+                />
                 <p className="text-xs">
                   Back to{" "}
                   <Link
