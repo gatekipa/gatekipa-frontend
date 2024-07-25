@@ -1,4 +1,9 @@
-import { EyeIcon, LayoutDashboardIcon, User2Icon } from "lucide-react";
+import {
+  EyeIcon,
+  LayoutDashboardIcon,
+  User2Icon,
+  UsersIcon,
+} from "lucide-react";
 import { ReactElement } from "react";
 
 type Route = {
@@ -22,6 +27,11 @@ const adminRoutes: Route[] = [
     label: "Visitors",
     href: "/dashboard/visitors",
     icon: <User2Icon size={18} />,
+  },
+  {
+    label: "Employees",
+    href: "/dashboard/employees",
+    icon: <UsersIcon size={18} />,
   },
   {
     label: "Change Password",

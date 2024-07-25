@@ -11,6 +11,7 @@ import UpdatePasswordPage from "../pages/auth/updatePassword";
 import HomePage from "../pages/home";
 import VisitorsPage from "@/pages/dashboard/visitors";
 import VisitsPage from "@/pages/dashboard/visits";
+import EmployeesPage from "@/pages/dashboard/employees";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "visitors",
         element: <VisitorsPage />,
+      },
+      {
+        path: "employees",
+        element: <EmployeesPage />,
       },
       {
         path: "visits/:visitorId",
