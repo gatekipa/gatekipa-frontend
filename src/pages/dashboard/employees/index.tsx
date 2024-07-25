@@ -1,4 +1,5 @@
 import { IEmployee, IEmployeeQuery } from '@/app/features/employee/thunk';
+import CreateEmployeeModal from '@/components/features/employees/createEmployeeModal';
 import PaginatedTable from '@/components/shared/paginatedTable';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -6,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import useEmployees from '@/hooks/employees';
 import { formatDate } from '@/utils';
 import { ColumnDef } from '@tanstack/react-table';
+import { UsersRound } from 'lucide-react';
 import React from 'react';
 
 const columns: ColumnDef<IEmployee>[] = [
@@ -60,11 +62,21 @@ const EmployeesPage: React.FC = () => {
 
   const { employees, loading, filterFn } = useEmployees();
 
+  const [isOpen, setIsOpen] = React.useState(false);
+
   return (
     <Card>
       <CardContent>
-        <div className='flex justify-between items-center p-3 mt-8'>
+        <div className='flex justify-between items-center mt-8'>
           <h2 className='text-2xl font-semibold'>Employee Management</h2>
+          <Button
+            className='text-xs'
+            title='Create New Employee'
+            onClick={() => setIsOpen(true)}
+          >
+            <UsersRound size={16} className='mr-2' />
+            New Employee
+          </Button>
         </div>
       </CardContent>
       <div>
@@ -109,6 +121,12 @@ const EmployeesPage: React.FC = () => {
           <div className='mx-6 mb-8'>
             <PaginatedTable data={employees} columns={columns} />
           </div>
+        )}
+        {isOpen && (
+          <CreateEmployeeModal
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+          />
         )}
       </div>
     </Card>
