@@ -1,6 +1,6 @@
 // import NetworkManager from "@/api";
-import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
+import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
+import axios, { AxiosError } from 'axios';
 // import { IBaseResponse } from "../auth/thunk";
 
 export interface IEmployee {
@@ -19,34 +19,49 @@ export interface IEmployee {
   updatedAt: string;
 }
 
-const fetchEmployeesThunk: AsyncThunk<IEmployee[], void, {}> = createAsyncThunk(
-  "employee/",
-  async (_, thunkAPI) => {
-    try {
-      // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
-      //   `/employee`
-      // );
+export interface IEmployeeQuery {
+  employeeNo: string;
+  mobileNo: string;
+  emailAddress: string;
+}
 
-      const response = await axios.get(
-        `${import.meta.env.VITE_BASE_API_URL}/employee`,
-        {
-          withCredentials: true,
-        }
-      );
-      return response.data.data;
-    } catch (error) {
-      const axiosError = error as AxiosError<{ message: string }>;
-      if (
-        axiosError.response &&
-        axiosError.response.data &&
-        axiosError.response.data.message
-      ) {
-        return thunkAPI.rejectWithValue(axiosError.response.data.message);
-      } else {
-        return thunkAPI.rejectWithValue("An unexpected error occurred");
+const fetchEmployeesThunk: AsyncThunk<
+  IEmployee[],
+  Partial<IEmployeeQuery>,
+  {}
+> = createAsyncThunk('employee/', async (params, thunkAPI) => {
+  try {
+    // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
+    //   `/employee`
+    // );
+
+    const queryParams = new URLSearchParams();
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (value) {
+        queryParams.append(key, value.toString());
       }
+    });
+
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_API_URL}/employee?${queryParams.toString()}`,
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    if (
+      axiosError.response &&
+      axiosError.response.data &&
+      axiosError.response.data.message
+    ) {
+      return thunkAPI.rejectWithValue(axiosError.response.data.message);
+    } else {
+      return thunkAPI.rejectWithValue('An unexpected error occurred');
     }
   }
-);
+});
 
 export { fetchEmployeesThunk };

@@ -1,37 +1,37 @@
-import { fetchVisitsThunk, IVisit } from "@/app/features/company/thunk";
-import { fetchEmployeesThunk } from "@/app/features/employee/thunk";
-import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { fetchVisitsThunk, IVisit } from '@/app/features/company/thunk';
+import { fetchEmployeesThunk } from '@/app/features/employee/thunk';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import ConfirmModal, {
   ModalType,
-} from "@/components/features/visits/confirmModal";
-import VisitsToolbar from "@/components/features/visits/toolbar";
-import PaginatedTable from "@/components/shared/paginatedTable";
-import { formatDate } from "@/utils";
-import { ColumnDef } from "@tanstack/react-table";
-import { ArrowLeft } from "lucide-react";
-import React, { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+} from '@/components/features/visits/confirmModal';
+import VisitsToolbar from '@/components/features/visits/toolbar';
+import PaginatedTable from '@/components/shared/paginatedTable';
+import { formatDate } from '@/utils';
+import { ColumnDef } from '@tanstack/react-table';
+import { ArrowLeft } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
 const columns: ColumnDef<IVisit>[] = [
   {
-    accessorKey: "purposeOfVisit",
-    header: "Purpose of Visit",
+    accessorKey: 'purposeOfVisit',
+    header: 'Purpose of Visit',
   },
   {
-    accessorKey: "personToMeet",
-    header: "Person to Meet",
+    accessorKey: 'personToMeet',
+    header: 'Person to Meet',
   },
   {
-    accessorKey: "personToMeetEmail",
+    accessorKey: 'personToMeetEmail',
     header: "Person to Meet's Email",
   },
   {
-    accessorKey: "personToMeetMobileNo",
+    accessorKey: 'personToMeetMobileNo',
     header: "Person to Meet's Mobile",
   },
   {
-    accessorKey: "visitDate",
-    header: "Visit Date",
+    accessorKey: 'visitDate',
+    header: 'Visit Date',
     cell: ({ getValue }) => {
       const createdAt = getValue() as Date;
       return createdAt ? (
@@ -42,8 +42,8 @@ const columns: ColumnDef<IVisit>[] = [
     },
   },
   {
-    accessorKey: "checkInTime",
-    header: "Check In Time",
+    accessorKey: 'checkInTime',
+    header: 'Check In Time',
     cell: ({ getValue }) => {
       const createdAt = getValue() as Date;
       return createdAt ? (
@@ -54,8 +54,8 @@ const columns: ColumnDef<IVisit>[] = [
     },
   },
   {
-    accessorKey: "checkoutTime",
-    header: "Check Out Time",
+    accessorKey: 'checkoutTime',
+    header: 'Check Out Time',
     cell: ({ getValue }) => {
       const createdAt = getValue() as Date;
       return createdAt ? (
@@ -66,8 +66,8 @@ const columns: ColumnDef<IVisit>[] = [
     },
   },
   {
-    id: "actions",
-    header: "Actions",
+    id: 'actions',
+    header: 'Actions',
     cell: ({ row }) => {
       const visit = row.original;
       const currentDate = new Date();
@@ -76,17 +76,17 @@ const columns: ColumnDef<IVisit>[] = [
       const visitCheckInDate = new Date(visit.checkInTime);
       visitCheckInDate.setHours(0, 0, 0, 0);
       return (
-        <div className="flex items-center gap-2">
+        <div className='flex items-center gap-2'>
           {!visit.checkInTime && (
             /*visitCheckInDate >= currentDate &&*/ <ConfirmModal
-              label="Check In"
+              label='Check In'
               type={ModalType.CHECK_IN}
               visit={visit}
             />
           )}
           {!visit.checkoutTime && (
             <ConfirmModal
-              label="Check Out"
+              label='Check Out'
               type={ModalType.CHECK_OUT}
               visit={visit}
             />
@@ -109,19 +109,19 @@ const VisitsPage: React.FC = () => {
 
     dispatch(
       fetchVisitsThunk({
-        visitorId: visitorId !== ":visitorId" ? visitorId! : user?.visitorId!,
+        visitorId: visitorId !== ':visitorId' ? visitorId! : user?.visitorId!,
       })
     );
 
-    dispatch(fetchEmployeesThunk());
+    dispatch(fetchEmployeesThunk({}));
   }, [user, visitorId]);
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h1 className="flex items-center gap-x-3 text-xl">
-          {user?.userType !== "VISITOR" && (
-            <Link to="/dashboard/visitors">
+      <div className='flex items-center justify-between'>
+        <h1 className='flex items-center gap-x-3 text-xl'>
+          {user?.userType !== 'VISITOR' && (
+            <Link to='/dashboard/visitors'>
               <ArrowLeft size={16} />
             </Link>
           )}
