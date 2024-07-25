@@ -1,4 +1,5 @@
 // import NetworkManager from "@/api";
+import { ICreateEmployeeForm } from '@/components/features/employees/createEmployeeModal';
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 // import { IBaseResponse } from "../auth/thunk";
@@ -64,4 +65,33 @@ const fetchEmployeesThunk: AsyncThunk<
   }
 });
 
-export { fetchEmployeesThunk };
+const createEmployeeThunk: AsyncThunk<IEmployee, ICreateEmployeeForm, {}> =
+  createAsyncThunk('employee/create/', async (body, thunkAPI) => {
+    try {
+      // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
+      //   `/employee`
+      // );
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL}/employee`,
+        body,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue('An unexpected error occurred');
+      }
+    }
+  });
+
+export { fetchEmployeesThunk, createEmployeeThunk };

@@ -1,5 +1,5 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { fetchEmployeesThunk, IEmployee } from "./thunk";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createEmployeeThunk, fetchEmployeesThunk, IEmployee } from './thunk';
 
 export interface EmployeeState {
   employees: IEmployee[];
@@ -12,7 +12,7 @@ const initialState: EmployeeState = {
 };
 
 export const employeeSlice = createSlice({
-  name: "employee",
+  name: 'employee',
   initialState,
   reducers: {},
   extraReducers(builder) {
@@ -27,6 +27,19 @@ export const employeeSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchEmployeesThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      createEmployeeThunk.fulfilled,
+      (state, action: PayloadAction<IEmployee>) => {
+        state.employees = [action.payload, ...state.employees];
+        state.loading = false;
+      }
+    );
+    builder.addCase(createEmployeeThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(createEmployeeThunk.rejected, (state) => {
       state.loading = false;
     });
   },

@@ -1,3 +1,5 @@
+import { createEmployeeThunk } from '@/app/features/employee/thunk';
+import { useAppDispatch } from '@/app/hooks';
 import LoadingButton from '@/components/shared/loadingButton';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -30,6 +32,7 @@ import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 type CreateEmployeeModalProps = {
@@ -44,6 +47,7 @@ const createEmployeeFormSchema = z.object({
   mobileNo: z.string().min(11),
   designation: z.string().min(3),
   dateOfBirth: z.date(),
+  shiftId: z.string(),
 });
 
 export type ICreateEmployeeForm = z.infer<typeof createEmployeeFormSchema>;
@@ -52,6 +56,8 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const dispatch = useAppDispatch();
+
   const form = useForm<ICreateEmployeeForm>({
     resolver: zodResolver(createEmployeeFormSchema),
     defaultValues: {
@@ -61,11 +67,19 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
       mobileNo: '',
       designation: '',
       dateOfBirth: new Date(),
+      shiftId: '6698d88c8c92fa5f838408cc',
     },
   });
 
-  const onSubmit = useCallback((values: ICreateEmployeeForm) => {
-    console.log(values);
+  const onSubmit = useCallback(async (values: ICreateEmployeeForm) => {
+    try {
+      await dispatch(createEmployeeThunk(values)).unwrap();
+      form.reset();
+      toast.success('Employee Created Successfully');
+      onClose();
+    } catch (error) {
+      toast.error(`${error}`);
+    }
   }, []);
 
   const loading = false;
