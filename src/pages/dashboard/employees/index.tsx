@@ -36,6 +36,10 @@ const columns: ColumnDef<IEmployee>[] = [
     header: 'Mobile Number',
   },
   {
+    accessorKey: 'shift.name',
+    header: 'Shift',
+  },
+  {
     accessorKey: 'createdAt',
     header: 'Created At',
     cell: ({ getValue }) => {

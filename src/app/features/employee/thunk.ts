@@ -4,6 +4,12 @@ import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 // import { IBaseResponse } from "../auth/thunk";
 
+export interface IShift {
+  id: string;
+  isActive: boolean;
+  name: string;
+}
+
 export interface IEmployee {
   id: string;
   firstName: string;
@@ -13,6 +19,7 @@ export interface IEmployee {
   companyId: string;
   isActive: boolean;
   designation: string;
+  shift: IShift;
   employeeNo: string;
   dateOfBirth: string;
   createdBy: string;
