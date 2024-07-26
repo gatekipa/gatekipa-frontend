@@ -10,7 +10,7 @@ import useShifts from '@/hooks/shifts';
 import { formatDate } from '@/utils';
 import { Pencil2Icon } from '@radix-ui/react-icons';
 import { ColumnDef } from '@tanstack/react-table';
-import { CircleOff, Clock11, UsersRound } from 'lucide-react';
+import { Check, CircleOff, Clock11, UsersRound } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 
 const columns: ColumnDef<IEmployee>[] = [
@@ -66,10 +66,26 @@ const columns: ColumnDef<IEmployee>[] = [
             />
           </ToolTip>
           <ToolTip title='Visits of Employee'>
-            <Clock11 className='text-gray-500 cursor-pointer' size={15} />
+            <Clock11
+              className='text-gray-500 cursor-pointer hover:text-gray-900'
+              size={15}
+            />
           </ToolTip>
-          <ToolTip title='Toggle Active State'>
-            <CircleOff className='text-gray-500 cursor-pointer' size={15} />
+          <ToolTip
+            title={employee?.isActive ? 'Mark as Inactive' : 'Mark as Active'}
+          >
+            {employee?.isActive ? (
+              <CircleOff
+                className='text-red-500 cursor-pointer hover:text-red-700'
+                size={15}
+              />
+            ) : (
+              <Check
+                className='text-green-500 cursor-pointer hover:text-green-600'
+                size={15}
+                strokeWidth={3}
+              />
+            )}
           </ToolTip>
           {isOpen && (
             <CreateEmployeeModal

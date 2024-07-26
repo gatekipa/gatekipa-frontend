@@ -11,7 +11,6 @@ type Props = {
 } & PropsWithChildren;
 
 const ToolTip: React.FC<Props> = ({ title, children }) => {
-  console.log('title :>> ', title);
   return (
     <TooltipProvider>
       <Tooltip>
