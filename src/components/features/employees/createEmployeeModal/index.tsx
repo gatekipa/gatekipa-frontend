@@ -1,5 +1,5 @@
-import { createEmployeeThunk } from '@/app/features/employee/thunk';
-import { useAppDispatch } from '@/app/hooks';
+import { createEmployeeThunk, IEmployee } from '@/app/features/employee/thunk';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import LoadingButton from '@/components/shared/loadingButton';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -38,6 +38,7 @@ import { z } from 'zod';
 type CreateEmployeeModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  employee?: IEmployee;
 };
 
 const createEmployeeFormSchema = z.object({
@@ -55,18 +56,22 @@ export type ICreateEmployeeForm = z.infer<typeof createEmployeeFormSchema>;
 const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
   isOpen,
   onClose,
+  employee,
 }) => {
   const dispatch = useAppDispatch();
+  const { loading } = useAppSelector((state) => state.employee);
 
   const form = useForm<ICreateEmployeeForm>({
     resolver: zodResolver(createEmployeeFormSchema),
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      emailAddress: '',
-      mobileNo: '',
-      designation: '',
-      dateOfBirth: new Date(),
+      firstName: employee?.firstName ?? '',
+      lastName: employee?.lastName ?? '',
+      emailAddress: employee?.emailAddress ?? '',
+      mobileNo: employee?.mobileNo ?? '',
+      designation: employee?.designation ?? '',
+      dateOfBirth: employee?.dateOfBirth
+        ? new Date(employee?.dateOfBirth)
+        : new Date(),
       shiftId: '6698d88c8c92fa5f838408cc',
     },
   });
@@ -82,8 +87,6 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
     }
   }, []);
 
-  const loading = false;
-
   return (
     <Dialog
       open={isOpen}
@@ -93,9 +96,13 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New Employee</DialogTitle>
+          <DialogTitle>
+            {!!employee ? 'Edit Employee' : 'Create New Employee'}
+          </DialogTitle>
           <DialogDescription className='text-xs'>
-            You can create a new employee by filling the form below.
+            {!!employee
+              ? 'You can edit employee details in the form below.'
+              : 'You can create a new employee by filling the form below.'}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

@@ -53,11 +53,16 @@ const columns: ColumnDef<IEmployee>[] = [
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
-      const visitor = row.original;
+      const employee = row.original;
+      const [isOpen, setIsOpen] = useState(false);
+
       return (
         <div className='flex items-center gap-2'>
           <ToolTip title='Edit Employee'>
-            <Pencil2Icon className='text-gray-500 cursor-pointer' />
+            <Pencil2Icon
+              className='text-gray-500 cursor-pointer hover:text-gray-900'
+              onClick={() => setIsOpen(true)}
+            />
           </ToolTip>
           <ToolTip title='Visits of Employee'>
             <Clock11 className='text-gray-500 cursor-pointer' size={15} />
@@ -65,6 +70,13 @@ const columns: ColumnDef<IEmployee>[] = [
           <ToolTip title='Toggle Active State'>
             <CircleOff className='text-gray-500 cursor-pointer' size={15} />
           </ToolTip>
+          {isOpen && (
+            <CreateEmployeeModal
+              isOpen={isOpen}
+              onClose={() => setIsOpen(false)}
+              employee={employee}
+            />
+          )}
         </div>
       );
     },
