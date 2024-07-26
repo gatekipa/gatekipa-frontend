@@ -257,7 +257,8 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
                           <SelectContent>
                             {shifts.map((shift) => (
                               <SelectItem key={shift.id} value={shift.id}>
-                                {shift.name}
+                                {shift.name} ({shift.startTime} -{' '}
+                                {shift.endTime})
                               </SelectItem>
                             ))}
                           </SelectContent>
