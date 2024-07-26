@@ -1,5 +1,6 @@
 import { IEmployee, IEmployeeQuery } from '@/app/features/employee/thunk';
 import CreateEmployeeModal from '@/components/features/employees/createEmployeeModal';
+import EmployeeStatusModal from '@/components/features/employees/employeeStatusModal';
 import PaginatedTable from '@/components/shared/paginatedTable';
 import ToolTip from '@/components/shared/tooltip';
 import { Badge } from '@/components/ui/badge';
@@ -74,7 +75,10 @@ const columns: ColumnDef<IEmployee>[] = [
     header: 'Actions',
     cell: ({ row }) => {
       const employee = row.original;
+      // TODO: Refactor Modal State with Redux
+
       const [isOpen, setIsOpen] = useState(false);
+      const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
       return (
         <div className='flex items-center gap-2'>
@@ -97,12 +101,14 @@ const columns: ColumnDef<IEmployee>[] = [
               <CircleOff
                 className='text-red-500 cursor-pointer hover:text-red-700'
                 size={15}
+                onClick={() => setIsEditModalOpen(true)}
               />
             ) : (
               <Check
                 className='text-green-500 cursor-pointer hover:text-green-600'
                 size={15}
                 strokeWidth={3}
+                onClick={() => setIsEditModalOpen(true)}
               />
             )}
           </ToolTip>
@@ -111,6 +117,12 @@ const columns: ColumnDef<IEmployee>[] = [
               isOpen={isOpen}
               onClose={() => setIsOpen(false)}
               employee={employee}
+            />
+          )}
+          {isEditModalOpen && (
+            <EmployeeStatusModal
+              isOpen={isEditModalOpen}
+              onClose={() => setIsEditModalOpen(false)}
             />
           )}
         </div>
