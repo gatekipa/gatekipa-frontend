@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import useEmployees from '@/hooks/employees';
+import useShifts from '@/hooks/shifts';
 import { formatDate } from '@/utils';
 import { Pencil2Icon } from '@radix-ui/react-icons';
 import { ColumnDef } from '@tanstack/react-table';
@@ -91,6 +92,7 @@ const EmployeesPage: React.FC = () => {
   });
 
   const { employees, loading, filterFn } = useEmployees();
+  useShifts();
 
   const [isOpen, setIsOpen] = useState(false);
 

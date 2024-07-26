@@ -25,6 +25,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PopoverClose } from '@radix-ui/react-popover';
@@ -59,7 +66,7 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
   employee,
 }) => {
   const dispatch = useAppDispatch();
-  const { loading } = useAppSelector((state) => state.employee);
+  const { loading, shifts } = useAppSelector((state) => state.employee);
 
   const form = useForm<ICreateEmployeeForm>({
     resolver: zodResolver(createEmployeeFormSchema),
@@ -72,7 +79,7 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
       dateOfBirth: employee?.dateOfBirth
         ? new Date(employee?.dateOfBirth)
         : new Date(),
-      shiftId: '6698d88c8c92fa5f838408cc',
+      shiftId: employee?.shift.id ?? '',
     },
   });
 
@@ -222,6 +229,39 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
                           className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
                           {...field}
                         />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className='flex flex-col space-y-1.5'>
+                <FormField
+                  control={form.control}
+                  name='shiftId'
+                  render={({ field }) => (
+                    <FormItem>
+                      <Label id='shiftId' className='text-xs'>
+                        Shift
+                      </Label>
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'>
+                              <SelectValue placeholder='Please select your shift' />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {shifts.map((shift) => (
+                              <SelectItem key={shift.id} value={shift.id}>
+                                {shift.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

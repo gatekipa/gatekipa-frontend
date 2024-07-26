@@ -6,8 +6,14 @@ import axios, { AxiosError } from 'axios';
 
 export interface IShift {
   id: string;
-  isActive: boolean;
   name: string;
+  isActive: boolean;
+  startTime: string;
+  endTime: string;
+  companyId: string;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface IEmployee {
@@ -101,7 +107,36 @@ const createEmployeeThunk: AsyncThunk<IEmployee, ICreateEmployeeForm, {}> =
     }
   });
 
-const fetchShiftsThunk: AsyncThunk<IEmployee[], void, {}> = createAsyncThunk(
+const editEmployeeThunk: AsyncThunk<IEmployee, ICreateEmployeeForm, {}> =
+  createAsyncThunk('employee/edit/', async (body, thunkAPI) => {
+    try {
+      // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
+      //   `/employee`
+      // );
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL}/employee`,
+        body,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue('An unexpected error occurred');
+      }
+    }
+  });
+
+const fetchShiftsThunk: AsyncThunk<IShift[], void, {}> = createAsyncThunk(
   'employee/shifts/',
   async (_, thunkAPI) => {
     try {
@@ -110,7 +145,7 @@ const fetchShiftsThunk: AsyncThunk<IEmployee[], void, {}> = createAsyncThunk(
       // );
 
       const response = await axios.get(
-        `${import.meta.env.VITE_BASE_API_URL}/employee`,
+        `${import.meta.env.VITE_BASE_API_URL}/shift`,
         {
           withCredentials: true,
         }
@@ -131,4 +166,9 @@ const fetchShiftsThunk: AsyncThunk<IEmployee[], void, {}> = createAsyncThunk(
   }
 );
 
-export { fetchEmployeesThunk, createEmployeeThunk, fetchShiftsThunk };
+export {
+  fetchEmployeesThunk,
+  createEmployeeThunk,
+  fetchShiftsThunk,
+  editEmployeeThunk,
+};
