@@ -1,4 +1,8 @@
-import { IEmployee } from '@/app/features/employee/thunk';
+import {
+  changeEmployeeStatusThunk,
+  IEmployee,
+} from '@/app/features/employee/thunk';
+import { useAppDispatch } from '@/app/hooks';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,7 +13,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import React from 'react';
+import React, { useCallback } from 'react';
+import { toast } from 'sonner';
 
 type EmployeeStatusModalProps = {
   isOpen: boolean;
@@ -21,6 +26,24 @@ const EmployeeStatusModal: React.FC<EmployeeStatusModalProps> = ({
   onClose,
   employee,
 }) => {
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = useCallback(async () => {
+    try {
+      await dispatch(
+        changeEmployeeStatusThunk({ ...employee, isActive: !employee.isActive })
+      ).unwrap();
+      toast.success(
+        `Employee Successfully Marked as ${
+          employee.isActive ? 'Inactive' : 'Active'
+        }`
+      );
+      onClose();
+    } catch (error) {
+      toast.error(`${error}`);
+    }
+  }, [employee]);
+
   return (
     <AlertDialog
       open={isOpen}
@@ -38,7 +61,7 @@ const EmployeeStatusModal: React.FC<EmployeeStatusModalProps> = ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel className='text-xs px-3'>Cancel</AlertDialogCancel>
-          <AlertDialogAction className='text-xs px-3'>
+          <AlertDialogAction className='text-xs px-3' onClick={handleSubmit}>
             Save Changes
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -107,6 +107,37 @@ const createEmployeeThunk: AsyncThunk<IEmployee, ICreateEmployeeForm, {}> =
     }
   });
 
+const changeEmployeeStatusThunk: AsyncThunk<IEmployee, IEmployee, {}> =
+  createAsyncThunk('employee/status/', async (body, thunkAPI) => {
+    try {
+      // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
+      //   `/employee`
+      // );
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL}/employee/change-status/${
+          body.id
+        }`,
+        { status: body.isActive },
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue('An unexpected error occurred');
+      }
+    }
+  });
+
 const editEmployeeThunk: AsyncThunk<IEmployee, ICreateEmployeeForm, {}> =
   createAsyncThunk('employee/edit/', async (body, thunkAPI) => {
     try {
@@ -171,4 +202,5 @@ export {
   createEmployeeThunk,
   fetchShiftsThunk,
   editEmployeeThunk,
+  changeEmployeeStatusThunk,
 };

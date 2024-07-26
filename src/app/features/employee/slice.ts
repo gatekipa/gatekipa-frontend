@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import {
+  changeEmployeeStatusThunk,
   createEmployeeThunk,
   fetchEmployeesThunk,
   fetchShiftsThunk,
@@ -61,6 +62,24 @@ export const employeeSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(createEmployeeThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      changeEmployeeStatusThunk.fulfilled,
+      (state, action: PayloadAction<IEmployee>) => {
+        state.employees = state.employees.map((employee) =>
+          employee.id === action.payload.id
+            ? { ...employee, isActive: action.payload.isActive }
+            : employee
+        );
+
+        state.loading = false;
+      }
+    );
+    builder.addCase(changeEmployeeStatusThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(changeEmployeeStatusThunk.rejected, (state) => {
       state.loading = false;
     });
   },
