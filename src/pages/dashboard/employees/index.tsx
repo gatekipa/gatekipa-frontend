@@ -2,6 +2,7 @@ import { IEmployee, IEmployeeQuery } from '@/app/features/employee/thunk';
 import CreateEmployeeModal from '@/components/features/employees/createEmployeeModal';
 import PaginatedTable from '@/components/shared/paginatedTable';
 import ToolTip from '@/components/shared/tooltip';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -33,6 +34,24 @@ const columns: ColumnDef<IEmployee>[] = [
   {
     accessorKey: 'emailAddress',
     header: 'Email',
+  },
+  {
+    accessorKey: 'isActive',
+    header: 'Status',
+    cell: ({ row }) => {
+      const { isActive } = row.original;
+      return (
+        <Badge
+          className={
+            isActive
+              ? 'bg-green-500 hover:bg-green-800'
+              : 'bg-red-600 hover:bg-red-800'
+          }
+        >
+          {isActive ? 'Active' : 'Inactive'}
+        </Badge>
+      );
+    },
   },
   {
     accessorKey: 'mobileNo',
