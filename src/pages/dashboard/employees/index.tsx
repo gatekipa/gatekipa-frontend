@@ -123,6 +123,7 @@ const columns: ColumnDef<IEmployee>[] = [
             <EmployeeStatusModal
               isOpen={isEditModalOpen}
               onClose={() => setIsEditModalOpen(false)}
+              employee={employee}
             />
           )}
         </div>
