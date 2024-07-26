@@ -8,7 +8,7 @@ import useEmployees from '@/hooks/employees';
 import { formatDate } from '@/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { UsersRound } from 'lucide-react';
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 
 const columns: ColumnDef<IEmployee>[] = [
   {
@@ -62,7 +62,16 @@ const EmployeesPage: React.FC = () => {
 
   const { employees, loading, filterFn } = useEmployees();
 
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const disableCondition = useMemo(
+    () =>
+      loading ||
+      (query.employeeNo === '' &&
+        query.emailAddress === '' &&
+        query.mobileNo === ''),
+    [loading, query]
+  );
 
   return (
     <Card>
@@ -102,7 +111,11 @@ const EmployeesPage: React.FC = () => {
             onChange={(e) => setQuery({ ...query, mobileNo: e.target.value })}
           />
           <div className='flex gap-x-2'>
-            <Button className='text-xs' onClick={() => filterFn(query)}>
+            <Button
+              className='text-xs'
+              onClick={() => filterFn(query)}
+              disabled={disableCondition}
+            >
               Search
             </Button>
             <Button
@@ -110,6 +123,7 @@ const EmployeesPage: React.FC = () => {
               onClick={() =>
                 setQuery({ emailAddress: '', employeeNo: '', mobileNo: '' })
               }
+              disabled={disableCondition}
             >
               Reset
             </Button>
