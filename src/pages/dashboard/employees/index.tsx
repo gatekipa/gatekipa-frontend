@@ -1,13 +1,15 @@
 import { IEmployee, IEmployeeQuery } from '@/app/features/employee/thunk';
 import CreateEmployeeModal from '@/components/features/employees/createEmployeeModal';
 import PaginatedTable from '@/components/shared/paginatedTable';
+import ToolTip from '@/components/shared/tooltip';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import useEmployees from '@/hooks/employees';
 import { formatDate } from '@/utils';
+import { Pencil2Icon } from '@radix-ui/react-icons';
 import { ColumnDef } from '@tanstack/react-table';
-import { UsersRound } from 'lucide-react';
+import { CircleOff, Clock11, UsersRound } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 
 const columns: ColumnDef<IEmployee>[] = [
@@ -52,7 +54,19 @@ const columns: ColumnDef<IEmployee>[] = [
     header: 'Actions',
     cell: ({ row }) => {
       const visitor = row.original;
-      return <div className='flex items-center gap-2'>{visitor.isActive}</div>;
+      return (
+        <div className='flex items-center gap-2'>
+          <ToolTip title='Edit Employee'>
+            <Pencil2Icon className='text-gray-500 cursor-pointer' />
+          </ToolTip>
+          <ToolTip title='Visits of Employee'>
+            <Clock11 className='text-gray-500 cursor-pointer' size={15} />
+          </ToolTip>
+          <ToolTip title='Toggle Active State'>
+            <CircleOff className='text-gray-500 cursor-pointer' size={15} />
+          </ToolTip>
+        </div>
+      );
     },
   },
 ];
