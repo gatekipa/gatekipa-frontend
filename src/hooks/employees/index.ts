@@ -8,18 +8,15 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks';
 const useEmployees = () => {
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(fetchEmployeesThunk({}));
-  }, []);
-
-  const filterFn = useCallback(
-    (query: IEmployeeQuery) => {
-      dispatch(fetchEmployeesThunk(query));
-    },
-    [dispatch]
-  );
-
   const { employees, loading } = useAppSelector((state) => state.employee);
+
+  useEffect(() => {
+    if (!employees.length) dispatch(fetchEmployeesThunk({}));
+  }, [employees.length]);
+
+  const filterFn = useCallback((query: IEmployeeQuery) => {
+    dispatch(fetchEmployeesThunk(query));
+  }, []);
 
   return { employees, loading, filterFn };
 };
