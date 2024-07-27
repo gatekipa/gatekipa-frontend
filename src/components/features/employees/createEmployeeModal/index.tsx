@@ -1,4 +1,8 @@
-import { createEmployeeThunk, IEmployee } from '@/app/features/employee/thunk';
+import {
+  createEmployeeThunk,
+  editEmployeeThunk,
+  IEmployee,
+} from '@/app/features/employee/thunk';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import LoadingButton from '@/components/shared/loadingButton';
 import { Button } from '@/components/ui/button';
@@ -85,7 +89,13 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
 
   const onSubmit = useCallback(async (values: ICreateEmployeeForm) => {
     try {
-      await dispatch(createEmployeeThunk(values)).unwrap();
+      if (!employee) {
+        await dispatch(createEmployeeThunk(values)).unwrap();
+      } else {
+        // copy the employee object and update the values
+        const newEmployee = { ...employee!, ...values };
+        await dispatch(editEmployeeThunk(newEmployee!)).unwrap();
+      }
       form.reset();
       toast.success('Employee Created Successfully');
       onClose();

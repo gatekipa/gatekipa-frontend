@@ -27,11 +27,15 @@ export interface IEmployee {
   designation: string;
   shift: IShift;
   employeeNo: string;
-  dateOfBirth: string;
+  dateOfBirth: Date;
   createdBy: string;
   createdAt: string;
   updatedAt: string;
 }
+
+export type IEmployeeUpdate = Omit<IEmployee, 'companyId' | 'shift'> & {
+  shift: Pick<IShift, 'id'>;
+};
 
 export interface IEmployeeQuery {
   employeeNo: string;
@@ -138,16 +142,21 @@ const changeEmployeeStatusThunk: AsyncThunk<IEmployee, IEmployee, {}> =
     }
   });
 
-const editEmployeeThunk: AsyncThunk<IEmployee, ICreateEmployeeForm, {}> =
+const editEmployeeThunk: AsyncThunk<IEmployee, IEmployee, {}> =
   createAsyncThunk('employee/edit/', async (body, thunkAPI) => {
     try {
       // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
       //   `/employee`
       // );
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_BASE_API_URL}/employee`,
-        body,
+      const requestBody = {
+        ...body,
+        shift: body.shift.id,
+      };
+
+      const response = await axios.put(
+        `${import.meta.env.VITE_BASE_API_URL}/employee/${body.id}`,
+        requestBody,
         {
           withCredentials: true,
         }
