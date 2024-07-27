@@ -14,6 +14,7 @@ import { Pencil2Icon } from '@radix-ui/react-icons';
 import { ColumnDef } from '@tanstack/react-table';
 import { Check, CircleOff, Clock11, UsersRound } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const columns: ColumnDef<IEmployee>[] = [
   {
@@ -89,10 +90,12 @@ const columns: ColumnDef<IEmployee>[] = [
             />
           </ToolTip>
           <ToolTip title='Visits of Employee'>
-            <Clock11
-              className='text-gray-500 cursor-pointer hover:text-gray-900'
-              size={15}
-            />
+            <Link to={`visits/${employee.id}`}>
+              <Clock11
+                className='text-gray-500 cursor-pointer hover:text-gray-900'
+                size={15}
+              />
+            </Link>
           </ToolTip>
           <ToolTip
             title={employee?.isActive ? 'Mark as Inactive' : 'Mark as Active'}
