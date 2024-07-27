@@ -21,6 +21,8 @@ interface PaginationToolbarProps<TData> {
 export function PaginationToolbar<TData>({
   table,
 }: PaginationToolbarProps<TData>) {
+  if (table.getRowModel().rows.length === 0) return null;
+
   return (
     <div className='flex items-center justify-end px-2 mt-4'>
       <div className='flex items-center space-x-6 lg:space-x-8'>
