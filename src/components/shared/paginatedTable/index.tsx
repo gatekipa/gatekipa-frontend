@@ -26,6 +26,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { PaginationToolbar } from '../paginationToolbar';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -138,6 +139,7 @@ export default function PaginatedTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
+      <PaginationToolbar table={table} />
     </div>
   );
 }
