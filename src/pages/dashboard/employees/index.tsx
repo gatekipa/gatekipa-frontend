@@ -1,6 +1,7 @@
 import { IEmployee, IEmployeeQuery } from '@/app/features/employee/thunk';
 import CreateEmployeeModal from '@/components/features/employees/createEmployeeModal';
 import EmployeeStatusModal from '@/components/features/employees/employeeStatusModal';
+import ColumnHeader from '@/components/shared/columnHeader';
 import PaginatedTable from '@/components/shared/paginatedTable';
 import ToolTip from '@/components/shared/tooltip';
 import { Badge } from '@/components/ui/badge';
@@ -19,27 +20,39 @@ import { Link } from 'react-router-dom';
 const columns: ColumnDef<IEmployee>[] = [
   {
     accessorKey: 'firstName',
-    header: 'First Name',
+    header: ({ column }) => <ColumnHeader column={column} label='First Name' />,
+    enableSorting: true,
   },
   {
     accessorKey: 'lastName',
-    header: 'Last Name',
+    header: ({ column }) => <ColumnHeader column={column} label='Last Name' />,
+    enableSorting: true,
   },
   {
     accessorKey: 'designation',
-    header: 'Designation',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label='Designation' />
+    ),
+    enableSorting: true,
   },
   {
     accessorKey: 'employeeNo',
-    header: 'Employee No',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label='Employee No' />
+    ),
+    enableSorting: true,
   },
   {
     accessorKey: 'emailAddress',
-    header: 'Email',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label='Email Address' />
+    ),
+    enableSorting: true,
   },
   {
     accessorKey: 'isActive',
-    header: 'Status',
+    header: ({ column }) => <ColumnHeader column={column} label='Status' />,
+    enableSorting: true,
     cell: ({ row }) => {
       const { isActive } = row.original;
       return (
@@ -57,15 +70,20 @@ const columns: ColumnDef<IEmployee>[] = [
   },
   {
     accessorKey: 'mobileNo',
-    header: 'Mobile Number',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label='Mobile Number' />
+    ),
+    enableSorting: true,
   },
   {
     accessorKey: 'shift.name',
-    header: 'Shift',
+    header: ({ column }) => <ColumnHeader column={column} label='Shift' />,
+    enableSorting: true,
   },
   {
     accessorKey: 'createdAt',
-    header: 'Created At',
+    header: ({ column }) => <ColumnHeader column={column} label='Created At' />,
+    enableSorting: true,
     cell: ({ getValue }) => {
       const createdAt = getValue() as Date;
       return <span>{formatDate(new Date(createdAt))}</span>;
