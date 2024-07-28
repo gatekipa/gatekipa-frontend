@@ -5,6 +5,7 @@ import ConfirmModal, {
   ModalType,
 } from '@/components/features/visits/confirmModal';
 import VisitsToolbar from '@/components/features/visits/toolbar';
+import ColumnHeader from '@/components/shared/columnHeader';
 import PaginatedTable from '@/components/shared/paginatedTable';
 import { formatDate } from '@/utils';
 import { ColumnDef } from '@tanstack/react-table';
@@ -15,11 +16,17 @@ import { Link, useParams } from 'react-router-dom';
 const columns: ColumnDef<IVisit>[] = [
   {
     accessorKey: 'purposeOfVisit',
-    header: 'Purpose of Visit',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label='Purpose of Visit' />
+    ),
+    enableSorting: true,
   },
   {
     accessorKey: 'employee',
-    header: 'Person to Meet',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label='Person to Meet' />
+    ),
+    enableSorting: true,
     cell: ({ row }) => {
       const { firstName, lastName } = row.original.employee;
       return `${firstName} ${lastName}`;
@@ -27,15 +34,22 @@ const columns: ColumnDef<IVisit>[] = [
   },
   {
     accessorKey: 'employee.emailAddress',
-    header: "Person to Meet's Email",
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Person to Meet's Email" />
+    ),
+    enableSorting: true,
   },
   {
     accessorKey: 'employee.mobileNo',
-    header: "Person to Meet's Mobile",
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Person to Meet's Mobile" />
+    ),
+    enableSorting: true,
   },
   {
     accessorKey: 'visitDate',
-    header: 'Visit Date',
+    header: ({ column }) => <ColumnHeader column={column} label='Visit Date' />,
+    enableSorting: true,
     cell: ({ getValue }) => {
       const createdAt = getValue() as Date;
       return createdAt ? (
@@ -47,7 +61,10 @@ const columns: ColumnDef<IVisit>[] = [
   },
   {
     accessorKey: 'checkInTime',
-    header: 'Check In Time',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label='Check In Time' />
+    ),
+    enableSorting: true,
     cell: ({ getValue }) => {
       const createdAt = getValue() as Date;
       return createdAt ? (
@@ -59,7 +76,10 @@ const columns: ColumnDef<IVisit>[] = [
   },
   {
     accessorKey: 'checkoutTime',
-    header: 'Check Out Time',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label='Check Out Time' />
+    ),
+    enableSorting: true,
     cell: ({ getValue }) => {
       const createdAt = getValue() as Date;
       return createdAt ? (

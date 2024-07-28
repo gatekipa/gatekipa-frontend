@@ -5,6 +5,7 @@ import VisitorToolbar from '@/components/features/visitors/toolbar';
 import VisitsToolbar from '@/components/features/visits/toolbar';
 import LoadingButton from '@/components/shared/loadingButton';
 import PaginatedTable from '@/components/shared/paginatedTable';
+import ColumnHeader from '@/components/shared/columnHeader';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -17,23 +18,30 @@ import { Link } from 'react-router-dom';
 const columns: ColumnDef<IVisitor>[] = [
   {
     accessorKey: 'firstName',
-    header: 'First Name',
+    header: ({ column }) => <ColumnHeader column={column} label='First Name' />,
+    enableSorting: true,
   },
   {
     accessorKey: 'lastName',
-    header: 'Last Name',
+    header: ({ column }) => <ColumnHeader column={column} label='Last Name' />,
+    enableSorting: true,
   },
   {
     accessorKey: 'emailAddress',
-    header: 'Email',
+    header: ({ column }) => <ColumnHeader column={column} label='Email' />,
+    enableSorting: true,
   },
   {
     accessorKey: 'mobileNo',
-    header: 'Mobile Number',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label='Mobile Number' />
+    ),
+    enableSorting: true,
   },
   {
     accessorKey: 'createdAt',
-    header: 'Created At',
+    header: ({ column }) => <ColumnHeader column={column} label='Created At' />,
+    enableSorting: true,
     cell: ({ getValue }) => {
       const createdAt = getValue() as Date;
       return <span>{formatDate(new Date(createdAt))}</span>;
