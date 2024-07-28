@@ -32,7 +32,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import { Label } from '@radix-ui/react-label';
 import { format } from 'date-fns';
-import { PlusCircleIcon } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import React, { useCallback, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -88,14 +88,9 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
     <div>
       <Dialog>
         <DialogTrigger>
-          <Button
-            size='sm'
-            className='text-xs'
-            variant='link'
-            title='Create a new visit'
-          >
-            <PlusCircleIcon size={12} className='mr-2' />
-            Create Visit
+          <Button size='sm'>
+            <Plus className='mr-2' size={16} />
+            New Visitor
           </Button>
         </DialogTrigger>
         <DialogContent>

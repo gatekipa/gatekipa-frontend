@@ -1,6 +1,5 @@
 import { fetchVisitorsThunk, IVisitor } from '@/app/features/company/thunk';
-import { fetchEmployeesThunk } from '@/app/features/employee/thunk';
-import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { useAppDispatch } from '@/app/hooks';
 import VisitorToolbar from '@/components/features/visitors/toolbar';
 import VisitsToolbar from '@/components/features/visits/toolbar';
 import LoadingButton from '@/components/shared/loadingButton';
@@ -12,8 +11,10 @@ import { Input } from '@/components/ui/input';
 import { formatDate, getUserRole } from '@/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { ExternalLink } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import useVisitors from '@/hooks/visitors';
+import useEmployees from '@/hooks/employees';
 
 const columns: ColumnDef<IVisitor>[] = [
   {
@@ -76,40 +77,38 @@ const columns: ColumnDef<IVisitor>[] = [
 const VisitorsPage: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const [emailSearch, setEmailSearch] = useState('');
-  const [phoneSearch, setPhoneSearch] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [query, setQuery] = useState({
+    emailSearch: '',
+    phoneSearch: '',
+    firstName: '',
+    lastName: '',
+  });
 
-  const { visitors, loading } = useAppSelector((state) => state.company);
-
-  useEffect(() => {
-    dispatch(fetchVisitorsThunk({}));
-    dispatch(fetchEmployeesThunk({}));
-  }, []);
+  const { visitors, loading, filterFn } = useVisitors();
+  useEmployees();
 
   const handleSearch = useCallback(() => {
-    dispatch(
-      fetchVisitorsThunk({
-        email: emailSearch,
-        phoneNumber: phoneSearch,
-        firstName,
-        lastName,
-      })
-    );
-  }, [emailSearch, phoneSearch, firstName, lastName]);
+    filterFn(query);
+  }, [query]);
 
   const handleReset = useCallback(() => {
     dispatch(fetchVisitorsThunk({}));
-    setPhoneSearch('');
-    setEmailSearch('');
-    setFirstName('');
-    setLastName('');
+    setQuery({
+      emailSearch: '',
+      phoneSearch: '',
+      firstName: '',
+      lastName: '',
+    });
   }, []);
 
   const disableCondition = useMemo(() => {
-    return !emailSearch && !phoneSearch && !firstName && !lastName;
-  }, [emailSearch, phoneSearch, firstName, lastName]);
+    return (
+      !query.emailSearch &&
+      !query.phoneSearch &&
+      !query.firstName &&
+      !query.lastName
+    );
+  }, [query]);
 
   return (
     <Card>
@@ -126,23 +125,29 @@ const VisitorsPage: React.FC = () => {
           <div className='flex gap-x-3 my-4'>
             <Input
               placeholder='Search By Email'
-              value={emailSearch}
-              onChange={(e) => setEmailSearch(e.target.value)}
+              value={query.emailSearch}
+              onChange={(e) =>
+                setQuery({ ...query, emailSearch: e.target.value })
+              }
             />
             <Input
               placeholder='Search By Mobile Number'
-              value={phoneSearch}
-              onChange={(e) => setPhoneSearch(e.target.value)}
+              value={query.phoneSearch}
+              onChange={(e) =>
+                setQuery({ ...query, phoneSearch: e.target.value })
+              }
             />
             <Input
               placeholder='Search By First Name'
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              value={query.firstName}
+              onChange={(e) =>
+                setQuery({ ...query, firstName: e.target.value })
+              }
             />
             <Input
               placeholder='Search By Last Name'
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              value={query.lastName}
+              onChange={(e) => setQuery({ ...query, lastName: e.target.value })}
             />
             <LoadingButton
               onClick={handleSearch}

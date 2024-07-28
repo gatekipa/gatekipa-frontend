@@ -7,6 +7,7 @@ import ConfirmModal, {
 import VisitsToolbar from '@/components/features/visits/toolbar';
 import ColumnHeader from '@/components/shared/columnHeader';
 import PaginatedTable from '@/components/shared/paginatedTable';
+import { Card, CardContent } from '@/components/ui/card';
 import { formatDate } from '@/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowLeft } from 'lucide-react';
@@ -141,24 +142,26 @@ const VisitsPage: React.FC = () => {
   }, [user, visitorId]);
 
   return (
-    <div>
-      <div className='flex items-center justify-between'>
-        <h1 className='flex items-center gap-x-3 text-xl'>
-          {user?.userType !== 'VISITOR' && (
-            <Link to='/dashboard/visitors'>
-              <ArrowLeft size={16} />
-            </Link>
-          )}
-          Visits Page
-        </h1>
-        <div>
-          <VisitsToolbar visitorId={visitorId!} />
+    <Card>
+      <CardContent>
+        <div className='flex items-center justify-between mt-6'>
+          <h1 className='flex items-center gap-x-3 text-2xl font-semibold'>
+            {user?.userType !== 'VISITOR' && (
+              <Link to='/dashboard/visitors'>
+                <ArrowLeft size={16} />
+              </Link>
+            )}
+            Visits Page
+          </h1>
+          <div>
+            <VisitsToolbar visitorId={visitorId!} />
+          </div>
         </div>
-      </div>
-      <div>
-        <PaginatedTable data={visits} columns={columns} />
-      </div>
-    </div>
+        <div>
+          <PaginatedTable data={visits} columns={columns} />
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

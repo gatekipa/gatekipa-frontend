@@ -45,7 +45,7 @@ export interface IVisit {
   id: string;
 }
 
-interface FetchVisitorsParams {
+export interface FetchVisitorsParams {
   email?: string;
   phoneNumber?: string;
   firstName?: string;
