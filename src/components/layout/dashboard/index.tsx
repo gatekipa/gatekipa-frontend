@@ -1,17 +1,24 @@
-import { LogOutIcon, Menu } from 'lucide-react';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { Avatar, AvatarFallback } from '../../ui/avatar';
 import { adminRoutes, visitorRoutes } from '../../../constants/routes';
-import { Button } from '../../ui/button';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { logout } from '../../../app/features/auth/slice';
-import { getUserInitials, getUsername } from '@/utils';
+import { getUsername } from '@/utils';
 import { ThemeProvider } from '@/components/providers/theme';
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from '@/components/ui/menubar';
+import logo from '../../../assets/logo.svg';
+import { Card, CardContent } from '@/components/ui/card';
+import { ModeToggle } from '@/components/shared/themeToggle';
+import { ArrowDown, KeyRound, LogOut } from 'lucide-react';
 
 const DashboardLayout: React.FC = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -36,30 +43,51 @@ const DashboardLayout: React.FC = () => {
   );
 
   return (
-    <ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
-      <div className='flex h-screen bg-gray-100'>
-        <div
-          className={`bg-primary text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform ${
-            isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-          } md:relative md:translate-x-0 transition duration-200 ease-in-out md:w-80 h-full`}
-        >
-          <div className='flex flex-col justify-between h-full'>
+    <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+      <div className='flex h-screen flex-col'>
+        <Menubar className='flex items-center py-7 px-3 rounded-none md:justify-between'>
+          <MenubarMenu>
             <div>
               <Link
                 to='/dashboard'
-                className='text-white flex items-center space-x-2 px-4'
+                className='flex items-center space-x-2 px-4'
               >
-                <Menu
-                  size={18}
-                  strokeWidth={2}
-                  color='#ffffff'
-                  onClick={() => setIsSidebarOpen(false)}
-                />
+                <img src={logo} alt='logo' className='w-8 h-8' />
                 <span className='text-xl font-extrabold tracking-wide'>
                   GateKipa
                 </span>
               </Link>
-              <nav className='mt-6'>
+            </div>
+          </MenubarMenu>
+          <div className='flex gap-x-2 ml-auto'>
+            <Menubar>
+              <MenubarMenu>
+                <MenubarTrigger>
+                  <div className='flex gap-x-2 items-center'>
+                    {getUsername()}
+                    <ArrowDown className='w-4 h-4' />
+                  </div>
+                </MenubarTrigger>
+                <MenubarContent>
+                  <MenubarItem>
+                    <KeyRound size={15} className='mr-2' />
+                    Change Password
+                  </MenubarItem>
+                  <MenubarSeparator />
+                  <MenubarItem onClick={handleLogout}>
+                    <LogOut size={15} className='mr-2' />
+                    Logout
+                  </MenubarItem>
+                </MenubarContent>
+              </MenubarMenu>
+            </Menubar>
+            <ModeToggle />
+          </div>
+        </Menubar>
+        <div className='flex-1 grid grid-cols-1 md:grid-cols-6'>
+          <Card className='col-span-1 py-4 rounded-none'>
+            <CardContent>
+              <aside>
                 {routes.map((route) => (
                   <NavLink
                     key={route.href}
@@ -69,7 +97,7 @@ const DashboardLayout: React.FC = () => {
                       route.href === '/dashboard/change-password'
                     }
                     className={({ isActive }) =>
-                      `flex gap-x-2 py-2.5 px-4 text-sm rounded transition duration-200 hover:bg-slate-800 ${
+                      `flex gap-x-2 py-2.5 text-sm rounded transition duration-200 ${
                         isActive
                           ? 'underline underline-offset-4 font-semibold'
                           : ''
@@ -77,38 +105,16 @@ const DashboardLayout: React.FC = () => {
                     }
                   >
                     {route.icon}
-                    <span> {route.label}</span>
+                    <span className='transition-all duration-300 ease-in-out hover:underline hover:underline-offset-4'>
+                      {' '}
+                      {route.label}
+                    </span>
                   </NavLink>
                 ))}
-              </nav>
-            </div>
-            <Button
-              className='flex gap-x-2 py-2.5 px-4 text-sm rounded transition duration-200 hover:bg-slate-800'
-              onClick={handleLogout}
-            >
-              <LogOutIcon size={18} className='mr-2' />
-              <span>Logout</span>
-            </Button>
-          </div>
-        </div>
-        <div className='flex-1 flex flex-col overflow-hidden'>
-          <header className='flex justify-between items-center p-2 shadow-md md:justify-end'>
-            <button
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className='md:hidden'
-            >
-              <Menu size={24} strokeWidth={2} color={'#000000'} />
-            </button>
-            <div className='flex items-center gap-x-2 pr-6'>
-              <Avatar>
-                <AvatarFallback className='bg-primary text-white'>
-                  {getUserInitials()}
-                </AvatarFallback>
-              </Avatar>
-              <p className='text-sm text-gray-900'>{getUsername()}</p>
-            </div>
-          </header>
-          <main className='flex-1 overflow-x-hidden overflow-y-auto bg-gray-200'>
+              </aside>
+            </CardContent>
+          </Card>
+          <main className='col-span-5 overflow-x-hidden overflow-y-auto'>
             <div className='container mx-auto px-6 py-8'>
               <Outlet />
             </div>
