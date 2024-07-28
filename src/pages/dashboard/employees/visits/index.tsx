@@ -4,7 +4,7 @@ import ColumnHeader from '@/components/shared/columnHeader';
 import PaginatedTable from '@/components/shared/paginatedTable';
 import { Card, CardContent } from '@/components/ui/card';
 import useEmployeeVisits from '@/hooks/employees/visits';
-import { formatDate } from '@/utils';
+import { formatDate, formatTime } from '@/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowLeft } from 'lucide-react';
 import React, { useMemo } from 'react';
@@ -21,21 +21,21 @@ const columns: ColumnDef<IEmployeeVisit>[] = [
     },
   },
   {
-    accessorKey: 'createdAt',
+    accessorKey: 'checkInTime',
     header: ({ column }) => <ColumnHeader column={column} label='Time In' />,
     enableSorting: true,
     cell: ({ getValue }) => {
-      const createdAt = getValue() as Date;
-      return <span>{formatDate(new Date(createdAt))}</span>;
+      const checkInTime = getValue() as Date;
+      return <span>{formatTime(new Date(checkInTime))}</span>;
     },
   },
   {
-    accessorKey: 'createdAt',
+    accessorKey: 'checkOutTime',
     header: ({ column }) => <ColumnHeader column={column} label='Time Out' />,
     enableSorting: true,
     cell: ({ getValue }) => {
-      const createdAt = getValue() as Date;
-      return <span>{formatDate(new Date(createdAt))}</span>;
+      const checkOutTime = getValue() as Date;
+      return <span>{formatTime(new Date(checkOutTime))}</span>;
     },
   },
 ];
