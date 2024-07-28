@@ -18,15 +18,19 @@ const columns: ColumnDef<IVisit>[] = [
     header: 'Purpose of Visit',
   },
   {
-    accessorKey: 'personToMeet',
+    accessorKey: 'employee',
     header: 'Person to Meet',
+    cell: ({ row }) => {
+      const { firstName, lastName } = row.original.employee;
+      return `${firstName} ${lastName}`;
+    },
   },
   {
-    accessorKey: 'personToMeetEmail',
+    accessorKey: 'employee.emailAddress',
     header: "Person to Meet's Email",
   },
   {
-    accessorKey: 'personToMeetMobileNo',
+    accessorKey: 'employee.mobileNo',
     header: "Person to Meet's Mobile",
   },
   {
