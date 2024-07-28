@@ -4,6 +4,7 @@ import {
   IEmployeeVisit,
 } from '@/app/features/employee/thunk';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import EmployeeCheckoutModal from '@/components/features/employees/visit/checkoutModal';
 import ColumnHeader from '@/components/shared/columnHeader';
 import PaginatedTable from '@/components/shared/paginatedTable';
 import { Button } from '@/components/ui/button';
@@ -12,7 +13,7 @@ import useEmployeeVisits from '@/hooks/employees/visits';
 import { formatDate, formatTime } from '@/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowLeft } from 'lucide-react';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -52,6 +53,8 @@ const EmployeeVisitsPage: React.FC = () => {
 
   const { employeeId } = useParams();
 
+  const [isCheckOutModalOpen, setIsCheckOutModalOpen] = useState(false);
+
   const { employees } = useAppSelector((state) => state.employee);
 
   const employee = useMemo(() => {
@@ -73,8 +76,6 @@ const EmployeeVisitsPage: React.FC = () => {
       toast.error(`${error}`);
     }
   }, [employeeId]);
-
-  const handleCheckOut = useCallback(() => {}, []);
 
   return (
     <Card>
@@ -148,12 +149,23 @@ const EmployeeVisitsPage: React.FC = () => {
           <Button className='text-xs' size='sm' onClick={handleCheckIn}>
             Check In
           </Button>
-          <Button className='text-xs' size='sm' onClick={handleCheckOut}>
+          <Button
+            className='text-xs'
+            size='sm'
+            onClick={() => setIsCheckOutModalOpen(true)}
+          >
             Check Out
           </Button>
         </div>
         <PaginatedTable data={visits} columns={columns} />
       </div>
+      {isCheckOutModalOpen && (
+        <EmployeeCheckoutModal
+          isOpen={isCheckOutModalOpen}
+          onClose={() => setIsCheckOutModalOpen(false)}
+          employeeId={employeeId!}
+        />
+      )}
     </Card>
   );
 };
