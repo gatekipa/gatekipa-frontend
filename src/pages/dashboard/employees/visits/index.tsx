@@ -1,6 +1,7 @@
 import { IEmployee } from '@/app/features/employee/thunk';
 import { useAppSelector } from '@/app/hooks';
 import { Card, CardContent } from '@/components/ui/card';
+import useEmployeeVisits from '@/hooks/employees/visits';
 import { ArrowLeft } from 'lucide-react';
 import React, { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -18,6 +19,8 @@ const EmployeeVisitsPage: React.FC = () => {
       ({} as IEmployee)
     );
   }, [employeeId, employees]);
+
+  const { visits } = useEmployeeVisits(employeeId!);
 
   return (
     <Card>
