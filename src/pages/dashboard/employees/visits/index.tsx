@@ -1,14 +1,20 @@
-import { IEmployee, IEmployeeVisit } from '@/app/features/employee/thunk';
-import { useAppSelector } from '@/app/hooks';
+import {
+  employeeCheckInThunk,
+  IEmployee,
+  IEmployeeVisit,
+} from '@/app/features/employee/thunk';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import ColumnHeader from '@/components/shared/columnHeader';
 import PaginatedTable from '@/components/shared/paginatedTable';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import useEmployeeVisits from '@/hooks/employees/visits';
 import { formatDate, formatTime } from '@/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowLeft } from 'lucide-react';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const columns: ColumnDef<IEmployeeVisit>[] = [
   {
@@ -41,6 +47,7 @@ const columns: ColumnDef<IEmployeeVisit>[] = [
 ];
 
 const EmployeeVisitsPage: React.FC = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const { employeeId } = useParams();
@@ -55,6 +62,19 @@ const EmployeeVisitsPage: React.FC = () => {
   }, [employeeId, employees]);
 
   const { visits } = useEmployeeVisits(employeeId!);
+
+  const handleCheckIn = useCallback(async () => {
+    try {
+      await dispatch(
+        employeeCheckInThunk({ employeeId: employeeId! })
+      ).unwrap();
+      toast.success('Checked in successfully');
+    } catch (error) {
+      toast.error(`${error}`);
+    }
+  }, [employeeId]);
+
+  const handleCheckOut = useCallback(() => {}, []);
 
   return (
     <Card>
@@ -124,6 +144,14 @@ const EmployeeVisitsPage: React.FC = () => {
         </div>
       </div>
       <div className='mx-8 mb-8'>
+        <div className='space-x-2 md:translate-y-14'>
+          <Button className='text-xs' size='sm' onClick={handleCheckIn}>
+            Check In
+          </Button>
+          <Button className='text-xs' size='sm' onClick={handleCheckOut}>
+            Check Out
+          </Button>
+        </div>
         <PaginatedTable data={visits} columns={columns} />
       </div>
     </Card>

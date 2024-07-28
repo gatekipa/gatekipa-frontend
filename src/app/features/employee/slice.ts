@@ -3,6 +3,7 @@ import {
   changeEmployeeStatusThunk,
   createEmployeeThunk,
   editEmployeeThunk,
+  employeeCheckInThunk,
   fetchEmployeesThunk,
   fetchEmployeeVisitsThunk,
   fetchShiftsThunk,
@@ -113,6 +114,19 @@ export const employeeSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchEmployeeVisitsThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      employeeCheckInThunk.fulfilled,
+      (state, action: PayloadAction<IEmployeeVisit>) => {
+        state.visits = [action.payload, ...state.visits];
+        state.loading = false;
+      }
+    );
+    builder.addCase(employeeCheckInThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(employeeCheckInThunk.rejected, (state) => {
       state.loading = false;
     });
   },
