@@ -67,7 +67,7 @@ const columns: ColumnDef<IVisitor>[] = [
             </Button>
           </Link>
 
-          <VisitsToolbar visitorId={visitor.id} />
+          <VisitsToolbar visitorId={visitor.id} mode='table' />
         </div>
       );
     },

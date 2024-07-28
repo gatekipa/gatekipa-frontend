@@ -154,7 +154,7 @@ const VisitsPage: React.FC = () => {
             Visits Page
           </h1>
           <div>
-            <VisitsToolbar visitorId={visitorId!} />
+            <VisitsToolbar visitorId={visitorId!} mode='toolbar' />
           </div>
         </div>
         <div>

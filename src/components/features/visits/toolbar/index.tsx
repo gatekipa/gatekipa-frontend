@@ -49,9 +49,10 @@ export type IVisitForm = z.infer<typeof visitFormSchema>;
 
 type IVisitsToolbarProps = {
   visitorId: string;
+  mode: 'table' | 'toolbar';
 };
 
-const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
+const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId, mode }) => {
   const dispatch = useAppDispatch();
   const { employees } = useAppSelector((state) => state.employee);
   const { loading } = useAppSelector((state) => state.company);
@@ -88,10 +89,17 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId }) => {
     <div>
       <Dialog>
         <DialogTrigger>
-          <Button size='sm'>
-            <Plus className='mr-2' size={16} />
-            New Visitor
-          </Button>
+          {mode === 'table' ? (
+            <Button size='sm' variant='link' className='text-xs'>
+              <Plus className='mr-1' size={12} />
+              Create Visit
+            </Button>
+          ) : (
+            <Button size='sm' className='text-xs'>
+              <Plus className='mr-2' size={16} />
+              Create Visit
+            </Button>
+          )}
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
