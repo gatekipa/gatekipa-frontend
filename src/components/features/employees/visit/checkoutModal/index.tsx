@@ -1,4 +1,4 @@
-import { employeeCheckInThunk } from '@/app/features/employee/thunk';
+import { employeeCheckOutThunk } from '@/app/features/employee/thunk';
 import { useAppDispatch } from '@/app/hooks';
 import {
   AlertDialog,
@@ -27,7 +27,9 @@ const EmployeeCheckoutModal: React.FC<EmployeeCheckoutModalProps> = ({
 
   const handleSubmit = useCallback(async () => {
     try {
-      await dispatch(employeeCheckInThunk({ employeeId: employeeId })).unwrap();
+      await dispatch(
+        employeeCheckOutThunk({ employeeId: employeeId })
+      ).unwrap();
       toast.success(`Employee Successfully Checked Out`);
       onClose();
     } catch (error) {

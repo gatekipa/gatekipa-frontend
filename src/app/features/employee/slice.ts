@@ -4,6 +4,7 @@ import {
   createEmployeeThunk,
   editEmployeeThunk,
   employeeCheckInThunk,
+  employeeCheckOutThunk,
   fetchEmployeesThunk,
   fetchEmployeeVisitsThunk,
   fetchShiftsThunk,
@@ -127,6 +128,19 @@ export const employeeSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(employeeCheckInThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      employeeCheckOutThunk.fulfilled,
+      (state, action: PayloadAction<IEmployeeVisit>) => {
+        state.visits = [action.payload, ...state.visits];
+        state.loading = false;
+      }
+    );
+    builder.addCase(employeeCheckOutThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(employeeCheckOutThunk.rejected, (state) => {
       state.loading = false;
     });
   },
