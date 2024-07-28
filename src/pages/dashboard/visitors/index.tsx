@@ -114,7 +114,7 @@ const VisitorsPage: React.FC = () => {
     <Card>
       <CardContent>
         <div className='flex justify-between items-center p-3 mt-8'>
-          <h2 className='text-2xl text-gray-950 font-semibold'>
+          <h2 className='text-2xl font-semibold'>
             {getUserRole() === 'ADMIN'
               ? 'Visitor Management'
               : 'Visit Management'}

@@ -69,10 +69,12 @@ const DashboardLayout: React.FC = () => {
                   </div>
                 </MenubarTrigger>
                 <MenubarContent>
-                  <MenubarItem>
-                    <KeyRound size={15} className='mr-2' />
-                    Change Password
-                  </MenubarItem>
+                  <Link to='change-password'>
+                    <MenubarItem>
+                      <KeyRound size={15} className='mr-2' />
+                      Change Password
+                    </MenubarItem>
+                  </Link>
                   <MenubarSeparator />
                   <MenubarItem onClick={handleLogout}>
                     <LogOut size={15} className='mr-2' />

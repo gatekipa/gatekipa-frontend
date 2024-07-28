@@ -3,8 +3,8 @@ import {
   LayoutDashboardIcon,
   User2Icon,
   UsersIcon,
-} from "lucide-react";
-import { ReactElement } from "react";
+} from 'lucide-react';
+import { ReactElement } from 'react';
 
 type Route = {
   label: string;
@@ -14,8 +14,8 @@ type Route = {
 
 const adminRoutes: Route[] = [
   {
-    label: "Dashboard",
-    href: "/dashboard",
+    label: 'Dashboard',
+    href: '/dashboard',
     icon: <LayoutDashboardIcon size={18} />,
   },
   // {
@@ -24,26 +24,26 @@ const adminRoutes: Route[] = [
   //   icon: <User2Icon size={18} />,
   // },
   {
-    label: "Visitors",
-    href: "/dashboard/visitors",
+    label: 'Visitors',
+    href: '/dashboard/visitors',
     icon: <User2Icon size={18} />,
   },
   {
-    label: "Employees",
-    href: "/dashboard/employees",
+    label: 'Employees',
+    href: '/dashboard/employees',
     icon: <UsersIcon size={18} />,
   },
-  {
-    label: "Change Password",
-    href: "/dashboard/change-password",
-    icon: <EyeIcon size={18} />,
-  },
+  // {
+  //   label: "Change Password",
+  //   href: "/dashboard/change-password",
+  //   icon: <EyeIcon size={18} />,
+  // },
 ];
 
 const visitorRoutes: Route[] = [
   {
-    label: "Dashboard",
-    href: "/dashboard",
+    label: 'Dashboard',
+    href: '/dashboard',
     icon: <LayoutDashboardIcon size={18} />,
   },
   // {
@@ -52,13 +52,13 @@ const visitorRoutes: Route[] = [
   //   icon: <User2Icon size={18} />,
   // },
   {
-    label: "Visits",
-    href: "/dashboard/visits/:visitorId",
+    label: 'Visits',
+    href: '/dashboard/visits/:visitorId',
     icon: <User2Icon size={18} />,
   },
   {
-    label: "Change Password",
-    href: "/dashboard/change-password",
+    label: 'Change Password',
+    href: '/dashboard/change-password',
     icon: <EyeIcon size={18} />,
   },
 ];
