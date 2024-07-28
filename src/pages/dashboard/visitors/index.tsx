@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { formatDate, getUserRole } from '@/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { ExternalLink } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const columns: ColumnDef<IVisitor>[] = [
@@ -107,6 +107,10 @@ const VisitorsPage: React.FC = () => {
     setLastName('');
   }, []);
 
+  const disableCondition = useMemo(() => {
+    return !emailSearch && !phoneSearch && !firstName && !lastName;
+  }, [emailSearch, phoneSearch, firstName, lastName]);
+
   return (
     <Card>
       <CardContent>
@@ -144,8 +148,11 @@ const VisitorsPage: React.FC = () => {
               onClick={handleSearch}
               loading={loading}
               label='Search'
+              disabled={disableCondition}
             />
-            <Button onClick={handleReset}>Reset</Button>
+            <Button onClick={handleReset} disabled={disableCondition}>
+              Reset
+            </Button>
           </div>
           {loading ? (
             <div>Loading...</div>
