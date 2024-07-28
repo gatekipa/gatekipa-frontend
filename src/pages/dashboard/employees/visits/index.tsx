@@ -1,10 +1,44 @@
-import { IEmployee } from '@/app/features/employee/thunk';
+import { IEmployee, IEmployeeVisit } from '@/app/features/employee/thunk';
 import { useAppSelector } from '@/app/hooks';
+import ColumnHeader from '@/components/shared/columnHeader';
+import PaginatedTable from '@/components/shared/paginatedTable';
 import { Card, CardContent } from '@/components/ui/card';
 import useEmployeeVisits from '@/hooks/employees/visits';
+import { formatDate } from '@/utils';
+import { ColumnDef } from '@tanstack/react-table';
 import { ArrowLeft } from 'lucide-react';
 import React, { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+
+const columns: ColumnDef<IEmployeeVisit>[] = [
+  {
+    accessorKey: 'createdAt',
+    header: ({ column }) => <ColumnHeader column={column} label='Date' />,
+    enableSorting: true,
+    cell: ({ getValue }) => {
+      const createdAt = getValue() as Date;
+      return <span>{formatDate(new Date(createdAt))}</span>;
+    },
+  },
+  {
+    accessorKey: 'createdAt',
+    header: ({ column }) => <ColumnHeader column={column} label='Time In' />,
+    enableSorting: true,
+    cell: ({ getValue }) => {
+      const createdAt = getValue() as Date;
+      return <span>{formatDate(new Date(createdAt))}</span>;
+    },
+  },
+  {
+    accessorKey: 'createdAt',
+    header: ({ column }) => <ColumnHeader column={column} label='Time Out' />,
+    enableSorting: true,
+    cell: ({ getValue }) => {
+      const createdAt = getValue() as Date;
+      return <span>{formatDate(new Date(createdAt))}</span>;
+    },
+  },
+];
 
 const EmployeeVisitsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -88,6 +122,9 @@ const EmployeeVisitsPage: React.FC = () => {
             className='w-36 h-36 rounded-sm object-cover'
           />
         </div>
+      </div>
+      <div className='mx-8 mb-8'>
+        <PaginatedTable data={visits} columns={columns} />
       </div>
     </Card>
   );

@@ -33,7 +33,16 @@ export interface IEmployee {
   updatedAt: string;
 }
 
-export interface IEmployeeVisit {}
+export interface IEmployeeVisit {
+  id: string;
+  checkOutTime: string;
+  checkInTime: string;
+  employee: string;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+  updatedBy: string;
+}
 
 export type IEmployeeUpdate = Omit<IEmployee, 'companyId' | 'shift'> & {
   shift: Pick<IShift, 'id'>;
