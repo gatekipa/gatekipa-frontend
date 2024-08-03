@@ -81,8 +81,7 @@ const AllVisitsEmployeePage = () => {
       body: data,
     });
 
-    // Save the PDF
-    doc.save('table.pdf');
+    doc.save(`employees-${new Date().toISOString()}.pdf`);
   }, [employees]);
 
   return (
