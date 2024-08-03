@@ -45,11 +45,17 @@ export const columns: ColumnDef<IEmployeeReport>[] = [
     ),
     enableSorting: true,
   },
-
   {
     accessorKey: 'employee.mobileNo',
     header: ({ column }) => (
       <ColumnHeader column={column} label='Mobile Number' />
+    ),
+    enableSorting: true,
+  },
+  {
+    accessorKey: 'checkInTime',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label='Check In Time' />
     ),
     enableSorting: true,
   },
