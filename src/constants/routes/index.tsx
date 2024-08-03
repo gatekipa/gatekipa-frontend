@@ -1,4 +1,5 @@
 import {
+  Clipboard,
   EyeIcon,
   LayoutDashboardIcon,
   User2Icon,
@@ -36,7 +37,7 @@ const adminRoutes: Route[] = [
   {
     label: 'Employee Visits',
     href: '/dashboard/employees/visits',
-    icon: <UsersIcon size={18} />,
+    icon: <Clipboard size={18} />,
   },
 ];
 
