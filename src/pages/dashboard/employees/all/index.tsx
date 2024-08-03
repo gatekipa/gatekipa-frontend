@@ -8,6 +8,9 @@ import { columns } from '..';
 import useEmployees from '@/hooks/employees';
 import { toast } from 'sonner';
 
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
 const AllVisitsEmployeePage = () => {
   const [query, setQuery] = useState({
     employeeNo: '',
@@ -66,19 +69,45 @@ const AllVisitsEmployeePage = () => {
     toast.success(`Exported Successfully`);
   }, [employees]);
 
+  const exportToPdf = useCallback(() => {
+    const doc = new jsPDF({ orientation: 'landscape' });
+    doc.setFontSize(18);
+    doc.text('Employee Visits', 14, 22);
+
+    const data = employees.map((employee) => Object.values(employee));
+
+    autoTable(doc, {
+      head: [['email', 'name', 'employeeNo']],
+      body: data,
+    });
+
+    // Save the PDF
+    doc.save('table.pdf');
+  }, [employees]);
+
   return (
     <Card>
       <CardContent>
         <div className='flex justify-between items-center mt-8'>
           <h2 className='text-2xl font-semibold'>Employee Visits</h2>
-          <Button
-            className='text-xs'
-            title='Export to CSV'
-            onClick={onExportClickHandler}
-          >
-            <DownloadIcon className='mr-2' />
-            Export
-          </Button>
+          <div className='flex gap-x-2 flex-wrap md:flex-nowrap'>
+            <Button
+              className='text-xs'
+              title='Export to CSV'
+              onClick={onExportClickHandler}
+            >
+              <DownloadIcon className='mr-2' />
+              Export to CSV
+            </Button>
+            <Button
+              className='text-xs'
+              title='Export to PDF'
+              onClick={exportToPdf}
+            >
+              <DownloadIcon className='mr-2' />
+              Export to PDF
+            </Button>
+          </div>
         </div>
       </CardContent>
       <div>
