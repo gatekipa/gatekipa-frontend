@@ -18,14 +18,14 @@ const adminRoutes: Route[] = [
     href: '/dashboard',
     icon: <LayoutDashboardIcon size={18} />,
   },
-  // {
-  //   label: "Profile",
-  //   href: "/profile",
-  //   icon: <User2Icon size={18} />,
-  // },
   {
     label: 'Visitors',
     href: '/dashboard/visitors',
+    icon: <User2Icon size={18} />,
+  },
+  {
+    label: 'Visitor Visits',
+    href: '/dashboard/visitors/visits',
     icon: <User2Icon size={18} />,
   },
   {
@@ -33,11 +33,11 @@ const adminRoutes: Route[] = [
     href: '/dashboard/employees',
     icon: <UsersIcon size={18} />,
   },
-  // {
-  //   label: "Change Password",
-  //   href: "/dashboard/change-password",
-  //   icon: <EyeIcon size={18} />,
-  // },
+  {
+    label: 'Employee Visits',
+    href: '/dashboard/employees/visits',
+    icon: <UsersIcon size={18} />,
+  },
 ];
 
 const visitorRoutes: Route[] = [
@@ -46,11 +46,6 @@ const visitorRoutes: Route[] = [
     href: '/dashboard',
     icon: <LayoutDashboardIcon size={18} />,
   },
-  // {
-  //   label: "Profile",
-  //   href: "/profile",
-  //   icon: <User2Icon size={18} />,
-  // },
   {
     label: 'Visits',
     href: '/dashboard/visits/:visitorId',

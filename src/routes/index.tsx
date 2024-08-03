@@ -13,6 +13,8 @@ import VisitorsPage from '@/pages/dashboard/visitors';
 import VisitsPage from '@/pages/dashboard/visits';
 import EmployeesPage from '@/pages/dashboard/employees';
 import EmployeeVisitsPage from '@/pages/dashboard/employees/visits';
+import AllVisitsEmployeePage from '@/pages/dashboard/employees/all';
+import AllVisitorVisitsPage from '@/pages/dashboard/visitors/visits';
 
 const router = createBrowserRouter([
   {
@@ -36,12 +38,20 @@ const router = createBrowserRouter([
         element: <VisitorsPage />,
       },
       {
+        path: 'visitors/visits',
+        element: <AllVisitorVisitsPage />,
+      },
+      {
         path: 'employees',
         element: <EmployeesPage />,
       },
       {
         path: 'employees/visits/:employeeId',
         element: <EmployeeVisitsPage />,
+      },
+      {
+        path: 'employees/visits',
+        element: <AllVisitsEmployeePage />,
       },
       {
         path: 'visits/:visitorId',
