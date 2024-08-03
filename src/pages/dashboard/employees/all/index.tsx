@@ -4,12 +4,56 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { DownloadIcon } from '@radix-ui/react-icons';
 import { useCallback, useState } from 'react';
-import { columns } from '..';
-import useEmployees from '@/hooks/employees';
 import { toast } from 'sonner';
 
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import useAllEmployeeVisits from '@/hooks/employees/allVisits';
+import { ColumnDef } from '@tanstack/react-table';
+import { IEmployeeReport } from '@/app/features/employee/thunk';
+import ColumnHeader from '@/components/shared/columnHeader';
+
+export const columns: ColumnDef<IEmployeeReport>[] = [
+  {
+    accessorKey: 'employee.firstName',
+    header: ({ column }) => <ColumnHeader column={column} label='First Name' />,
+    enableSorting: true,
+  },
+  {
+    accessorKey: 'employee.lastName',
+    header: ({ column }) => <ColumnHeader column={column} label='Last Name' />,
+    enableSorting: true,
+  },
+  {
+    accessorKey: 'employee.designation',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label='Designation' />
+    ),
+    enableSorting: true,
+  },
+  {
+    accessorKey: 'employee.employeeNo',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label='Employee No' />
+    ),
+    enableSorting: true,
+  },
+  {
+    accessorKey: 'employee.emailAddress',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label='Email Address' />
+    ),
+    enableSorting: true,
+  },
+
+  {
+    accessorKey: 'employee.mobileNo',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label='Mobile Number' />
+    ),
+    enableSorting: true,
+  },
+];
 
 const AllVisitsEmployeePage = () => {
   const [query, setQuery] = useState({
@@ -18,7 +62,7 @@ const AllVisitsEmployeePage = () => {
     mobileNo: '',
   });
 
-  const { employees, loading } = useEmployees();
+  const { employeeVisits, loading } = useAllEmployeeVisits();
 
   const onExportClickHandler = useCallback(() => {
     const headerRowKeys = {
@@ -30,24 +74,24 @@ const AllVisitsEmployeePage = () => {
       designation: true,
       mobileNo: true,
       dateOfBirth: true,
-      companyId: true,
+      checkInTime: true,
     };
     const headerRow = Object.keys(headerRowKeys);
 
     // TODO: Add types to dataRows
     let dataRows = [];
 
-    for (const record of employees) {
+    for (const record of employeeVisits) {
       dataRows.push({
         id: record.id,
-        email: record.emailAddress,
-        firstName: record.firstName,
-        lastName: record.lastName,
-        desgination: record.designation,
-        employeeNo: record.employeeNo,
-        mobileNo: record.mobileNo,
-        dateOfBirth: record.dateOfBirth,
-        companyId: record.companyId,
+        email: record.employee.emailAddress,
+        firstName: record.employee.firstName,
+        lastName: record.employee.lastName,
+        desgination: record.employee.designation,
+        employeeNo: record.employee.employeeNo,
+        mobileNo: record.employee.mobileNo,
+        dateOfBirth: record.employee.dateOfBirth,
+        checkInTime: record.checkInTime,
       });
     }
 
@@ -67,14 +111,14 @@ const AllVisitsEmployeePage = () => {
     link.click();
 
     toast.success(`Exported Successfully`);
-  }, [employees]);
+  }, [employeeVisits]);
 
   const exportToPdf = useCallback(() => {
     const doc = new jsPDF({ orientation: 'landscape' });
     doc.setFontSize(18);
-    doc.text('Employee Visits', 14, 22);
+    doc.text('Employee Reports', 14, 22);
 
-    const data = employees.map((employee) => Object.values(employee));
+    const data = employeeVisits.map((employee) => Object.values(employee));
 
     autoTable(doc, {
       head: [['email', 'name', 'employeeNo']],
@@ -82,19 +126,19 @@ const AllVisitsEmployeePage = () => {
     });
 
     doc.save(`employees-${new Date().toISOString()}.pdf`);
-  }, [employees]);
+  }, [employeeVisits]);
 
   return (
     <Card>
       <CardContent>
         <div className='flex justify-between items-center mt-8'>
-          <h2 className='text-2xl font-semibold'>Employee Visits</h2>
+          <h2 className='text-2xl font-semibold'>Employee Reports</h2>
           <div className='flex gap-x-2 flex-wrap md:flex-nowrap'>
             <Button
               className='text-xs'
               title='Export to CSV'
               onClick={onExportClickHandler}
-              disabled={loading || !employees.length}
+              disabled={loading || !employeeVisits.length}
             >
               <DownloadIcon className='mr-2' />
               Export to CSV
@@ -103,7 +147,7 @@ const AllVisitsEmployeePage = () => {
               className='text-xs'
               title='Export to PDF'
               onClick={exportToPdf}
-              disabled={loading || !employees.length}
+              disabled={loading || !employeeVisits.length}
             >
               <DownloadIcon className='mr-2' />
               Export to PDF
@@ -149,7 +193,7 @@ const AllVisitsEmployeePage = () => {
           <div>Loading...</div>
         ) : (
           <div className='mx-6 mb-8'>
-            <PaginatedTable data={employees} columns={columns} />
+            <PaginatedTable data={employeeVisits} columns={columns} />
           </div>
         )}
       </div>

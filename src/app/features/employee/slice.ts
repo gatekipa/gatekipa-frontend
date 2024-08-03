@@ -5,10 +5,12 @@ import {
   editEmployeeThunk,
   employeeCheckInThunk,
   employeeCheckOutThunk,
+  fetchAllEmployeesVisits,
   fetchEmployeesThunk,
   fetchEmployeeVisitsThunk,
   fetchShiftsThunk,
   IEmployee,
+  IEmployeeReport,
   IEmployeeVisit,
   IShift,
 } from './thunk';
@@ -17,6 +19,7 @@ export interface EmployeeState {
   employees: IEmployee[];
   shifts: IShift[];
   visits: IEmployeeVisit[];
+  employeeVisits: IEmployeeReport[];
   loading: boolean;
 }
 
@@ -24,6 +27,7 @@ const initialState: EmployeeState = {
   employees: [],
   shifts: [],
   visits: [],
+  employeeVisits: [],
   loading: false,
 };
 
@@ -115,6 +119,20 @@ export const employeeSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchEmployeeVisitsThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      fetchAllEmployeesVisits.fulfilled,
+      (state, action: PayloadAction<IEmployeeReport[]>) => {
+        state.employeeVisits =
+          action.payload?.filter((record) => !!record.employee) ?? [];
+        state.loading = false;
+      }
+    );
+    builder.addCase(fetchAllEmployeesVisits.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchAllEmployeesVisits.rejected, (state) => {
       state.loading = false;
     });
     builder.addCase(

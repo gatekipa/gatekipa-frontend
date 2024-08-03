@@ -47,6 +47,12 @@ export interface IEmployeeVisit {
   updatedBy: string;
 }
 
+export interface IEmployeeReport {
+  id: string;
+  checkInTime: string;
+  employee: IEmployee;
+}
+
 export type IEmployeeUpdate = Omit<IEmployee, 'companyId' | 'shift'> & {
   shift: Pick<IShift, 'id'>;
 };
@@ -290,6 +296,34 @@ const fetchShiftsThunk: AsyncThunk<IShift[], void, {}> = createAsyncThunk(
   }
 );
 
+const fetchAllEmployeesVisits: AsyncThunk<IEmployeeReport[], void, {}> =
+  createAsyncThunk('employee/visits/reports', async (_, thunkAPI) => {
+    try {
+      // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
+      //   `/employee`
+      // );
+
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_API_URL}/reports/employee-visits`,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue('An unexpected error occurred');
+      }
+    }
+  });
+
 const fetchEmployeeVisitsThunk: AsyncThunk<
   IEmployeeVisit[],
   { employeeId: string },
@@ -330,4 +364,5 @@ export {
   fetchEmployeeVisitsThunk,
   employeeCheckInThunk,
   employeeCheckOutThunk,
+  fetchAllEmployeesVisits,
 };
