@@ -3,7 +3,7 @@ import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { adminRoutes, visitorRoutes } from '../../../constants/routes';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { logout } from '../../../app/features/auth/slice';
-import { getUsername } from '@/utils';
+import { getUsername, getUserRole } from '@/utils';
 import { ThemeProvider } from '@/components/providers/theme';
 import {
   Menubar,
@@ -17,6 +17,7 @@ import logo from '../../../assets/logo.svg';
 import { Card, CardContent } from '@/components/ui/card';
 import { ModeToggle } from '@/components/shared/themeToggle';
 import { ArrowDown, KeyRound, LogOut } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 const DashboardLayout: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -47,7 +48,7 @@ const DashboardLayout: React.FC = () => {
       <div className='flex h-screen flex-col'>
         <Menubar className='flex items-center py-7 px-3 rounded-none md:justify-between'>
           <MenubarMenu>
-            <div>
+            <div className='flex items-center'>
               <Link
                 to='/dashboard'
                 className='flex items-center space-x-2 px-4'
@@ -57,6 +58,13 @@ const DashboardLayout: React.FC = () => {
                   GateKipa
                 </span>
               </Link>
+
+              <Badge
+                variant='destructive'
+                className='hidden uppercase md:block'
+              >
+                {getUserRole()}
+              </Badge>
             </div>
           </MenubarMenu>
           <div className='flex gap-x-2 ml-auto'>
