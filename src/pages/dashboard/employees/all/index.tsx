@@ -118,7 +118,14 @@ const AllVisitsEmployeePage = () => {
     doc.setFontSize(18);
     doc.text('Employee Reports', 14, 22);
 
-    const data = employeeVisits.map((employee) => Object.values(employee));
+    const data = employeeVisits.map((employee) => {
+      const record = {
+        email: employee.employee.emailAddress,
+        name: `${employee.employee.firstName} ${employee.employee.lastName}`,
+        employeeNo: employee.employee.employeeNo,
+      };
+      return Object.values(record);
+    });
 
     autoTable(doc, {
       head: [['email', 'name', 'employeeNo']],
