@@ -28,6 +28,9 @@ export interface IEmployee {
   shift: IShift;
   employeeNo: string;
   dateOfBirth: Date;
+  payrollPeriodEndDate: Date;
+  payDate: Date;
+  timesheetDueDate: Date;
   createdBy: string;
   createdAt: string;
   updatedAt: string;

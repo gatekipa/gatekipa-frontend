@@ -59,6 +59,9 @@ const createEmployeeFormSchema = z.object({
   mobileNo: z.string().min(11),
   designation: z.string().min(3),
   dateOfBirth: z.date(),
+  timesheetDueDate: z.date(),
+  payrollPeriodEndDate: z.date(),
+  payDate: z.date(),
   shiftId: z.string(),
 });
 
@@ -84,6 +87,15 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
       dateOfBirth: employee?.dateOfBirth
         ? new Date(employee?.dateOfBirth)
         : new Date('2004-01-01'),
+      timesheetDueDate: employee?.timesheetDueDate
+        ? new Date(employee?.timesheetDueDate)
+        : new Date('2004-01-01'),
+      payrollPeriodEndDate: employee?.payrollPeriodEndDate
+        ? new Date(employee?.payrollPeriodEndDate)
+        : new Date('2004-01-01'),
+      payDate: employee?.payDate
+        ? new Date(employee?.payDate)
+        : new Date('2004-01-01'),
       shiftId: employee?.shift.id ?? '',
     },
   });
@@ -95,7 +107,6 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
       if (!employee) {
         await dispatch(createEmployeeThunk(values)).unwrap();
       } else {
-        // copy the employee object and update the values
         const newEmployee = { ...employee!, ...values };
         await dispatch(editEmployeeThunk(newEmployee!)).unwrap();
       }
@@ -114,7 +125,7 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
         if (!open) onClose();
       }}
     >
-      <DialogContent>
+      <DialogContent className='md:max-w-4xl'>
         <DialogHeader>
           <DialogTitle>
             {!!employee ? 'Edit Employee' : 'Create New Employee'}
@@ -128,150 +139,157 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className='grid w-full items-center gap-4'>
-              <div className='flex flex-col space-y-1.5'>
-                <FormField
-                  control={form.control}
-                  name='employeeNo'
-                  render={({ field }) => (
-                    <FormItem>
-                      <Label id='employeeNo' className='text-xs'>
-                        Employee No - (Leave blank for auto generation)
-                      </Label>
-                      <FormControl>
-                        <Input
-                          id='employeeNo'
-                          type='text'
-                          placeholder='Provide Employee No (Leave blank for auto generation)'
-                          autoComplete='off'
-                          className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <div className='flex gap-x-2 w-full'>
+                <div className='flex w-1/2 flex-col space-y-1.5'>
+                  <FormField
+                    control={form.control}
+                    name='firstName'
+                    render={({ field }) => (
+                      <FormItem>
+                        <Label id='firstName' className='text-xs'>
+                          First Name
+                        </Label>
+                        <FormControl>
+                          <Input
+                            id='firstName'
+                            type='text'
+                            placeholder='Please Enter First Name of the Employee'
+                            autoComplete='off'
+                            className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-xs'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className='flex w-1/2 flex-col space-y-1.5'>
+                  <FormField
+                    control={form.control}
+                    name='lastName'
+                    render={({ field }) => (
+                      <FormItem>
+                        <Label id='lastName' className='text-xs'>
+                          Last Name
+                        </Label>
+                        <FormControl>
+                          <Input
+                            id='lastName'
+                            type='text'
+                            placeholder='Please Enter Last Name of the Employee'
+                            autoComplete='off'
+                            className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
-              <div className='flex flex-col space-y-1.5'>
-                <FormField
-                  control={form.control}
-                  name='firstName'
-                  render={({ field }) => (
-                    <FormItem>
-                      <Label id='firstName' className='text-xs'>
-                        First Name
-                      </Label>
-                      <FormControl>
-                        <Input
-                          id='firstName'
-                          type='text'
-                          placeholder='Please Enter First Name of the Employee'
-                          autoComplete='off'
-                          className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <div className='flex gap-x-2 w-full'>
+                <div className='flex w-1/2 flex-col space-y-1.5'>
+                  <FormField
+                    control={form.control}
+                    name='emailAddress'
+                    render={({ field }) => (
+                      <FormItem>
+                        <Label id='emailAddress' className='text-xs'>
+                          Email Address
+                        </Label>
+                        <FormControl>
+                          <Input
+                            id='emailAddress'
+                            type='email'
+                            placeholder='Please Enter Email Address of the Employee'
+                            autoComplete='off'
+                            className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className='flex w-1/2 flex-col space-y-1.5'>
+                  <FormField
+                    control={form.control}
+                    name='mobileNo'
+                    render={({ field }) => (
+                      <FormItem>
+                        <Label id='mobileNo' className='text-xs'>
+                          Mobile No
+                        </Label>
+                        <FormControl>
+                          <Input
+                            id='mobileNo'
+                            type='text'
+                            placeholder='Please Enter Mobile No of the Employee'
+                            autoComplete='off'
+                            className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
-              <div className='flex flex-col space-y-1.5'>
-                <FormField
-                  control={form.control}
-                  name='lastName'
-                  render={({ field }) => (
-                    <FormItem>
-                      <Label id='lastName' className='text-xs'>
-                        Last Name
-                      </Label>
-                      <FormControl>
-                        <Input
-                          id='lastName'
-                          type='text'
-                          placeholder='Please Enter Last Name of the Employee'
-                          autoComplete='off'
-                          className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <div className='flex w-full gap-x-2'>
+                <div className='flex w-1/2 flex-col space-y-1.5'>
+                  <FormField
+                    control={form.control}
+                    name='employeeNo'
+                    render={({ field }) => (
+                      <FormItem>
+                        <Label id='employeeNo' className='text-xs'>
+                          Employee No - (Leave blank for auto generation)
+                        </Label>
+                        <FormControl>
+                          <Input
+                            id='employeeNo'
+                            type='text'
+                            placeholder='Provide Employee No (Leave blank for auto generation)'
+                            autoComplete='off'
+                            className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className='flex w-1/2 flex-col space-y-1.5'>
+                  <FormField
+                    control={form.control}
+                    name='designation'
+                    render={({ field }) => (
+                      <FormItem>
+                        <Label id='designation' className='text-xs'>
+                          Designation
+                        </Label>
+                        <FormControl>
+                          <Input
+                            id='designation'
+                            type='text'
+                            placeholder='Please Enter Designation of the Employee'
+                            autoComplete='off'
+                            className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
-              <div className='flex flex-col space-y-1.5'>
-                <FormField
-                  control={form.control}
-                  name='emailAddress'
-                  render={({ field }) => (
-                    <FormItem>
-                      <Label id='emailAddress' className='text-xs'>
-                        Email Address
-                      </Label>
-                      <FormControl>
-                        <Input
-                          id='emailAddress'
-                          type='email'
-                          placeholder='Please Enter Email Address of the Employee'
-                          autoComplete='off'
-                          className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className='flex flex-col space-y-1.5'>
-                <FormField
-                  control={form.control}
-                  name='mobileNo'
-                  render={({ field }) => (
-                    <FormItem>
-                      <Label id='mobileNo' className='text-xs'>
-                        Mobile No
-                      </Label>
-                      <FormControl>
-                        <Input
-                          id='mobileNo'
-                          type='text'
-                          placeholder='Please Enter Mobile No of the Employee'
-                          autoComplete='off'
-                          className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className='flex flex-col space-y-1.5'>
-                <FormField
-                  control={form.control}
-                  name='designation'
-                  render={({ field }) => (
-                    <FormItem>
-                      <Label id='designation' className='text-xs'>
-                        Designation
-                      </Label>
-                      <FormControl>
-                        <Input
-                          id='designation'
-                          type='text'
-                          placeholder='Please Enter Designation of the Employee'
-                          autoComplete='off'
-                          className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+
               <div className='flex flex-col space-y-1.5'>
                 <FormField
                   control={form.control}
@@ -343,7 +361,142 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
                             disabled={(date) =>
                               date > new Date() || date < new Date('1900-01-01')
                             }
-                            onDayClick={() => setIsCalendarOpen(false)}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className='flex w-full gap-x-2'>
+                <div className='flex w-1/2 flex-col space-y-1.5'>
+                  <FormField
+                    control={form.control}
+                    name='payDate'
+                    render={({ field }) => (
+                      <FormItem className='flex flex-col'>
+                        <Label className='text-xs'>Pay Date</Label>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={'outline'}
+                                className={cn(
+                                  'pl-3 text-left font-normal text-xs',
+                                  !field.value && 'text-muted-foreground'
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, 'PPP')
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className='w-full p-0' align='end'>
+                            <Calendar
+                              mode='single'
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              disabled={(date) =>
+                                date > new Date() ||
+                                date < new Date('1900-01-01')
+                              }
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className='flex w-1/2 flex-col space-y-1.5'>
+                  <FormField
+                    control={form.control}
+                    name='payrollPeriodEndDate'
+                    render={({ field }) => (
+                      <FormItem className='flex flex-col'>
+                        <Label className='text-xs'>
+                          Payroll Period End Date
+                        </Label>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={'outline'}
+                                className={cn(
+                                  'pl-3 text-left font-normal text-xs',
+                                  !field.value && 'text-muted-foreground'
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, 'PPP')
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className='w-full p-0' align='end'>
+                            <Calendar
+                              mode='single'
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              disabled={(date) =>
+                                date > new Date() ||
+                                date < new Date('1900-01-01')
+                              }
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
+              <div className='flex flex-col space-y-1.5'>
+                <FormField
+                  control={form.control}
+                  name='timesheetDueDate'
+                  render={({ field }) => (
+                    <FormItem className='flex flex-col'>
+                      <Label className='text-xs'>Timesheet Due Date</Label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={'outline'}
+                              className={cn(
+                                'pl-3 text-left font-normal text-xs',
+                                !field.value && 'text-muted-foreground'
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, 'PPP')
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className='w-full p-0' align='end'>
+                          <Calendar
+                            mode='single'
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date('1900-01-01')
+                            }
                             initialFocus
                           />
                         </PopoverContent>
