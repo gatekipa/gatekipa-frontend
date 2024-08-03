@@ -94,10 +94,7 @@ const DashboardLayout: React.FC = () => {
                   <NavLink
                     key={route.href}
                     to={route.href}
-                    end={
-                      route.href === '/dashboard' ||
-                      route.href === '/dashboard/change-password'
-                    }
+                    end
                     className={({ isActive }) =>
                       `flex gap-x-2 py-2.5 text-sm rounded transition duration-200 ${
                         isActive
