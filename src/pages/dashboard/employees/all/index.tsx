@@ -95,6 +95,7 @@ const AllVisitsEmployeePage = () => {
               className='text-xs'
               title='Export to CSV'
               onClick={onExportClickHandler}
+              disabled={loading || !employees.length}
             >
               <DownloadIcon className='mr-2' />
               Export to CSV
@@ -103,6 +104,7 @@ const AllVisitsEmployeePage = () => {
               className='text-xs'
               title='Export to PDF'
               onClick={exportToPdf}
+              disabled={loading || !employees.length}
             >
               <DownloadIcon className='mr-2' />
               Export to PDF
