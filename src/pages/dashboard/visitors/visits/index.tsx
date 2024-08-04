@@ -1,19 +1,12 @@
 import PaginatedTable from '@/components/shared/paginatedTable';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import useAllEmployeeVisits from '@/hooks/employees/allVisits';
+import useVisitorReports from '@/hooks/visitors/reports';
 import { DownloadIcon } from '@radix-ui/react-icons';
-import React, { useState } from 'react';
+import React from 'react';
 
 const AllVisitorVisitsPage: React.FC = () => {
-  const [query, setQuery] = useState({
-    employeeNo: '',
-    emailAddress: '',
-    mobileNo: '',
-  });
-
-  const { employeeVisits, loading } = useAllEmployeeVisits();
+  const { visitorVisits, loading } = useVisitorReports();
 
   const onExportClickHandler = () => {
     console.log('Export to CSV');
@@ -33,7 +26,7 @@ const AllVisitorVisitsPage: React.FC = () => {
               className='text-xs'
               title='Export to CSV'
               onClick={onExportClickHandler}
-              disabled={loading || !employeeVisits.length}
+              disabled={loading || !visitorVisits.length}
             >
               <DownloadIcon className='mr-2' />
               Export to CSV
@@ -42,7 +35,7 @@ const AllVisitorVisitsPage: React.FC = () => {
               className='text-xs'
               title='Export to PDF'
               onClick={exportToPdf}
-              disabled={loading || !employeeVisits.length}
+              disabled={loading || !visitorVisits.length}
             >
               <DownloadIcon className='mr-2' />
               Export to PDF
@@ -51,44 +44,11 @@ const AllVisitorVisitsPage: React.FC = () => {
         </div>
       </CardContent>
       <div>
-        <div className='flex flex-col gap-x-3 my-4 mx-6 space-y-6 md:flex-row md:space-y-0'>
-          <Input
-            placeholder='Search By Employee No'
-            className='placeholder:text-xs'
-            value={query.employeeNo}
-            onChange={(e) => setQuery({ ...query, employeeNo: e.target.value })}
-          />
-          <Input
-            placeholder='Search By Email Address'
-            className='placeholder:text-xs'
-            value={query.emailAddress}
-            onChange={(e) =>
-              setQuery({ ...query, emailAddress: e.target.value })
-            }
-          />
-          <Input
-            placeholder='Search By Mobile No'
-            className='placeholder:text-xs'
-            value={query.mobileNo}
-            onChange={(e) => setQuery({ ...query, mobileNo: e.target.value })}
-          />
-          <div className='flex gap-x-2'>
-            <Button className='text-xs'>Search</Button>
-            <Button
-              className='text-xs'
-              onClick={() =>
-                setQuery({ emailAddress: '', employeeNo: '', mobileNo: '' })
-              }
-            >
-              Reset
-            </Button>
-          </div>
-        </div>
         {loading ? (
           <div>Loading...</div>
         ) : (
           <div className='mx-6 mb-8'>
-            <PaginatedTable data={employeeVisits} columns={[]} />
+            <PaginatedTable data={visitorVisits} columns={[]} />
           </div>
         )}
       </div>
