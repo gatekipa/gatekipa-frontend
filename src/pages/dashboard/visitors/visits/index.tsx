@@ -7,6 +7,8 @@ import useVisitorReports from '@/hooks/visitors/reports';
 import { formatDate } from '@/utils';
 import { DownloadIcon } from '@radix-ui/react-icons';
 import { ColumnDef } from '@tanstack/react-table';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import React, { useCallback } from 'react';
 import { toast } from 'sonner';
 
@@ -139,9 +141,26 @@ const AllVisitorVisitsPage: React.FC = () => {
     toast.success(`Exported Successfully`);
   }, [visitorVisits]);
 
-  const exportToPdf = () => {
-    console.log('Export to PDF');
-  };
+  const exportToPdf = useCallback(() => {
+    const doc = new jsPDF({ orientation: 'landscape' });
+    doc.setFontSize(18);
+    doc.text('Visitors Report', 14, 22);
+
+    const data = visitorVisits.map((employee) => {
+      const record = {
+        email: employee.employee.emailAddress,
+        name: `${employee.employee.firstName} ${employee.employee.lastName}`,
+      };
+      return Object.values(record);
+    });
+
+    autoTable(doc, {
+      head: [['email', 'name', 'employeeNo']],
+      body: data,
+    });
+
+    doc.save(`visitors-${new Date().toISOString()}.pdf`);
+  }, [visitorVisits]);
 
   return (
     <Card>
