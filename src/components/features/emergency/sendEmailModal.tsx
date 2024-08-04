@@ -38,6 +38,20 @@ const sendMailSchema = z.object({
 
 export type ISendMail = z.infer<typeof sendMailSchema>;
 
+const placholder = `Dear Team,
+
+This is an urgent notification requiring your immediate attention and action. An emergency situation has arisen, and all employees must evacuate the building immediately.
+
+Please follow the established emergency exit routes and proceed to the designated assembly points as quickly and safely as possible.
+
+Do not use the elevators. If you encounter any obstacles or need assistance, alert the nearest emergency personnel.
+
+Your safety is our utmost priority. Please remain calm and follow all instructions from emergency responders.
+
+Thank you for your cooperation.
+
+Sincerely,`;
+
 const SendEmailModal: React.FC<SendEmailModalProps> = ({
   type,
   isOpen,
@@ -86,8 +100,8 @@ const SendEmailModal: React.FC<SendEmailModalProps> = ({
                   name='subject'
                   render={({ field }) => (
                     <FormItem>
-                      <Label id='employeeNo' className='text-xs'>
-                        Email's Subject
+                      <Label id='subject' className='text-xs'>
+                        Subject
                       </Label>
                       <FormControl>
                         <Input
@@ -111,13 +125,13 @@ const SendEmailModal: React.FC<SendEmailModalProps> = ({
                   render={({ field }) => (
                     <FormItem>
                       <Label id='employeeNo' className='text-xs'>
-                        Email's Content
+                        Content
                       </Label>
                       <FormControl>
                         <Textarea
                           id='content'
-                          rows={12}
-                          placeholder={`Please provide the content of the email`}
+                          rows={20}
+                          placeholder={placholder}
                           autoComplete='off'
                           className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
                           {...field}
