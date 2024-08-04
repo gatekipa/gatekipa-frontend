@@ -1,4 +1,5 @@
 import {
+  AlertCircleIcon,
   Clipboard,
   EyeIcon,
   LayoutDashboardIcon,
@@ -23,6 +24,11 @@ const adminRoutes: Route[] = [
     label: 'Visitors',
     href: '/dashboard/visitors',
     icon: <User2Icon size={18} />,
+  },
+  {
+    label: 'Emergency',
+    href: '/dashboard/emergency',
+    icon: <AlertCircleIcon size={18} />,
   },
   {
     label: 'Visitor Visits',

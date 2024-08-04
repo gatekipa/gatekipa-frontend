@@ -15,6 +15,7 @@ import EmployeesPage from '@/pages/dashboard/employees';
 import EmployeeVisitsPage from '@/pages/dashboard/employees/visits';
 import AllVisitsEmployeePage from '@/pages/dashboard/employees/all';
 import AllVisitorVisitsPage from '@/pages/dashboard/visitors/visits';
+import EmergencyPage from '@/pages/dashboard/emergency';
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: 'visitors',
         element: <VisitorsPage />,
+      },
+      {
+        path: 'emergency',
+        element: <EmergencyPage />,
       },
       {
         path: 'visitors/visits',
