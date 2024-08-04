@@ -58,7 +58,7 @@ export interface IVisitorReport {
   id: string;
   checkInTime: string;
   purposeOfVisit: string;
-  checkOutTime: string;
+  checkoutTime: string;
   visitDate: string;
   createdAt: string;
   employee: Pick<
