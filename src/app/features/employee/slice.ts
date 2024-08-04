@@ -11,12 +11,15 @@ import {
   fetchEmployeeVisitsThunk,
   fetchShiftsThunk,
   fetchVisitorReports,
+  IEmergencyEmployeeReport,
+  IEmergencyVisitorReport,
   IEmployee,
   IEmployeeReport,
   IEmployeeVisit,
   IShift,
   IVisitorReport,
 } from './thunk';
+import { EmergencyTab } from '@/pages/dashboard/emergency';
 
 export interface EmployeeState {
   employees: IEmployee[];
@@ -24,7 +27,10 @@ export interface EmployeeState {
   visits: IEmployeeVisit[];
   employeeVisits: IEmployeeReport[];
   visitorVisits: IVisitorReport[];
-  emergency: { employee: any[]; visitor: any[] };
+  emergency: {
+    employee: IEmergencyEmployeeReport[];
+    visitor: IEmergencyVisitorReport[];
+  };
   loading: boolean;
 }
 
@@ -132,9 +138,18 @@ export const employeeSlice = createSlice({
       fetchEmergencyListByType.fulfilled,
       (
         state,
-        action: PayloadAction<{ records: any[]; type: 'employee' | 'visitor' }>
+        action: PayloadAction<{
+          records: IEmergencyEmployeeReport[] | IEmergencyVisitorReport[];
+          type: EmergencyTab;
+        }>
       ) => {
-        state.emergency.employee = action.payload.records;
+        if (action.payload.type === EmergencyTab.EMPLOYEES) {
+          state.emergency.employee = action.payload
+            .records as IEmergencyEmployeeReport[];
+        } else {
+          state.emergency.visitor = action.payload
+            .records as IEmergencyVisitorReport[];
+        }
         state.loading = false;
       }
     );
