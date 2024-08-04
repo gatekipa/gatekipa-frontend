@@ -33,8 +33,8 @@ type SendEmailModalProps = {
 };
 
 const sendMailSchema = z.object({
-  subject: z.string(),
-  content: z.string(),
+  subject: z.string().min(12).max(100),
+  content: z.string().min(20),
 });
 
 export type ISendMail = z.infer<typeof sendMailSchema>;
@@ -114,7 +114,7 @@ const SendEmailModal: React.FC<SendEmailModalProps> = ({
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className='text-xs' />
                     </FormItem>
                   )}
                 />
@@ -138,7 +138,7 @@ const SendEmailModal: React.FC<SendEmailModalProps> = ({
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className='text-xs' />
                     </FormItem>
                   )}
                 />
@@ -148,6 +148,9 @@ const SendEmailModal: React.FC<SendEmailModalProps> = ({
               <LoadingButton
                 loading={false}
                 type='submit'
+                disabled={
+                  form.formState.isSubmitting || !form.formState.isValid
+                }
                 className='w-full mt-4'
               />
             </DialogFooter>
