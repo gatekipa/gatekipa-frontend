@@ -83,7 +83,6 @@ const AllVisitorVisitsPage: React.FC = () => {
 
   const onExportClickHandler = useCallback(() => {
     const headerRowKeys = {
-      id: true,
       employeeEmailAddress: true,
       employeeFirstName: true,
       employeeLastName: true,
@@ -106,7 +105,6 @@ const AllVisitorVisitsPage: React.FC = () => {
 
     for (const record of visitorVisits) {
       dataRows.push({
-        id: record.id,
         employeeEmailAddress: record.employee.emailAddress,
         employeeFirstName: record.employee.firstName,
         employeeLastName: record.employee.lastName,
