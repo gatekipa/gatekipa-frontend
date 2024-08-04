@@ -10,7 +10,7 @@ import PaginatedTable from '@/components/shared/paginatedTable';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import useEmployeeVisits from '@/hooks/employees/visits';
-import { formatDate, formatTime } from '@/utils';
+import { formatDate, formatTime, getUserRole } from '@/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowLeft } from 'lucide-react';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -152,16 +152,20 @@ const EmployeeVisitsPage: React.FC = () => {
       </div>
       <div className='mx-8 mb-8'>
         <div className='space-x-2 md:translate-y-14'>
-          <Button className='text-xs' size='sm' onClick={handleCheckIn}>
-            Check In
-          </Button>
-          <Button
-            className='text-xs'
-            size='sm'
-            onClick={() => setIsCheckOutModalOpen(true)}
-          >
-            Check Out
-          </Button>
+          {getUserRole() !== 'ADMIN' && (
+            <>
+              <Button className='text-xs' size='sm' onClick={handleCheckIn}>
+                Check In
+              </Button>
+              <Button
+                className='text-xs'
+                size='sm'
+                onClick={() => setIsCheckOutModalOpen(true)}
+              >
+                Check Out
+              </Button>
+            </>
+          )}
         </div>
         <PaginatedTable data={visits} columns={columns} />
       </div>
