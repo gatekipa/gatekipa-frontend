@@ -105,7 +105,7 @@ const EmergencyPage: React.FC = () => {
         </div>
       </CardContent>
       <div>
-        <div className='mx-5'>
+        <div className='mx-5 mb-5'>
           <Tabs
             defaultValue={EmergencyTab.EMPLOYEES}
             className=''
