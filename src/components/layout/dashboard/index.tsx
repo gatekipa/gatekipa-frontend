@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { adminRoutes, visitorRoutes } from '../../../constants/routes';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { logout } from '../../../app/features/auth/slice';
 import { getUsername, getUserRole } from '@/utils';
@@ -18,6 +17,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ModeToggle } from '@/components/shared/themeToggle';
 import { ChevronDownIcon, ChevronUpIcon, KeyRound, LogOut } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { mappedRoutes } from '@/constants';
+import { UserRole } from '@/constants/enums';
 
 const DashboardLayout: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -40,10 +41,10 @@ const DashboardLayout: React.FC = () => {
     navigate('/auth/login');
   }, []);
 
-  const routes = useMemo(
-    () => (user?.userType === 'VISITOR' ? visitorRoutes : adminRoutes),
-    [user]
-  );
+  const routes = useMemo(() => {
+    const role = getUserRole() as UserRole;
+    return mappedRoutes[role];
+  }, []);
 
   return (
     <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>

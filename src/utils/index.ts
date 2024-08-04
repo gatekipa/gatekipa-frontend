@@ -16,6 +16,18 @@ function getUserRole(): string {
   return user.data.userType;
 }
 
+function getUserEmployeeId(): string {
+  const user = JSON.parse(localStorage.getItem('userInfo')!);
+  if (!user) return '';
+  return user.data.employeeId;
+}
+
+function getUserVisitorId(): string {
+  const user = JSON.parse(localStorage.getItem('userInfo')!);
+  if (!user) return '';
+  return user.data.visitorId;
+}
+
 function formatDate(date: Date): string {
   return new Intl.DateTimeFormat('en-US', {
     day: '2-digit',
@@ -34,4 +46,12 @@ function formatTime(date: Date): string {
   });
 }
 
-export { getUserInitials, getUsername, getUserRole, formatDate, formatTime };
+export {
+  getUserInitials,
+  getUsername,
+  getUserRole,
+  formatDate,
+  formatTime,
+  getUserEmployeeId,
+  getUserVisitorId,
+};

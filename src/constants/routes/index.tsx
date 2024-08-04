@@ -1,14 +1,13 @@
 import {
   AlertCircleIcon,
   Clipboard,
-  EyeIcon,
   LayoutDashboardIcon,
   User2Icon,
   UsersIcon,
 } from 'lucide-react';
 import { ReactElement } from 'react';
 
-type Route = {
+export type Route = {
   label: string;
   href: string;
   icon: ReactElement;
@@ -53,16 +52,24 @@ const visitorRoutes: Route[] = [
     href: '/dashboard',
     icon: <LayoutDashboardIcon size={18} />,
   },
-  {
-    label: 'Visits',
-    href: '/dashboard/visits/:visitorId',
-    icon: <User2Icon size={18} />,
-  },
-  {
-    label: 'Change Password',
-    href: '/dashboard/change-password',
-    icon: <EyeIcon size={18} />,
-  },
+  // {
+  //   label: 'Visits',
+  //   href: '/dashboard/visits/:visitorId',
+  //   icon: <User2Icon size={18} />,
+  // },
 ];
 
-export { adminRoutes, visitorRoutes };
+const employeeRoutes: Route[] = [
+  {
+    label: 'Dashboard',
+    href: '/dashboard',
+    icon: <LayoutDashboardIcon size={18} />,
+  },
+  // {
+  //   label: 'Employee',
+  //   href: '/dashboard/employees/visits/:employeeId',
+  //   icon: <User2Icon size={18} />,
+  // },
+];
+
+export { adminRoutes, visitorRoutes, employeeRoutes };
