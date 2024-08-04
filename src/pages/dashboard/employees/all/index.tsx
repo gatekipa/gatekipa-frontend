@@ -1,17 +1,16 @@
 import PaginatedTable from '@/components/shared/paginatedTable';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { DownloadIcon } from '@radix-ui/react-icons';
-import { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { toast } from 'sonner';
 
-import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import useAllEmployeeVisits from '@/hooks/employees/allVisits';
-import { ColumnDef } from '@tanstack/react-table';
 import { IEmployeeReport } from '@/app/features/employee/thunk';
 import ColumnHeader from '@/components/shared/columnHeader';
+import useAllEmployeeVisits from '@/hooks/employees/allVisits';
+import { ColumnDef } from '@tanstack/react-table';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 export const columns: ColumnDef<IEmployeeReport>[] = [
   {
@@ -61,13 +60,7 @@ export const columns: ColumnDef<IEmployeeReport>[] = [
   },
 ];
 
-const AllVisitsEmployeePage = () => {
-  const [query, setQuery] = useState({
-    employeeNo: '',
-    emailAddress: '',
-    mobileNo: '',
-  });
-
+const AllVisitsEmployeePage: React.FC = () => {
   const { employeeVisits, loading } = useAllEmployeeVisits();
 
   const onExportClickHandler = useCallback(() => {
@@ -169,39 +162,6 @@ const AllVisitsEmployeePage = () => {
         </div>
       </CardContent>
       <div>
-        <div className='flex flex-col gap-x-3 my-4 mx-6 space-y-6 md:flex-row md:space-y-0'>
-          <Input
-            placeholder='Search By Employee No'
-            className='placeholder:text-xs'
-            value={query.employeeNo}
-            onChange={(e) => setQuery({ ...query, employeeNo: e.target.value })}
-          />
-          <Input
-            placeholder='Search By Email Address'
-            className='placeholder:text-xs'
-            value={query.emailAddress}
-            onChange={(e) =>
-              setQuery({ ...query, emailAddress: e.target.value })
-            }
-          />
-          <Input
-            placeholder='Search By Mobile No'
-            className='placeholder:text-xs'
-            value={query.mobileNo}
-            onChange={(e) => setQuery({ ...query, mobileNo: e.target.value })}
-          />
-          <div className='flex gap-x-2'>
-            <Button className='text-xs'>Search</Button>
-            <Button
-              className='text-xs'
-              onClick={() =>
-                setQuery({ emailAddress: '', employeeNo: '', mobileNo: '' })
-              }
-            >
-              Reset
-            </Button>
-          </div>
-        </div>
         {loading ? (
           <div>Loading...</div>
         ) : (

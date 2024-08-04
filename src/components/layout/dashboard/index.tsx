@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { adminRoutes, visitorRoutes } from '../../../constants/routes';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
@@ -16,12 +16,14 @@ import {
 import logo from '../../../assets/logo.svg';
 import { Card, CardContent } from '@/components/ui/card';
 import { ModeToggle } from '@/components/shared/themeToggle';
-import { ArrowDown, KeyRound, LogOut } from 'lucide-react';
+import { ChevronDownIcon, ChevronUpIcon, KeyRound, LogOut } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const DashboardLayout: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>();
 
   const user = useAppSelector((state) => state.auth.user);
 
@@ -71,9 +73,16 @@ const DashboardLayout: React.FC = () => {
             <Menubar>
               <MenubarMenu>
                 <MenubarTrigger>
-                  <div className='flex gap-x-2 items-center'>
+                  <div
+                    className='flex gap-x-2 items-center'
+                    onClick={() => setIsMenuOpen((prev) => !prev)}
+                  >
                     {getUsername()}
-                    <ArrowDown className='w-4 h-4' />
+                    {!isMenuOpen ? (
+                      <ChevronDownIcon className='w-4 h-4' />
+                    ) : (
+                      <ChevronUpIcon className='w-4 h-4' />
+                    )}
                   </div>
                 </MenubarTrigger>
                 <MenubarContent>
