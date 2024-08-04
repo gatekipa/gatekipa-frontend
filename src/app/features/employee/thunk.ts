@@ -3,6 +3,7 @@ import { ICreateEmployeeForm } from '@/components/features/employees/createEmplo
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 import { IVisitor } from '../company/thunk';
+import { EmergencyTab } from '@/pages/dashboard/emergency';
 // import { IBaseResponse } from "../auth/thunk";
 
 export interface IShift {
@@ -212,8 +213,8 @@ const employeeCheckInThunk: AsyncThunk<
 );
 
 const fetchEmergencyListByType: AsyncThunk<
-  { records: IEmergencyEmployeeReport[]; type: 'employee' | 'visitor' },
-  { type: 'employee' | 'visitor' },
+  { records: IEmergencyEmployeeReport[]; type: EmergencyTab },
+  { type: EmergencyTab },
   {}
 > = createAsyncThunk('employee/emergency/list', async ({ type }, thunkAPI) => {
   try {

@@ -19,6 +19,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { EmergencyTab } from '@/pages/dashboard/emergency';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
@@ -28,7 +29,7 @@ import { z } from 'zod';
 type SendEmailModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  type: 'employee' | 'visitor';
+  type: EmergencyTab;
 };
 
 const sendMailSchema = z.object({

@@ -81,9 +81,15 @@ export const visitorColumns: ColumnDef<IEmergencyVisitorReport>[] = [
   },
 ];
 
+export enum EmergencyTab {
+  EMPLOYEES = 'employee',
+  VISITORS = 'visitor',
+}
+
 const EmergencyPage: React.FC = () => {
   const [openEmailModal, setOpenEmailModal] = useState(false);
-  const { emergency, loading } = useEmergencyReports('visitor');
+  const [tab, setTab] = useState<EmergencyTab>(EmergencyTab.EMPLOYEES);
+  const { emergency, loading } = useEmergencyReports(tab);
 
   return (
     <Card>
@@ -100,23 +106,34 @@ const EmergencyPage: React.FC = () => {
       </CardContent>
       <div>
         <div className='mx-5'>
-          <Tabs defaultValue='employees' className='w-max'>
-            <TabsList className='grid w-full grid-cols-2'>
-              <TabsTrigger value='employees'>Employees</TabsTrigger>
-              <TabsTrigger value='visitors'>Visitors</TabsTrigger>
+          <Tabs
+            defaultValue={EmergencyTab.EMPLOYEES}
+            className=''
+            onValueChange={(value) => {
+              setTab(value as EmergencyTab);
+            }}
+          >
+            <TabsList className='grid w-max grid-cols-2'>
+              <TabsTrigger value={EmergencyTab.EMPLOYEES}>
+                Employees
+              </TabsTrigger>
+              <TabsTrigger value={EmergencyTab.VISITORS}>Visitors</TabsTrigger>
             </TabsList>
-            <TabsContent value='employees'>
+            <TabsContent value={EmergencyTab.EMPLOYEES}>
               {loading ? (
                 <p>Loading</p>
               ) : (
-                <PaginatedTable data={emergency} columns={columns} />
+                <PaginatedTable data={emergency.employee} columns={columns} />
               )}
             </TabsContent>
-            <TabsContent value='visitors'>
+            <TabsContent value={EmergencyTab.VISITORS}>
               {loading ? (
                 <p>Loading</p>
               ) : (
-                <PaginatedTable data={emergency} columns={visitorColumns} />
+                <PaginatedTable
+                  data={emergency.visitor}
+                  columns={visitorColumns}
+                />
               )}
             </TabsContent>
           </Tabs>
@@ -125,7 +142,7 @@ const EmergencyPage: React.FC = () => {
           <SendEmailModal
             isOpen={openEmailModal}
             onClose={() => setOpenEmailModal(false)}
-            type='visitor'
+            type={tab}
           />
         )}
       </div>
