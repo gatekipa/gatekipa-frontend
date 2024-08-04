@@ -151,9 +151,8 @@ const SendEmailModal: React.FC<SendEmailModalProps> = ({
               <LoadingButton
                 loading={false}
                 type='submit'
-                disabled={
-                  form.formState.isSubmitting || !form.formState.isValid
-                }
+                label='Send Email'
+                disabled={!form.formState.isValid}
                 className='w-full mt-4'
               />
             </DialogFooter>

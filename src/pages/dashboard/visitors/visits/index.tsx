@@ -16,7 +16,7 @@ export const columns: ColumnDef<IVisitorReport>[] = [
   {
     accessorKey: 'employee',
     header: ({ column }) => (
-      <ColumnHeader column={column} label={`Employee's Full Name`} />
+      <ColumnHeader column={column} label={`Person To Meet`} />
     ),
     cell: ({ row }) =>
       `${row.original.employee.firstName} ${row.original.employee.lastName}`,
@@ -25,14 +25,14 @@ export const columns: ColumnDef<IVisitorReport>[] = [
   {
     accessorKey: 'employee.emailAddress',
     header: ({ column }) => (
-      <ColumnHeader column={column} label={`Employee's Email`} />
+      <ColumnHeader column={column} label={`Person To Meet Email`} />
     ),
     enableSorting: true,
   },
   {
     accessorKey: 'visitor',
     header: ({ column }) => (
-      <ColumnHeader column={column} label={`Visitor's Full Name`} />
+      <ColumnHeader column={column} label={`Visitor Name`} />
     ),
     cell: ({ row }) =>
       `${row.original.visitor.firstName} ${row.original.visitor.lastName}`,
@@ -68,12 +68,14 @@ export const columns: ColumnDef<IVisitorReport>[] = [
     enableSorting: true,
   },
   {
-    accessorKey: 'checkOutTime',
+    accessorKey: 'checkoutTime',
     header: ({ column }) => (
       <ColumnHeader column={column} label='Check Out Time' />
     ),
-    cell: ({ row }) => formatDate(new Date(row.original.checkoutTime)),
-
+    cell: ({ row }) => {
+      const checkoutTime = row.original?.checkoutTime;
+      return checkoutTime ? formatDate(new Date(checkoutTime)) : '-';
+    },
     enableSorting: true,
   },
 ];
@@ -83,7 +85,6 @@ const AllVisitorVisitsPage: React.FC = () => {
 
   const onExportClickHandler = useCallback(() => {
     const headerRowKeys = {
-      id: true,
       employeeEmailAddress: true,
       employeeFirstName: true,
       employeeLastName: true,
@@ -106,7 +107,6 @@ const AllVisitorVisitsPage: React.FC = () => {
 
     for (const record of visitorVisits) {
       dataRows.push({
-        id: record.id,
         employeeEmailAddress: record.employee.emailAddress,
         employeeFirstName: record.employee.firstName,
         employeeLastName: record.employee.lastName,

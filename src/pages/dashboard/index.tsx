@@ -1,7 +1,21 @@
+import EmployeeDashboard from '@/components/features/employees/dashboard';
+import VisitorDashboard from '@/components/features/visitors/dashboard';
+import { UserRole } from '@/constants/enums';
+import { getUserRole } from '@/utils';
+
 const DashboardPage: React.FC = () => {
+  const role = getUserRole();
   return (
     <div>
-      <h2 className="text-2xl text-gray-950 font-semibold">Dashboard</h2>
+      <div>
+        {role === UserRole.EMPLOYEE ? (
+          <EmployeeDashboard />
+        ) : role === UserRole.VISITOR ? (
+          <VisitorDashboard />
+        ) : (
+          <h2 className='text-2xl text-gray-950 font-semibold'>Dashboard</h2>
+        )}
+      </div>
     </div>
   );
 };

@@ -65,7 +65,6 @@ const AllVisitsEmployeePage: React.FC = () => {
 
   const onExportClickHandler = useCallback(() => {
     const headerRowKeys = {
-      id: true,
       email: true,
       firstName: true,
       lastName: true,
@@ -82,7 +81,6 @@ const AllVisitsEmployeePage: React.FC = () => {
 
     for (const record of employeeVisits) {
       dataRows.push({
-        id: record.id,
         email: record.employee.emailAddress,
         firstName: record.employee.firstName,
         lastName: record.employee.lastName,
@@ -127,7 +125,7 @@ const AllVisitsEmployeePage: React.FC = () => {
     });
 
     autoTable(doc, {
-      head: [['email', 'name', 'employeeNo']],
+      head: [['Email', 'Name', 'Employee No']],
       body: data,
     });
 
