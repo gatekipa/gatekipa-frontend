@@ -1,11 +1,12 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { Card, CardContent } from '@/components/ui/card';
-import { getUsername, getUserVisitorId } from '@/utils';
+import { getUserVisitorId } from '@/utils';
 import React, { useEffect } from 'react';
 import VisitsToolbar from '../../visits/toolbar';
 import PaginatedTable from '@/components/shared/paginatedTable';
 import { fetchVisitsThunk } from '@/app/features/company/thunk';
 import { visitColumns } from '@/pages/dashboard/visits';
+import { fetchEmployeesThunk } from '@/app/features/employee/thunk';
 
 const VisitorDashboard: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -22,6 +23,8 @@ const VisitorDashboard: React.FC = () => {
         visitorId,
       })
     );
+
+    dispatch(fetchEmployeesThunk({}));
   }, [user, visitorId]);
 
   return (
@@ -29,7 +32,7 @@ const VisitorDashboard: React.FC = () => {
       <CardContent>
         <div className='flex items-center justify-between mt-6'>
           <h1 className='flex items-center gap-x-3 text-2xl font-semibold'>
-            Visitor - {getUsername()}
+            Visitor Dashboard
           </h1>
           <div>
             <VisitsToolbar visitorId={visitorId!} mode='toolbar' />
