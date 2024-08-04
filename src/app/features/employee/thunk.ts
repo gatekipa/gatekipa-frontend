@@ -71,6 +71,33 @@ export interface IVisitorReport {
   >;
 }
 
+export interface IEmergencyEmployeeReport {
+  checkOutTime: string | null;
+  checkInTime: string;
+  employee: Pick<
+    IEmployee,
+    'id' | 'firstName' | 'lastName' | 'mobileNo' | 'emailAddress'
+  >;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+}
+export interface IEmergencyVisitorReport {
+  id: string;
+  checkOutTime: string | null;
+  checkInTime: string;
+  employee: Pick<
+    IVisitor,
+    'id' | 'firstName' | 'lastName' | 'mobileNo' | 'emailAddress'
+  >;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+  purposeOfVisit: string;
+  visitDate: string;
+}
+
 export type IEmployeeUpdate = Omit<IEmployee, 'companyId' | 'shift'> & {
   shift: Pick<IShift, 'id'>;
 };
@@ -183,6 +210,37 @@ const employeeCheckInThunk: AsyncThunk<
     }
   }
 );
+
+const fetchEmergencyListByType: AsyncThunk<
+  { records: IEmergencyEmployeeReport[]; type: 'employee' | 'visitor' },
+  { type: 'employee' | 'visitor' },
+  {}
+> = createAsyncThunk('employee/emergency/list', async ({ type }, thunkAPI) => {
+  try {
+    // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
+    //   `/employee`
+    // );
+
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_API_URL}/reports/emergency-list/${type}`,
+      {
+        withCredentials: true,
+      }
+    );
+    return { records: response.data.data, type };
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    if (
+      axiosError.response &&
+      axiosError.response.data &&
+      axiosError.response.data.message
+    ) {
+      return thunkAPI.rejectWithValue(axiosError.response.data.message);
+    } else {
+      return thunkAPI.rejectWithValue('An unexpected error occurred');
+    }
+  }
+});
 
 const employeeCheckOutThunk: AsyncThunk<
   IEmployeeVisit,
@@ -412,4 +470,5 @@ export {
   employeeCheckOutThunk,
   fetchAllEmployeesVisits,
   fetchVisitorReports,
+  fetchEmergencyListByType,
 };
