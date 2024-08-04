@@ -20,7 +20,7 @@ const adminRoutes: Route[] = [
     icon: <LayoutDashboardIcon size={18} />,
   },
   {
-    label: 'Visitors',
+    label: 'Visitor Management',
     href: '/dashboard/visitors',
     icon: <User2Icon size={18} />,
   },
@@ -35,7 +35,7 @@ const adminRoutes: Route[] = [
     icon: <User2Icon size={18} />,
   },
   {
-    label: 'Employees',
+    label: 'Employee Management',
     href: '/dashboard/employees',
     icon: <UsersIcon size={18} />,
   },
