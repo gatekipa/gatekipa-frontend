@@ -9,8 +9,9 @@ const useEmergencyReports = (type: EmergencyTab) => {
   const { emergency, loading } = useAppSelector((state) => state.employee);
 
   useEffect(() => {
-    // if (emergency[type].length) return;
-    dispatch(fetchEmergencyListByType({ type }));
+    if (!emergency[type].length) {
+      dispatch(fetchEmergencyListByType({ type }));
+    }
   }, [type]);
 
   return { emergency, loading };
