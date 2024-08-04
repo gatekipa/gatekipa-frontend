@@ -33,8 +33,8 @@ type SendEmailModalProps = {
 };
 
 const sendMailSchema = z.object({
-  subject: z.string().min(12).max(100),
-  content: z.string().min(20),
+  subject: z.string(),
+  content: z.string(),
 });
 
 export type ISendMail = z.infer<typeof sendMailSchema>;
