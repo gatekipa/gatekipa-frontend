@@ -1,3 +1,5 @@
+import { sendEmergencyEmail } from '@/app/features/employee/thunk';
+import { useAppDispatch } from '@/app/hooks';
 import LoadingButton from '@/components/shared/loadingButton';
 import {
   Dialog,
@@ -20,6 +22,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 type SendEmailModalProps = {
@@ -48,7 +51,17 @@ const SendEmailModal: React.FC<SendEmailModalProps> = ({
     },
   });
 
-  const onSubmit = useCallback((values: ISendMail) => {}, []);
+  const dispatch = useAppDispatch();
+
+  const onSubmit = useCallback(async (values: ISendMail) => {
+    try {
+      await dispatch(sendEmergencyEmail({ ...values, type })).unwrap();
+      toast.success('Email has been sent successfully');
+      onClose();
+    } catch (error) {
+      toast.error(`${error}`);
+    }
+  }, []);
 
   return (
     <Dialog
