@@ -5,18 +5,32 @@ import {
   editEmployeeThunk,
   employeeCheckInThunk,
   employeeCheckOutThunk,
+  fetchAllEmployeesVisits,
+  fetchEmergencyListByType,
   fetchEmployeesThunk,
   fetchEmployeeVisitsThunk,
   fetchShiftsThunk,
+  fetchVisitorReports,
+  IEmergencyEmployeeReport,
+  IEmergencyVisitorReport,
   IEmployee,
+  IEmployeeReport,
   IEmployeeVisit,
   IShift,
+  IVisitorReport,
 } from './thunk';
+import { EmergencyTab } from '@/pages/dashboard/emergency';
 
 export interface EmployeeState {
   employees: IEmployee[];
   shifts: IShift[];
   visits: IEmployeeVisit[];
+  employeeVisits: IEmployeeReport[];
+  visitorVisits: IVisitorReport[];
+  emergency: {
+    employee: IEmergencyEmployeeReport[];
+    visitor: IEmergencyVisitorReport[];
+  };
   loading: boolean;
 }
 
@@ -24,6 +38,9 @@ const initialState: EmployeeState = {
   employees: [],
   shifts: [],
   visits: [],
+  employeeVisits: [],
+  visitorVisits: [],
+  emergency: { employee: [], visitor: [] },
   loading: false,
 };
 
@@ -115,6 +132,58 @@ export const employeeSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchEmployeeVisitsThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      fetchEmergencyListByType.fulfilled,
+      (
+        state,
+        action: PayloadAction<{
+          records: IEmergencyEmployeeReport[] | IEmergencyVisitorReport[];
+          type: EmergencyTab;
+        }>
+      ) => {
+        if (action.payload.type === EmergencyTab.EMPLOYEES) {
+          state.emergency.employee = action.payload
+            .records as IEmergencyEmployeeReport[];
+        } else {
+          state.emergency.visitor = action.payload
+            .records as IEmergencyVisitorReport[];
+        }
+        state.loading = false;
+      }
+    );
+    builder.addCase(fetchEmergencyListByType.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchEmergencyListByType.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      fetchVisitorReports.fulfilled,
+      (state, action: PayloadAction<IVisitorReport[]>) => {
+        state.visitorVisits = action.payload;
+        state.loading = false;
+      }
+    );
+    builder.addCase(fetchVisitorReports.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchVisitorReports.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      fetchAllEmployeesVisits.fulfilled,
+      (state, action: PayloadAction<IEmployeeReport[]>) => {
+        state.employeeVisits =
+          action.payload?.filter((record) => !!record.employee) ?? [];
+        state.loading = false;
+      }
+    );
+    builder.addCase(fetchAllEmployeesVisits.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchAllEmployeesVisits.rejected, (state) => {
       state.loading = false;
     });
     builder.addCase(

@@ -17,7 +17,7 @@ import { Check, CircleOff, Clock11, UsersRound } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const columns: ColumnDef<IEmployee>[] = [
+export const columns: ColumnDef<IEmployee>[] = [
   {
     accessorKey: 'firstName',
     header: ({ column }) => <ColumnHeader column={column} label='First Name' />,

@@ -2,6 +2,8 @@
 import { ICreateEmployeeForm } from '@/components/features/employees/createEmployeeModal';
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
+import { IVisitor } from '../company/thunk';
+import { EmergencyTab } from '@/pages/dashboard/emergency';
 // import { IBaseResponse } from "../auth/thunk";
 
 export interface IShift {
@@ -28,6 +30,9 @@ export interface IEmployee {
   shift: IShift;
   employeeNo: string;
   dateOfBirth: Date;
+  payrollPeriodEndDate: Date;
+  payDate: Date;
+  timesheetDueDate: Date;
   createdBy: string;
   createdAt: string;
   updatedAt: string;
@@ -42,6 +47,56 @@ export interface IEmployeeVisit {
   createdAt: string;
   updatedAt: string;
   updatedBy: string;
+}
+
+export interface IEmployeeReport {
+  id: string;
+  checkInTime: string;
+  employee: IEmployee;
+}
+
+export interface IVisitorReport {
+  id: string;
+  checkInTime: string;
+  purposeOfVisit: string;
+  checkoutTime: string;
+  visitDate: string;
+  createdAt: string;
+  employee: Pick<
+    IEmployee,
+    'id' | 'firstName' | 'lastName' | 'emailAddress' | 'mobileNo'
+  >;
+  visitor: Pick<
+    IVisitor,
+    'id' | 'firstName' | 'lastName' | 'emailAddress' | 'mobileNo'
+  >;
+}
+
+export interface IEmergencyEmployeeReport {
+  checkOutTime: string | null;
+  checkInTime: string;
+  employee: Pick<
+    IEmployee,
+    'id' | 'firstName' | 'lastName' | 'mobileNo' | 'emailAddress'
+  >;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+}
+export interface IEmergencyVisitorReport {
+  id: string;
+  checkOutTime: string | null;
+  checkInTime: string;
+  employee: Pick<
+    IVisitor,
+    'id' | 'firstName' | 'lastName' | 'mobileNo' | 'emailAddress'
+  >;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+  purposeOfVisit: string;
+  visitDate: string;
 }
 
 export type IEmployeeUpdate = Omit<IEmployee, 'companyId' | 'shift'> & {
@@ -157,6 +212,37 @@ const employeeCheckInThunk: AsyncThunk<
   }
 );
 
+const fetchEmergencyListByType: AsyncThunk<
+  { records: IEmergencyEmployeeReport[]; type: EmergencyTab },
+  { type: EmergencyTab },
+  {}
+> = createAsyncThunk('employee/emergency/list', async ({ type }, thunkAPI) => {
+  try {
+    // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
+    //   `/employee`
+    // );
+
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_API_URL}/reports/emergency-list/${type}`,
+      {
+        withCredentials: true,
+      }
+    );
+    return { records: response.data.data, type };
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    if (
+      axiosError.response &&
+      axiosError.response.data &&
+      axiosError.response.data.message
+    ) {
+      return thunkAPI.rejectWithValue(axiosError.response.data.message);
+    } else {
+      return thunkAPI.rejectWithValue('An unexpected error occurred');
+    }
+  }
+});
+
 const employeeCheckOutThunk: AsyncThunk<
   IEmployeeVisit,
   { employeeId: string },
@@ -172,6 +258,45 @@ const employeeCheckOutThunk: AsyncThunk<
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_API_URL}/employee/checkout/${employeeId}`,
         {},
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue('An unexpected error occurred');
+      }
+    }
+  }
+);
+
+const sendEmergencyEmail: AsyncThunk<
+  any,
+  { type: string; subject: string; content: string },
+  {}
+> = createAsyncThunk(
+  'employee/visit/checkout',
+  async ({ type, subject, content }, thunkAPI) => {
+    try {
+      // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
+      //   `/employee`
+      // );
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL}/reports/emergency/send-email`,
+        {
+          type,
+          subject,
+          content,
+        },
         {
           withCredentials: true,
         }
@@ -287,6 +412,62 @@ const fetchShiftsThunk: AsyncThunk<IShift[], void, {}> = createAsyncThunk(
   }
 );
 
+const fetchAllEmployeesVisits: AsyncThunk<IEmployeeReport[], void, {}> =
+  createAsyncThunk('employee/visits/reports', async (_, thunkAPI) => {
+    try {
+      // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
+      //   `/employee`
+      // );
+
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_API_URL}/reports/employee-visits`,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue('An unexpected error occurred');
+      }
+    }
+  });
+
+const fetchVisitorReports: AsyncThunk<IVisitorReport[], void, {}> =
+  createAsyncThunk('visitor/reports', async (_, thunkAPI) => {
+    try {
+      // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
+      //   `/employee`
+      // );
+
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_API_URL}/reports/visitors-visits`,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue('An unexpected error occurred');
+      }
+    }
+  });
+
 const fetchEmployeeVisitsThunk: AsyncThunk<
   IEmployeeVisit[],
   { employeeId: string },
@@ -327,4 +508,8 @@ export {
   fetchEmployeeVisitsThunk,
   employeeCheckInThunk,
   employeeCheckOutThunk,
+  fetchAllEmployeesVisits,
+  fetchVisitorReports,
+  fetchEmergencyListByType,
+  sendEmergencyEmail,
 };
