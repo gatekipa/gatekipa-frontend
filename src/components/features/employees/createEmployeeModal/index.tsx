@@ -247,12 +247,13 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <Label id='employeeNo' className='text-xs'>
-                          Employee No - (Leave blank for auto generation)
+                          Employee No
                         </Label>
                         <FormControl>
                           <Input
                             id='employeeNo'
                             type='text'
+                            disabled={!!employee}
                             placeholder='Provide Employee No (Leave blank for auto generation)'
                             autoComplete='off'
                             className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
