@@ -7,7 +7,8 @@ import useVisitorReports from '@/hooks/visitors/reports';
 import { formatDate } from '@/utils';
 import { DownloadIcon } from '@radix-ui/react-icons';
 import { ColumnDef } from '@tanstack/react-table';
-import React from 'react';
+import React, { useCallback } from 'react';
+import { toast } from 'sonner';
 
 export const columns: ColumnDef<IVisitorReport>[] = [
   {
@@ -78,9 +79,65 @@ export const columns: ColumnDef<IVisitorReport>[] = [
 const AllVisitorVisitsPage: React.FC = () => {
   const { visitorVisits, loading } = useVisitorReports();
 
-  const onExportClickHandler = () => {
-    console.log('Export to CSV');
-  };
+  const onExportClickHandler = useCallback(() => {
+    const headerRowKeys = {
+      id: true,
+      employeeEmailAddress: true,
+      employeeFirstName: true,
+      employeeLastName: true,
+      employeeMobileNo: true,
+      visitorEmailAddress: true,
+      visitorFirstName: true,
+      visitorLastName: true,
+      visitorMobileNo: true,
+      purposeOfVisit: true,
+      visitDate: true,
+      checkOutTime: true,
+      checkInTime: true,
+      createdAt: true,
+    };
+
+    const headerRow = Object.keys(headerRowKeys);
+
+    // TODO: Add types to dataRows
+    let dataRows = [];
+
+    for (const record of visitorVisits) {
+      dataRows.push({
+        id: record.id,
+        employeeEmailAddress: record.employee.emailAddress,
+        employeeFirstName: record.employee.firstName,
+        employeeLastName: record.employee.lastName,
+        employeeMobileNo: record.employee.mobileNo,
+        visitorEmailAddress: record.visitor.emailAddress,
+        visitorFirstName: record.visitor.firstName,
+        visitorLastName: record.visitor.lastName,
+        visitorMobileNo: record.visitor.mobileNo,
+        purposeOfVisit: record.purposeOfVisit,
+        visitDate: record.visitDate,
+        checkOutTime: record.checkoutTime,
+        checkInTime: record.checkInTime,
+        createdAt: record.createdAt,
+      });
+    }
+
+    dataRows = dataRows.map((row) => Object.values(row));
+
+    const csvContent =
+      'data:text/csv;charset=utf-8,' +
+      [headerRow.join(','), ...dataRows.map((row) => row.join(','))].join('\n');
+
+    const encodedURI = encodeURI(csvContent);
+    const link = document.createElement('a');
+
+    link.setAttribute('href', encodedURI);
+    link.setAttribute('download', `${new Date().toISOString()}.csv`);
+    document.body.appendChild(link);
+
+    link.click();
+
+    toast.success(`Exported Successfully`);
+  }, [visitorVisits]);
 
   const exportToPdf = () => {
     console.log('Export to PDF');
