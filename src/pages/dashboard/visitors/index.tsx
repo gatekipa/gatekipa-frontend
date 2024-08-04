@@ -53,6 +53,7 @@ const columns: ColumnDef<IVisitor>[] = [
     header: 'Actions',
     cell: ({ row }) => {
       const visitor = row.original;
+      const [isModalOpen, setIsModalOpen] = useState(false);
       return (
         <div className='flex items-center gap-2'>
           <Link to={`/dashboard/visits/${visitor.id}`}>
@@ -67,7 +68,13 @@ const columns: ColumnDef<IVisitor>[] = [
             </Button>
           </Link>
 
-          <VisitsToolbar visitorId={visitor.id} mode='table' />
+          <VisitsToolbar
+            visitorId={visitor.id}
+            mode='table'
+            open={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onOpen={() => setIsModalOpen(true)}
+          />
         </div>
       );
     },

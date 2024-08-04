@@ -50,9 +50,18 @@ export type IVisitForm = z.infer<typeof visitFormSchema>;
 type IVisitsToolbarProps = {
   visitorId: string;
   mode: 'table' | 'toolbar';
+  open: boolean;
+  onClose: () => void;
+  onOpen: () => void;
 };
 
-const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId, mode }) => {
+const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({
+  visitorId,
+  mode,
+  open,
+  onClose,
+  onOpen,
+}) => {
   const dispatch = useAppDispatch();
   const { employees } = useAppSelector((state) => state.employee);
   const { loading } = useAppSelector((state) => state.company);
@@ -67,15 +76,21 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId, mode }) => {
     },
   });
 
-  const onSubmit = useCallback(async (values: IVisitForm) => {
-    try {
-      await dispatch(addNewVisitThunk({ visitorId, payload: values })).unwrap();
-      form.reset();
-      toast.success('Added Visitor Successfully');
-    } catch (err) {
-      toast.error(err as string);
-    }
-  }, []);
+  const onSubmit = useCallback(
+    async (values: IVisitForm) => {
+      try {
+        await dispatch(
+          addNewVisitThunk({ visitorId, payload: values })
+        ).unwrap();
+        form.reset();
+        toast.success('Added Visitor Successfully');
+        onClose();
+      } catch (err) {
+        toast.error(err as string);
+      }
+    },
+    [visitorId]
+  );
 
   const transformedEmployees = useMemo(
     () =>
@@ -87,15 +102,28 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({ visitorId, mode }) => {
   );
   return (
     <div>
-      <Dialog>
+      <Dialog
+        open={open}
+        onOpenChange={(open) => {
+          if (!open) {
+            form.reset();
+            onClose();
+          }
+        }}
+      >
         <DialogTrigger>
           {mode === 'table' ? (
-            <Button size='sm' variant='link' className='text-xs'>
+            <Button
+              size='sm'
+              variant='link'
+              className='text-xs'
+              onClick={onOpen}
+            >
               <Plus className='mr-1' size={12} />
               Create Visit
             </Button>
           ) : (
-            <Button size='sm' className='text-xs'>
+            <Button size='sm' className='text-xs' onClick={onOpen}>
               <Plus className='mr-2' size={16} />
               Create Visit
             </Button>

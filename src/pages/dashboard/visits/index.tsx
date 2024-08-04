@@ -11,7 +11,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { formatDate } from '@/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowLeft } from 'lucide-react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 export const visitColumns: ColumnDef<IVisit>[] = [
@@ -132,6 +132,7 @@ const VisitsPage: React.FC = () => {
 
   const { visits } = useAppSelector((state) => state.company);
   const { user } = useAppSelector((state) => state.auth);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (!visitorId && !user?.id) return;
@@ -158,7 +159,13 @@ const VisitsPage: React.FC = () => {
             Visits Page
           </h1>
           <div>
-            <VisitsToolbar visitorId={visitorId!} mode='toolbar' />
+            <VisitsToolbar
+              visitorId={visitorId!}
+              mode='toolbar'
+              open={open}
+              onClose={() => setOpen(false)}
+              onOpen={() => setOpen(true)}
+            />
           </div>
         </div>
         <div>

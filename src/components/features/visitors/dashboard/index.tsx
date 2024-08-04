@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { Card, CardContent } from '@/components/ui/card';
 import { getUserVisitorId } from '@/utils';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import VisitsToolbar from '../../visits/toolbar';
 import PaginatedTable from '@/components/shared/paginatedTable';
 import { fetchVisitsThunk } from '@/app/features/company/thunk';
@@ -13,6 +13,8 @@ const VisitorDashboard: React.FC = () => {
 
   const { visits } = useAppSelector((state) => state.company);
   const { user } = useAppSelector((state) => state.auth);
+
+  const [open, setOpen] = useState(false);
   const visitorId = getUserVisitorId();
 
   useEffect(() => {
@@ -35,7 +37,13 @@ const VisitorDashboard: React.FC = () => {
             Visitor Dashboard
           </h1>
           <div>
-            <VisitsToolbar visitorId={visitorId!} mode='toolbar' />
+            <VisitsToolbar
+              visitorId={visitorId!}
+              mode='toolbar'
+              open={open}
+              onClose={() => setOpen(false)}
+              onOpen={() => setOpen(true)}
+            />
           </div>
         </div>
         <div>
