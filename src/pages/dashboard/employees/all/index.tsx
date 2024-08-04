@@ -127,7 +127,7 @@ const AllVisitsEmployeePage: React.FC = () => {
     });
 
     autoTable(doc, {
-      head: [['email', 'name', 'employeeNo']],
+      head: [['Email', 'Name', 'Employee No']],
       body: data,
     });
 
