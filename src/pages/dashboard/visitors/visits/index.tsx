@@ -142,21 +142,48 @@ const AllVisitorVisitsPage: React.FC = () => {
   }, [visitorVisits]);
 
   const exportToPdf = useCallback(() => {
-    const doc = new jsPDF({ orientation: 'landscape' });
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: [420, 297],
+    });
+
     doc.setFontSize(18);
     doc.text('Visitors Report', 14, 22);
 
-    const data = visitorVisits.map((employee) => {
-      const record = {
-        email: employee.employee.emailAddress,
-        name: `${employee.employee.firstName} ${employee.employee.lastName}`,
+    const data = visitorVisits.map((record) => {
+      const _record = {
+        employeeEmail: record.employee.emailAddress,
+        employeeFullName: `${record.employee.firstName} ${record.employee.lastName}`,
+        visitorEmail: record.visitor.emailAddress,
+        visitorFullName: `${record.visitor.firstName} ${record.visitor.lastName}`,
+        purposeOfVisit: record.purposeOfVisit,
+        checkInTime: formatDate(new Date(record.checkInTime)),
+        checkOutTime: formatDate(new Date(record.checkoutTime)),
+        visitDate: formatDate(new Date(record.visitDate)),
       };
-      return Object.values(record);
+      return Object.values(_record);
     });
 
     autoTable(doc, {
-      head: [['email', 'name', 'employeeNo']],
+      head: [
+        [
+          `Employee's Email`,
+          `Employee's Name`,
+          `Visitor's Email`,
+          `Visitor's Name`,
+          `Purpose of Visit`,
+          `Check In Time`,
+          `Check Out Time`,
+          `Visit Date`,
+        ],
+      ],
       body: data,
+      styles: {
+        cellPadding: 3,
+        fontSize: 10,
+      },
+      margin: { top: 30, right: 10, bottom: 10, left: 10 },
     });
 
     doc.save(`visitors-${new Date().toISOString()}.pdf`);
