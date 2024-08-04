@@ -68,15 +68,18 @@ const SendEmailModal: React.FC<SendEmailModalProps> = ({
 
   const dispatch = useAppDispatch();
 
-  const onSubmit = useCallback(async (values: ISendMail) => {
-    try {
-      await dispatch(sendEmergencyEmail({ ...values, type })).unwrap();
-      toast.success('Email has been sent successfully');
-      onClose();
-    } catch (error) {
-      toast.error(`${error}`);
-    }
-  }, []);
+  const onSubmit = useCallback(
+    async (values: ISendMail) => {
+      try {
+        await dispatch(sendEmergencyEmail({ ...values, type })).unwrap();
+        toast.success('Email has been sent successfully');
+        onClose();
+      } catch (error) {
+        toast.error(`${error}`);
+      }
+    },
+    [type]
+  );
 
   return (
     <Dialog
