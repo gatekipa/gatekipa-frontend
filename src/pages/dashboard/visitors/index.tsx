@@ -91,6 +91,8 @@ const VisitorsPage: React.FC = () => {
     lastName: '',
   });
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { visitors, loading, filterFn } = useVisitors();
   useEmployees();
 
@@ -126,7 +128,11 @@ const VisitorsPage: React.FC = () => {
               ? 'Visitor Management'
               : 'Visit Management'}
           </h2>
-          <VisitorToolbar />
+          <VisitorToolbar
+            open={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onOpen={() => setIsModalOpen(true)}
+          />
         </div>
         <div>
           <div className='flex gap-x-3 my-4'>
