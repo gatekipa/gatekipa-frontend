@@ -1,11 +1,13 @@
-import { useEffect } from "react";
-import { fetchEmployeeVisitsThunk } from "@/app/features/employee/thunk";
-import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { useEffect } from 'react';
+import { fetchEmployeeVisitsThunk } from '@/app/features/employee/thunk';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 
 const useEmployeeVisits = (employeeId: string) => {
   const dispatch = useAppDispatch();
 
-  const { visits, loading } = useAppSelector((state) => state.employee);
+  const { visits, employee, loading } = useAppSelector(
+    (state) => state.employee
+  );
 
   useEffect(() => {
     // !Temporary fix for now to reload screen data after checkout.
@@ -13,7 +15,7 @@ const useEmployeeVisits = (employeeId: string) => {
     dispatch(fetchEmployeeVisitsThunk({ employeeId }));
   }, [visits.length]);
 
-  return { visits, loading };
+  return { visits, loading, employee };
 };
 
 export default useEmployeeVisits;

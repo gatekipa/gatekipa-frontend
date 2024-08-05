@@ -14,7 +14,7 @@ const EmployeeDashboard: React.FC = () => {
   const employeeId = getUserEmployeeId();
   const dispatch = useAppDispatch();
 
-  const { visits, loading } = useEmployeeVisits(employeeId!);
+  const { visits, loading, employee } = useEmployeeVisits(employeeId!);
   const [isCheckOutModalOpen, setIsCheckOutModalOpen] = useState(false);
 
   const handleCheckIn = useCallback(async () => {
@@ -31,12 +31,12 @@ const EmployeeDashboard: React.FC = () => {
   return (
     <Card>
       <CardContent>
-        <div className='mt-8'>
-          <h2 className='text-2xl font-semibold'>Employee Visits</h2>
+        <div className='mt-8 mx-5'>
+          <h2 className='text-2xl font-semibold'>Employee Dashboard</h2>
         </div>
       </CardContent>
       <div className='flex justify-between mx-5 md:mx-10'>
-        {/* <div className='space-y-3'>
+        <div className='space-y-3'>
           <div className='flex gap-x-8 items-center'>
             <div className='space-y-1'>
               <div className='text-xs'>Name</div>
@@ -79,7 +79,7 @@ const EmployeeDashboard: React.FC = () => {
               </div>
             </div>
           </div>
-        </div> */}
+        </div>
 
         <div>
           <img

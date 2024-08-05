@@ -469,7 +469,7 @@ const fetchVisitorReports: AsyncThunk<IVisitorReport[], void, {}> =
   });
 
 const fetchEmployeeVisitsThunk: AsyncThunk<
-  IEmployeeVisit[],
+  { employee: IEmployee; employeeVisits: IEmployeeVisit[] },
   { employeeId: string },
   {}
 > = createAsyncThunk('employee/visits/', async ({ employeeId }, thunkAPI) => {

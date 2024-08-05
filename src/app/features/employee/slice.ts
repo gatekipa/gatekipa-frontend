@@ -24,6 +24,7 @@ import { EmergencyTab } from '@/pages/dashboard/emergency';
 export interface EmployeeState {
   employees: IEmployee[];
   shifts: IShift[];
+  employee: IEmployee | null;
   visits: IEmployeeVisit[];
   employeeVisits: IEmployeeReport[];
   visitorVisits: IVisitorReport[];
@@ -39,6 +40,7 @@ const initialState: EmployeeState = {
   shifts: [],
   visits: [],
   employeeVisits: [],
+  employee: null,
   visitorVisits: [],
   emergency: { employee: [], visitor: [] },
   loading: false,
@@ -123,8 +125,15 @@ export const employeeSlice = createSlice({
     });
     builder.addCase(
       fetchEmployeeVisitsThunk.fulfilled,
-      (state, action: PayloadAction<IEmployeeVisit[]>) => {
-        state.visits = action.payload;
+      (
+        state,
+        action: PayloadAction<{
+          employee: IEmployee;
+          employeeVisits: IEmployeeVisit[];
+        }>
+      ) => {
+        state.visits = action.payload.employeeVisits;
+        state.employee = action.payload.employee;
         state.loading = false;
       }
     );
