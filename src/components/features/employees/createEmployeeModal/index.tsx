@@ -122,7 +122,10 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
     <Dialog
       open={isOpen}
       onOpenChange={(open) => {
-        if (!open) onClose();
+        if (!open) {
+          form.reset();
+          onClose();
+        }
       }}
     >
       <DialogContent className='md:max-w-4xl'>

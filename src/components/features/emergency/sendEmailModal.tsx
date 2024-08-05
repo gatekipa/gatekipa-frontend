@@ -85,7 +85,10 @@ const SendEmailModal: React.FC<SendEmailModalProps> = ({
     <Dialog
       open={isOpen}
       onOpenChange={(open) => {
-        if (!open) onClose();
+        if (!open) {
+          form.reset();
+          onClose();
+        }
       }}
     >
       <DialogContent className='max-w-2xl'>
