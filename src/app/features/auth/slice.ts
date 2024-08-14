@@ -8,6 +8,7 @@ import {
   registerUserThunk,
   updatePasswordThunk,
   verifyEmailThunk,
+  verifyEmailWithTokenThunk,
   verifyTokenThunk,
 } from './thunk';
 
@@ -16,14 +17,22 @@ export interface AuthState {
   loading: boolean;
   forgotPasswordUserEmail?: string | null;
   resetPasswordCredentials: { token: string; email: string };
-  registerUser: { isVerificationEmailSent: boolean; isEmailVerified: boolean };
+  registerUser: {
+    isVerificationEmailSent: boolean;
+    isEmailVerified: boolean;
+    emailAddress: string;
+  };
 }
 
 const initialState: AuthState = {
   user: null,
   loading: false,
   resetPasswordCredentials: { token: '', email: '' },
-  registerUser: { isVerificationEmailSent: false, isEmailVerified: false },
+  registerUser: {
+    isVerificationEmailSent: false,
+    isEmailVerified: false,
+    emailAddress: '',
+  },
 };
 
 export const authSlice = createSlice({
@@ -99,14 +108,32 @@ export const authSlice = createSlice({
     builder.addCase(verifyTokenThunk.rejected, (state) => {
       state.loading = false;
     });
-    builder.addCase(verifyEmailThunk.fulfilled, (state) => {
-      state.loading = false;
-      state.registerUser.isVerificationEmailSent = true;
-    });
+    builder.addCase(
+      verifyEmailThunk.fulfilled,
+      (state, action: PayloadAction<{ emailAddress: string }>) => {
+        state.loading = false;
+        state.registerUser.isVerificationEmailSent = true;
+        state.registerUser.emailAddress = action.payload.emailAddress ?? '';
+      }
+    );
     builder.addCase(verifyEmailThunk.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(verifyEmailThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      verifyEmailWithTokenThunk.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        console.log('action :>> ', action);
+        state.registerUser.isEmailVerified = true;
+      }
+    );
+    builder.addCase(verifyEmailWithTokenThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(verifyEmailWithTokenThunk.rejected, (state) => {
       state.loading = false;
     });
     builder.addCase(updatePasswordThunk.fulfilled, (state) => {
