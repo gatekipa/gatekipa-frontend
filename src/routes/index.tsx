@@ -16,6 +16,7 @@ import EmployeeVisitsPage from '@/pages/dashboard/employees/visits';
 import AllVisitsEmployeePage from '@/pages/dashboard/employees/all';
 import AllVisitorVisitsPage from '@/pages/dashboard/visitors/visits';
 import EmergencyPage from '@/pages/dashboard/emergency';
+import CompanyRegistrationPage from '@/pages/auth/companyRegistration';
 
 const router = createBrowserRouter([
   {
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
       {
         path: 'register',
         element: <RegistrationPage />,
+      },
+      {
+        path: 'register/company',
+        element: <CompanyRegistrationPage />,
       },
       {
         path: 'forgot-password',

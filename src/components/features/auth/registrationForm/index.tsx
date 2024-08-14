@@ -4,22 +4,22 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback } from "react";
-import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import { z } from "zod";
-import { registerUserThunk } from "../../../../app/features/auth/thunk";
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
+} from '@/components/ui/select';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useCallback } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import { registerUserThunk } from '../../../../app/features/auth/thunk';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../../../ui/card";
+} from '../../../ui/card';
 import {
   Form,
   FormControl,
@@ -27,13 +27,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../ui/form";
-import { Input } from "../../../ui/input";
-import LoadingButton from "@/components/shared/loadingButton";
+} from '../../../ui/form';
+import { Input } from '../../../ui/input';
+import LoadingButton from '@/components/shared/loadingButton';
 
 enum UserType {
-  VISITOR = "VISITOR",
-  EMPLOYEE = "EMPLOYEE",
+  VISITOR = 'VISITOR',
+  EMPLOYEE = 'EMPLOYEE',
 }
 
 const registrationFormSchema = z.object({
@@ -58,12 +58,12 @@ const RegistrationForm: React.FC = () => {
   const form = useForm<IRegistrationForm>({
     resolver: zodResolver(registrationFormSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      companyId: "",
-      emailAddress: "",
-      password: "",
-      mobileNo: "",
+      firstName: '',
+      lastName: '',
+      companyId: '',
+      emailAddress: '',
+      password: '',
+      mobileNo: '',
       userType: UserType.EMPLOYEE,
     },
   });
@@ -71,82 +71,82 @@ const RegistrationForm: React.FC = () => {
   const onSubmit = useCallback(async (values: IRegistrationForm) => {
     try {
       await dispatch(registerUserThunk(values)).unwrap();
-      toast.success("Registration Successfull");
+      toast.success('Registration Successfull');
       form.reset();
-      navigate("/auth/login");
+      navigate('/auth/login');
     } catch (err) {
       toast.error(err as string);
     }
   }, []);
 
   return (
-    <Card className="w-[350px] md:w-[600px]">
-      <CardHeader className="space-y-2">
+    <Card className='w-[350px] md:w-[600px]'>
+      <CardHeader className='space-y-2'>
         <CardTitle>Registration</CardTitle>
         <CardDescription>Create a new account to get started.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
+            <div className='grid w-full items-center gap-4'>
+              <div className='flex flex-col space-y-1.5'>
                 <FormField
                   control={form.control}
-                  name="firstName"
+                  name='firstName'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel id="firstName">First Name</FormLabel>
+                      <FormLabel id='firstName'>First Name</FormLabel>
                       <FormControl>
                         <Input
-                          id="firstName"
-                          type="text"
-                          placeholder="Please enter your first name"
-                          autoComplete="off"
-                          className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                          id='firstName'
+                          type='text'
+                          placeholder='Please enter your first name'
+                          autoComplete='off'
+                          className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage className="text-xs" />
+                      <FormMessage className='text-xs' />
                     </FormItem>
                   )}
                 />
               </div>
-              <div className="flex flex-col space-y-1.5">
+              <div className='flex flex-col space-y-1.5'>
                 <FormField
                   control={form.control}
-                  name="lastName"
+                  name='lastName'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel id="lastName">Last Name</FormLabel>
+                      <FormLabel id='lastName'>Last Name</FormLabel>
                       <FormControl>
                         <Input
-                          id="lastName"
-                          type="text"
-                          placeholder="Please enter your last name"
-                          autoComplete="off"
-                          className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                          id='lastName'
+                          type='text'
+                          placeholder='Please enter your last name'
+                          autoComplete='off'
+                          className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage className="text-xs" />
+                      <FormMessage className='text-xs' />
                     </FormItem>
                   )}
                 />
               </div>
-              <div className="flex flex-col space-y-1.5">
+              <div className='flex flex-col space-y-1.5'>
                 <FormField
                   control={form.control}
-                  name="emailAddress"
+                  name='emailAddress'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel id="email">Email</FormLabel>
+                      <FormLabel id='email'>Email</FormLabel>
                       <FormControl>
                         <Input
-                          id="emailAddress"
-                          type="email"
-                          placeholder="Please enter your email address"
-                          autoComplete="off"
-                          className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                          id='emailAddress'
+                          type='email'
+                          placeholder='Please enter your email address'
+                          autoComplete='off'
+                          className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
                           {...field}
                         />
                       </FormControl>
@@ -155,10 +155,10 @@ const RegistrationForm: React.FC = () => {
                   )}
                 />
               </div>
-              <div className="flex flex-col space-y-1.5">
+              <div className='flex flex-col space-y-1.5'>
                 <FormField
                   control={form.control}
-                  name="companyId"
+                  name='companyId'
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Company</FormLabel>
@@ -167,8 +167,8 @@ const RegistrationForm: React.FC = () => {
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0">
-                            <SelectValue placeholder="Please select your company" />
+                          <SelectTrigger className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'>
+                            <SelectValue placeholder='Please select your company' />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -184,17 +184,17 @@ const RegistrationForm: React.FC = () => {
                   )}
                 />
               </div>
-              <div className="flex flex-col space-y-1.5">
+              <div className='flex flex-col space-y-1.5'>
                 <FormField
                   control={form.control}
-                  name="userType"
+                  name='userType'
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>User Type</FormLabel>
                       <Select onValueChange={field.onChange}>
                         <FormControl>
-                          <SelectTrigger className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0">
-                            <SelectValue placeholder="Please select your user type" />
+                          <SelectTrigger className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'>
+                            <SelectValue placeholder='Please select your user type' />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -210,75 +210,81 @@ const RegistrationForm: React.FC = () => {
                   )}
                 />
               </div>
-              <div className="flex flex-col space-y-1.5">
+              <div className='flex flex-col space-y-1.5'>
                 <FormField
                   control={form.control}
-                  name="mobileNo"
+                  name='mobileNo'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel id="mobileNo">Mobile Number</FormLabel>
+                      <FormLabel id='mobileNo'>Mobile Number</FormLabel>
                       <FormControl>
                         <Input
-                          id="mobileNo"
-                          type="text"
-                          placeholder="Please enter your mobile number"
-                          autoComplete="off"
-                          className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                          id='mobileNo'
+                          type='text'
+                          placeholder='Please enter your mobile number'
+                          autoComplete='off'
+                          className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage className="text-xs" />
+                      <FormMessage className='text-xs' />
                     </FormItem>
                   )}
                 />
               </div>
-              <div className="flex flex-col space-y-1.5">
+              <div className='flex flex-col space-y-1.5'>
                 <FormField
                   control={form.control}
-                  name="password"
+                  name='password'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel id="password">Password</FormLabel>
+                      <FormLabel id='password'>Password</FormLabel>
                       <FormControl>
                         <Input
-                          id="password"
-                          type="password"
-                          placeholder="Please enter your password"
-                          autoComplete="off"
-                          className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                          id='password'
+                          type='password'
+                          placeholder='Please enter your password'
+                          autoComplete='off'
+                          className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage className="text-xs" />
+                      <FormMessage className='text-xs' />
                     </FormItem>
                   )}
                 />
               </div>
               <div>
-                <p className="text-sm">
-                  Already have an account.? Please{" "}
+                <p className='text-sm'>
+                  Already have an account.? Please{' '}
                   <Link
-                    to="/auth/login"
-                    className="text-sm font-semibold underline transition-opacity hover:opacity-75"
+                    to='/auth/login'
+                    className='text-sm font-semibold underline transition-opacity hover:opacity-75'
                   >
                     Login
-                  </Link>{" "}
+                  </Link>{' '}
                 </p>
               </div>
             </div>
-            <div className="mt-4">
+            <div className='mt-4'>
               <LoadingButton
                 loading={loading}
-                type="submit"
-                className="w-full"
-                label="Register"
+                type='submit'
+                className='w-full'
+                label='Register'
               />
-              <div className="flex justify-between items-center mt-3">
+              <div className='flex justify-between items-center mt-3'>
                 <Link
-                  to="/auth/forgot-password"
-                  className="text-sm underline transition-opacity hover:opacity-75"
+                  to='/auth/forgot-password'
+                  className='text-sm underline transition-opacity hover:opacity-75'
                 >
                   Forgot Password
+                </Link>
+                <Link
+                  to='company'
+                  className='text-sm underline transition-opacity hover:opacity-75'
+                >
+                  Register as Company
                 </Link>
               </div>
             </div>
