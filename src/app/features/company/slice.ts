@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import {
   ICompany,
   IVisit,
@@ -10,7 +10,8 @@ import {
   fetchVisitsThunk,
   markVisitCheckoutThunk,
   markVisitThunk,
-} from "./thunk";
+  registerCompanyThunk,
+} from './thunk';
 
 export interface CompanyState {
   companies: ICompany[];
@@ -27,7 +28,7 @@ const initialState: CompanyState = {
 };
 
 export const companySlice = createSlice({
-  name: "company",
+  name: 'company',
   initialState,
   reducers: {},
   extraReducers(builder) {
@@ -68,6 +69,19 @@ export const companySlice = createSlice({
       state.loading = true;
     });
     builder.addCase(addVisitorThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      registerCompanyThunk.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        console.log('action.payload :>> ', action.payload);
+        state.loading = false;
+      }
+    );
+    builder.addCase(registerCompanyThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(registerCompanyThunk.rejected, (state) => {
       state.loading = false;
     });
     builder.addCase(
