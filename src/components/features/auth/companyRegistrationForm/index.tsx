@@ -1,5 +1,5 @@
 import { registerCompanyThunk } from '@/app/features/company/thunk';
-import { useAppDispatch } from '@/app/hooks';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import LoadingButton from '@/components/shared/loadingButton';
 import {
   Card,
@@ -36,10 +36,16 @@ const companyRegistrationFormSchema = z.object({
 
 export type ICompanyRegistration = z.infer<
   typeof companyRegistrationFormSchema
->;
+> & {
+  emailAddress: string;
+  isEmailVerified: boolean;
+};
 
 const CompanyRegistrationForm: React.FC = () => {
   const dispatch = useAppDispatch();
+  const {
+    registerUser: { emailAddress },
+  } = useAppSelector((state) => state.auth);
 
   const form = useForm<ICompanyRegistration>({
     resolver: zodResolver(companyRegistrationFormSchema),
@@ -53,15 +59,20 @@ const CompanyRegistrationForm: React.FC = () => {
     },
   });
 
-  const onSubmit = useCallback(async (data: ICompanyRegistration) => {
-    try {
-      await dispatch(registerCompanyThunk(data));
-      toast.success('Successfully registered');
-      form.reset();
-    } catch (error) {
-      toast.error(error as string);
-    }
-  }, []);
+  const onSubmit = useCallback(
+    async (data: ICompanyRegistration) => {
+      try {
+        await dispatch(
+          registerCompanyThunk({ ...data, emailAddress, isEmailVerified: true })
+        );
+        toast.success('Successfully registered');
+        form.reset();
+      } catch (error) {
+        toast.error(error as string);
+      }
+    },
+    [emailAddress]
+  );
 
   return (
     <Card className='w-[350px] md:w-[600px]'>
