@@ -46,6 +46,13 @@ export const authSlice = createSlice({
     setForgotPasswordUserEmail: (state, action: PayloadAction<string>) => {
       state.forgotPasswordUserEmail = action.payload;
     },
+    resetRegisterUser: (state) => {
+      state.registerUser = {
+        isVerificationEmailSent: false,
+        isEmailVerified: false,
+        emailAddress: '',
+      };
+    },
   },
   extraReducers(builder) {
     builder.addCase(
@@ -122,14 +129,10 @@ export const authSlice = createSlice({
     builder.addCase(verifyEmailThunk.rejected, (state) => {
       state.loading = false;
     });
-    builder.addCase(
-      verifyEmailWithTokenThunk.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        console.log('action :>> ', action);
-        state.registerUser.isEmailVerified = true;
-      }
-    );
+    builder.addCase(verifyEmailWithTokenThunk.fulfilled, (state) => {
+      state.loading = false;
+      state.registerUser.isEmailVerified = true;
+    });
     builder.addCase(verifyEmailWithTokenThunk.pending, (state) => {
       state.loading = true;
     });
@@ -148,6 +151,7 @@ export const authSlice = createSlice({
   },
 });
 
-export const { logout, setForgotPasswordUserEmail } = authSlice.actions;
+export const { logout, setForgotPasswordUserEmail, resetRegisterUser } =
+  authSlice.actions;
 
 export default authSlice.reducer;

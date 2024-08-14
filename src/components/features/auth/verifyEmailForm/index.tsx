@@ -41,7 +41,7 @@ const VerifyEmailForm: React.FC = () => {
 
   const onSubmit = useCallback(async (data: IVerifyEmail) => {
     try {
-      await dispatch(verifyEmailThunk(data));
+      await dispatch(verifyEmailThunk(data)).unwrap();
       form.reset();
       toast.success('Successfully Verified Email Address');
     } catch (error) {

@@ -1,3 +1,4 @@
+import { resetRegisterUser } from '@/app/features/auth/slice';
 import { registerCompanyThunk } from '@/app/features/company/thunk';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import LoadingButton from '@/components/shared/loadingButton';
@@ -64,7 +65,8 @@ const CompanyRegistrationForm: React.FC = () => {
       try {
         await dispatch(
           registerCompanyThunk({ ...data, emailAddress, isEmailVerified: true })
-        );
+        ).unwrap();
+        dispatch(resetRegisterUser());
         toast.success('Successfully registered');
         form.reset();
       } catch (error) {
