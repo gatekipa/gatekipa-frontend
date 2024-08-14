@@ -71,13 +71,9 @@ export const companySlice = createSlice({
     builder.addCase(addVisitorThunk.rejected, (state) => {
       state.loading = false;
     });
-    builder.addCase(
-      registerCompanyThunk.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        console.log('action.payload :>> ', action.payload);
-        state.loading = false;
-      }
-    );
+    builder.addCase(registerCompanyThunk.fulfilled, (state) => {
+      state.loading = false;
+    });
     builder.addCase(registerCompanyThunk.pending, (state) => {
       state.loading = true;
     });

@@ -53,6 +53,23 @@ export interface FetchVisitorsParams {
   lastName?: string;
 }
 
+export interface ICompanyResponse {
+  id: string;
+  emailAddress: string;
+  name: string;
+  ownerFirstName: string;
+  ownerLastName: string;
+  mobileNo: string;
+  isSubscriptionActive: boolean;
+  nextPaymentDate: string;
+  lastPaymentDate: string;
+  stripeCustomerId: string;
+  companyCode: string;
+  address: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const fetchCompanyThunk: AsyncThunk<ICompany[], void, {}> = createAsyncThunk(
   'company/',
   async (_, thunkAPI) => {
@@ -154,33 +171,36 @@ const addVisitorThunk: AsyncThunk<IVisitor, IVisitorForm, {}> =
     }
   );
 
-const registerCompanyThunk: AsyncThunk<any, ICompanyRegistration, {}> =
-  createAsyncThunk(
-    'company/register',
-    async (payload: ICompanyRegistration, thunkAPI) => {
-      try {
-        const response = await axios.post(
-          `${import.meta.env.VITE_BASE_API_URL}/company`,
-          payload,
-          {
-            withCredentials: true,
-          }
-        );
-        return response.data.data;
-      } catch (error) {
-        const axiosError = error as AxiosError<{ message: string }>;
-        if (
-          axiosError.response &&
-          axiosError.response.data &&
-          axiosError.response.data.message
-        ) {
-          return thunkAPI.rejectWithValue(axiosError.response.data.message);
-        } else {
-          return thunkAPI.rejectWithValue('An unexpected error occurred');
+const registerCompanyThunk: AsyncThunk<
+  ICompanyResponse,
+  ICompanyRegistration,
+  {}
+> = createAsyncThunk(
+  'company/register',
+  async (payload: ICompanyRegistration, thunkAPI) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL}/company`,
+        payload,
+        {
+          withCredentials: true,
         }
+      );
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue('An unexpected error occurred');
       }
     }
-  );
+  }
+);
 
 const fetchVisitsThunk: AsyncThunk<IVisit[], { visitorId: string }, {}> =
   createAsyncThunk('company/visits', async ({ visitorId }, thunkAPI) => {
