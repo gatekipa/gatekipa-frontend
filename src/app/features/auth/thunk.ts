@@ -1,8 +1,8 @@
-import { createAsyncThunk, AsyncThunk } from "@reduxjs/toolkit";
-import NetworkManager from "../../../api";
+import { createAsyncThunk, AsyncThunk } from '@reduxjs/toolkit';
+import NetworkManager from '../../../api';
 //import AuthNetworkManager from "../../../api/auth";
-import { IChangePasswordForm } from "../../../components/features/auth/changePasswordForm";
-import axios, { AxiosError } from "axios";
+import { IChangePasswordForm } from '../../../components/features/auth/changePasswordForm';
+import axios, { AxiosError } from 'axios';
 
 export interface IBaseResponse<T> {
   data: T;
@@ -23,12 +23,12 @@ export interface IUser {
 }
 
 interface IUserRequest
-  extends Omit<IUser, "userType" | "id" | "visitorId" | "employeeId"> {
+  extends Omit<IUser, 'userType' | 'id' | 'visitorId' | 'employeeId'> {
   password: string;
   mobileNo: string;
 }
 
-type ILoginRequest = Pick<IUserRequest, "password" | "emailAddress">;
+type ILoginRequest = Pick<IUserRequest, 'password' | 'emailAddress'>;
 
 interface IForgotPasswordRequest {
   emailAddress: string;
@@ -37,6 +37,10 @@ interface IForgotPasswordRequest {
 interface IVerifyTokenRequest {
   token: string;
   email: string;
+}
+
+interface IVerifyEmailRequest {
+  emailAddress: string;
 }
 
 interface IUpdatePasswordRequest {
@@ -50,7 +54,7 @@ const registerUserThunk: AsyncThunk<
   IUserRequest,
   {}
 > = createAsyncThunk(
-  "users/register",
+  'users/register',
   async (userDetails: IUserRequest, thunkAPI) => {
     try {
       const response = await NetworkManager.post<
@@ -67,14 +71,14 @@ const registerUserThunk: AsyncThunk<
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue("An unexpected error occurred");
+        return thunkAPI.rejectWithValue('An unexpected error occurred');
       }
     }
   }
 );
 
 const loginThunk: AsyncThunk<IUser, ILoginRequest, {}> = createAsyncThunk(
-  "users/login",
+  'users/login',
   async (loginDetails: ILoginRequest, thunkAPI) => {
     try {
       // const response = await AuthNetworkManager.post<IUser, ILoginRequest>(
@@ -97,7 +101,7 @@ const loginThunk: AsyncThunk<IUser, ILoginRequest, {}> = createAsyncThunk(
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue("An unexpected error occurred");
+        return thunkAPI.rejectWithValue('An unexpected error occurred');
       }
     }
   }
@@ -108,7 +112,7 @@ const changePasswordThunk: AsyncThunk<
   IChangePasswordForm,
   {}
 > = createAsyncThunk(
-  "users/change-password",
+  'users/change-password',
   async (loginDetails: IChangePasswordForm) => {
     const response = await NetworkManager.post<
       IBaseResponse<IUser>,
@@ -120,7 +124,7 @@ const changePasswordThunk: AsyncThunk<
 
 const forgotPasswordThunk: AsyncThunk<any, IForgotPasswordRequest, {}> =
   createAsyncThunk(
-    "users/forgot-password",
+    'users/forgot-password',
     async (forgotPasswordRequest: IForgotPasswordRequest, thunkAPI) => {
       try {
         const response = await NetworkManager.post<any, IForgotPasswordRequest>(
@@ -137,7 +141,7 @@ const forgotPasswordThunk: AsyncThunk<any, IForgotPasswordRequest, {}> =
         ) {
           return thunkAPI.rejectWithValue(axiosError.response.data.message);
         } else {
-          return thunkAPI.rejectWithValue("An unexpected error occurred");
+          return thunkAPI.rejectWithValue('An unexpected error occurred');
         }
       }
     }
@@ -145,14 +149,14 @@ const forgotPasswordThunk: AsyncThunk<any, IForgotPasswordRequest, {}> =
 
 const verifyTokenThunk: AsyncThunk<any, IVerifyTokenRequest, {}> =
   createAsyncThunk(
-    "users/verify-forgot-pass-token",
+    'users/verify-forgot-pass-token',
     async (verifyTokenRequest: IVerifyTokenRequest, thunkAPI) => {
       try {
         const response = await NetworkManager.post<any, IVerifyTokenRequest>(
           `/users/verify-forgot-pass-token`,
           verifyTokenRequest
         );
-        console.log("response.data :>> ", response.data);
+        console.log('response.data :>> ', response.data);
         return response.data;
       } catch (error) {
         const axiosError = error as AxiosError<{ message: string }>;
@@ -163,7 +167,34 @@ const verifyTokenThunk: AsyncThunk<any, IVerifyTokenRequest, {}> =
         ) {
           return thunkAPI.rejectWithValue(axiosError.response.data.message);
         } else {
-          return thunkAPI.rejectWithValue("An unexpected error occurred");
+          return thunkAPI.rejectWithValue('An unexpected error occurred');
+        }
+      }
+    }
+  );
+
+const verifyEmailThunk: AsyncThunk<any, IVerifyEmailRequest, {}> =
+  createAsyncThunk(
+    'users/verify-email',
+    async (verifyEmailRequest: IVerifyEmailRequest, thunkAPI) => {
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_BASE_API_URL}/users/verify-email`,
+          verifyEmailRequest,
+          { withCredentials: true }
+        );
+
+        return response.data;
+      } catch (error) {
+        const axiosError = error as AxiosError<{ message: string }>;
+        if (
+          axiosError.response &&
+          axiosError.response.data &&
+          axiosError.response.data.message
+        ) {
+          return thunkAPI.rejectWithValue(axiosError.response.data.message);
+        } else {
+          return thunkAPI.rejectWithValue('An unexpected error occurred');
         }
       }
     }
@@ -171,7 +202,7 @@ const verifyTokenThunk: AsyncThunk<any, IVerifyTokenRequest, {}> =
 
 const updatePasswordThunk: AsyncThunk<any, IUpdatePasswordRequest, {}> =
   createAsyncThunk(
-    "users/new-password",
+    'users/new-password',
     async (updatePasswordRequest: IUpdatePasswordRequest, thunkAPI) => {
       try {
         const response = await NetworkManager.post<any, IUpdatePasswordRequest>(
@@ -188,7 +219,7 @@ const updatePasswordThunk: AsyncThunk<any, IUpdatePasswordRequest, {}> =
         ) {
           return thunkAPI.rejectWithValue(axiosError.response.data.message);
         } else {
-          return thunkAPI.rejectWithValue("An unexpected error occurred");
+          return thunkAPI.rejectWithValue('An unexpected error occurred');
         }
       }
     }
@@ -200,4 +231,5 @@ export {
   forgotPasswordThunk,
   verifyTokenThunk,
   updatePasswordThunk,
+  verifyEmailThunk,
 };

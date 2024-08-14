@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import {
   IBaseResponse,
   IUser,
@@ -7,29 +7,32 @@ import {
   loginThunk,
   registerUserThunk,
   updatePasswordThunk,
+  verifyEmailThunk,
   verifyTokenThunk,
-} from "./thunk";
+} from './thunk';
 
 export interface AuthState {
   user?: IUser | null;
   loading: boolean;
   forgotPasswordUserEmail?: string | null;
   resetPasswordCredentials: { token: string; email: string };
+  registerUser: { isVerificationEmailSent: boolean; isEmailVerified: boolean };
 }
 
 const initialState: AuthState = {
   user: null,
   loading: false,
-  resetPasswordCredentials: { token: "", email: "" },
+  resetPasswordCredentials: { token: '', email: '' },
+  registerUser: { isVerificationEmailSent: false, isEmailVerified: false },
 };
 
 export const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
     logout: (state) => {
       state.user = null;
-      localStorage.removeItem("userInfo");
+      localStorage.removeItem('userInfo');
     },
     setForgotPasswordUserEmail: (state, action: PayloadAction<string>) => {
       state.forgotPasswordUserEmail = action.payload;
@@ -40,7 +43,7 @@ export const authSlice = createSlice({
       loginThunk.fulfilled,
       (state, action: PayloadAction<IUser>) => {
         state.user = action.payload;
-        localStorage.setItem("userInfo", JSON.stringify(action.payload));
+        localStorage.setItem('userInfo', JSON.stringify(action.payload));
         state.loading = false;
       }
     );
@@ -86,15 +89,24 @@ export const authSlice = createSlice({
       verifyTokenThunk.fulfilled,
       (state, action: PayloadAction<any>) => {
         state.loading = false;
-        console.log("action.payload :>> ", action.payload);
-        state.resetPasswordCredentials.email = action.payload.data.domain ?? "";
-        state.resetPasswordCredentials.token = action.payload.data.token ?? "";
+        state.resetPasswordCredentials.email = action.payload.data.domain ?? '';
+        state.resetPasswordCredentials.token = action.payload.data.token ?? '';
       }
     );
     builder.addCase(verifyTokenThunk.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(verifyTokenThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(verifyEmailThunk.fulfilled, (state) => {
+      state.loading = false;
+      state.registerUser.isVerificationEmailSent = true;
+    });
+    builder.addCase(verifyEmailThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(verifyEmailThunk.rejected, (state) => {
       state.loading = false;
     });
     builder.addCase(updatePasswordThunk.fulfilled, (state) => {

@@ -30,7 +30,6 @@ const companyRegistrationFormSchema = z.object({
   ownerFirstName: z.string().min(3),
   ownerLastName: z.string().min(3),
   companyCode: z.string().min(3),
-  emailAddress: z.string().email(),
   address: z.string().min(8),
   mobileNo: z.string().min(10),
 });
@@ -49,16 +48,16 @@ const CompanyRegistrationForm: React.FC = () => {
       ownerFirstName: '',
       ownerLastName: '',
       companyCode: '',
-      emailAddress: '',
       address: '',
       mobileNo: '',
     },
   });
+
   const onSubmit = useCallback(async (data: ICompanyRegistration) => {
     try {
       await dispatch(registerCompanyThunk(data));
-      form.reset();
       toast.success('Successfully registered');
+      form.reset();
     } catch (error) {
       toast.error(error as string);
     }
@@ -167,30 +166,6 @@ const CompanyRegistrationForm: React.FC = () => {
                         />
                       </FormControl>
                       <FormMessage className='text-xs' />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className='flex flex-col space-y-1.5'>
-                <FormField
-                  control={form.control}
-                  name='emailAddress'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel id='email' className='text-xs'>
-                        Email Address
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          id='emailAddress'
-                          type='email'
-                          placeholder='Please enter your email address'
-                          autoComplete='off'
-                          className='text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />
