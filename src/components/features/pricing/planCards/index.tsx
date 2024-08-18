@@ -1,9 +1,27 @@
-import { IPlan } from "@/app/features/pricing/thunk";
+import { createPaymentIntent, IPlan } from "@/app/features/pricing/thunk";
+import { useAppDispatch } from "@/app/hooks";
 import { X } from "lucide-react";
+import { useCallback } from "react";
+import { toast } from "sonner";
 
 const PlanCard: React.FC<{
   plan: IPlan;
 }> = ({ plan }) => {
+  const dispatch = useAppDispatch();
+
+  const onPlanClickHandler = useCallback(async () => {
+    try {
+      await dispatch(
+        createPaymentIntent({
+          actualAmount: plan.price,
+          payableAmount: plan.price,
+        })
+      ).unwrap();
+    } catch (error) {
+      toast.error(error as string);
+    }
+  }, [plan, dispatch]);
+
   return (
     <div className="flex flex-col items-center bg-slate-950 p-8 rounded-lg shadow-xl max-w-sm cursor-pointer transition-transform hover:scale-110">
       <div>
@@ -19,9 +37,9 @@ const PlanCard: React.FC<{
       <div className="flex flex-col gap-1 mb-3">
         {plan.features.map((feature, index) => (
           <div key={index}>
-            <p className="font-bold my-2">{feature.title}</p>
+            <div className="font-bold my-2">{feature.title}</div>
             {feature.details.map((detail, idx) => (
-              <p key={idx} className="flex items-center text-sm">
+              <div key={idx} className="flex items-center text-sm">
                 {detail.allowed ? (
                   <div className="flex">
                     <svg
@@ -45,12 +63,15 @@ const PlanCard: React.FC<{
                     {detail.text}
                   </div>
                 )}
-              </p>
+              </div>
             ))}
           </div>
         ))}
         <div className="flex justify-center mt-8">
-          <button className="px-6 py-2 border-white border-2 rounded-xl hover:bg-white hover:text-slate-950">
+          <button
+            className="px-6 py-2 border-white border-2 rounded-xl hover:bg-white hover:text-slate-950"
+            onClick={onPlanClickHandler}
+          >
             Get Started
           </button>
         </div>
