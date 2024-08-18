@@ -1,14 +1,31 @@
-import { createAsyncThunk, AsyncThunk } from '@reduxjs/toolkit';
-import NetworkManager from '../../../api';
+import { createAsyncThunk, AsyncThunk } from "@reduxjs/toolkit";
+import NetworkManager from "../../../api";
 //import AuthNetworkManager from "../../../api/auth";
-import { IChangePasswordForm } from '../../../components/features/auth/changePasswordForm';
-import axios, { AxiosError } from 'axios';
+import { IChangePasswordForm } from "../../../components/features/auth/changePasswordForm";
+import axios, { AxiosError } from "axios";
 
 export interface IBaseResponse<T> {
   data: T;
   message: string;
   isError: boolean;
   responseCode: number;
+}
+
+export interface IUserPlan {
+  id: string;
+  emailAddress: string;
+  name: string;
+  ownerFirstName: string;
+  ownerLastName: string;
+  mobileNo: string;
+  isSubscriptionActive: boolean;
+  nextPaymentDate: string;
+  lastPaymentDate: string;
+  stripeCustomerId: string;
+  companyCode: string;
+  address: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface IUser {
@@ -19,16 +36,20 @@ export interface IUser {
   userType: string;
   visitorId: string | null;
   companyId: string | null;
+  planInfo: IUserPlan | null;
   employeeId: string | null;
 }
 
 interface IUserRequest
-  extends Omit<IUser, 'userType' | 'id' | 'visitorId' | 'employeeId'> {
+  extends Omit<
+    IUser,
+    "userType" | "id" | "visitorId" | "employeeId" | "planInfo"
+  > {
   password: string;
   mobileNo: string;
 }
 
-type ILoginRequest = Pick<IUserRequest, 'password' | 'emailAddress'>;
+type ILoginRequest = Pick<IUserRequest, "password" | "emailAddress">;
 
 interface IForgotPasswordRequest {
   emailAddress: string;
@@ -58,7 +79,7 @@ const registerUserThunk: AsyncThunk<
   IUserRequest,
   {}
 > = createAsyncThunk(
-  'users/register',
+  "users/register",
   async (userDetails: IUserRequest, thunkAPI) => {
     try {
       const response = await NetworkManager.post<
@@ -75,14 +96,14 @@ const registerUserThunk: AsyncThunk<
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   }
 );
 
 const loginThunk: AsyncThunk<IUser, ILoginRequest, {}> = createAsyncThunk(
-  'users/login',
+  "users/login",
   async (loginDetails: ILoginRequest, thunkAPI) => {
     try {
       // const response = await AuthNetworkManager.post<IUser, ILoginRequest>(
@@ -105,7 +126,7 @@ const loginThunk: AsyncThunk<IUser, ILoginRequest, {}> = createAsyncThunk(
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   }
@@ -116,7 +137,7 @@ const changePasswordThunk: AsyncThunk<
   IChangePasswordForm,
   {}
 > = createAsyncThunk(
-  'users/change-password',
+  "users/change-password",
   async (loginDetails: IChangePasswordForm) => {
     const response = await NetworkManager.post<
       IBaseResponse<IUser>,
@@ -128,7 +149,7 @@ const changePasswordThunk: AsyncThunk<
 
 const forgotPasswordThunk: AsyncThunk<any, IForgotPasswordRequest, {}> =
   createAsyncThunk(
-    'users/forgot-password',
+    "users/forgot-password",
     async (forgotPasswordRequest: IForgotPasswordRequest, thunkAPI) => {
       try {
         const response = await NetworkManager.post<any, IForgotPasswordRequest>(
@@ -145,7 +166,7 @@ const forgotPasswordThunk: AsyncThunk<any, IForgotPasswordRequest, {}> =
         ) {
           return thunkAPI.rejectWithValue(axiosError.response.data.message);
         } else {
-          return thunkAPI.rejectWithValue('An unexpected error occurred');
+          return thunkAPI.rejectWithValue("An unexpected error occurred");
         }
       }
     }
@@ -153,7 +174,7 @@ const forgotPasswordThunk: AsyncThunk<any, IForgotPasswordRequest, {}> =
 
 const verifyTokenThunk: AsyncThunk<any, IVerifyTokenRequest, {}> =
   createAsyncThunk(
-    'users/verify-forgot-pass-token',
+    "users/verify-forgot-pass-token",
     async (verifyTokenRequest: IVerifyTokenRequest, thunkAPI) => {
       try {
         const response = await NetworkManager.post<any, IVerifyTokenRequest>(
@@ -170,7 +191,7 @@ const verifyTokenThunk: AsyncThunk<any, IVerifyTokenRequest, {}> =
         ) {
           return thunkAPI.rejectWithValue(axiosError.response.data.message);
         } else {
-          return thunkAPI.rejectWithValue('An unexpected error occurred');
+          return thunkAPI.rejectWithValue("An unexpected error occurred");
         }
       }
     }
@@ -178,7 +199,7 @@ const verifyTokenThunk: AsyncThunk<any, IVerifyTokenRequest, {}> =
 
 const verifyEmailThunk: AsyncThunk<any, IVerifyEmailRequest, {}> =
   createAsyncThunk(
-    'users/verify-email',
+    "users/verify-email",
     async (verifyEmailRequest: IVerifyEmailRequest, thunkAPI) => {
       try {
         await axios.post(
@@ -197,7 +218,7 @@ const verifyEmailThunk: AsyncThunk<any, IVerifyEmailRequest, {}> =
         ) {
           return thunkAPI.rejectWithValue(axiosError.response.data.message);
         } else {
-          return thunkAPI.rejectWithValue('An unexpected error occurred');
+          return thunkAPI.rejectWithValue("An unexpected error occurred");
         }
       }
     }
@@ -208,7 +229,7 @@ const verifyEmailWithTokenThunk: AsyncThunk<
   IVerifyEmailWithTokenRequest,
   {}
 > = createAsyncThunk(
-  'users/verify-email-token',
+  "users/verify-email-token",
   async (verifyEmailRequest: IVerifyEmailWithTokenRequest, thunkAPI) => {
     try {
       const response = await axios.post(
@@ -227,7 +248,7 @@ const verifyEmailWithTokenThunk: AsyncThunk<
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   }
@@ -235,7 +256,7 @@ const verifyEmailWithTokenThunk: AsyncThunk<
 
 const updatePasswordThunk: AsyncThunk<any, IUpdatePasswordRequest, {}> =
   createAsyncThunk(
-    'users/new-password',
+    "users/new-password",
     async (updatePasswordRequest: IUpdatePasswordRequest, thunkAPI) => {
       try {
         const response = await NetworkManager.post<any, IUpdatePasswordRequest>(
@@ -252,7 +273,7 @@ const updatePasswordThunk: AsyncThunk<any, IUpdatePasswordRequest, {}> =
         ) {
           return thunkAPI.rejectWithValue(axiosError.response.data.message);
         } else {
-          return thunkAPI.rejectWithValue('An unexpected error occurred');
+          return thunkAPI.rejectWithValue("An unexpected error occurred");
         }
       }
     }
