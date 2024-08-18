@@ -5,7 +5,7 @@ const PlanCard: React.FC<{
   plan: IPlan;
 }> = ({ plan }) => {
   return (
-    <div className="flex flex-col items-center bg-slate-950 p-8 rounded-lg shadow-xl max-w-sm">
+    <div className="flex flex-col items-center bg-slate-950 p-8 rounded-lg shadow-xl max-w-sm cursor-pointer transition-transform hover:scale-110">
       <div>
         <h2 className="font-extrabold shadow-slate-500 text-3xl text-center mb-2 uppercase">
           {plan.planName}
