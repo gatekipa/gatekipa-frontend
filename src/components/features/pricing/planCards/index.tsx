@@ -2,12 +2,14 @@ import { createPaymentIntent, IPlan } from "@/app/features/pricing/thunk";
 import { useAppDispatch } from "@/app/hooks";
 import { X } from "lucide-react";
 import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const PlanCard: React.FC<{
   plan: IPlan;
 }> = ({ plan }) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const onPlanClickHandler = useCallback(async () => {
     try {
@@ -17,6 +19,8 @@ const PlanCard: React.FC<{
           payableAmount: plan.price,
         })
       ).unwrap();
+
+      navigate("checkout");
     } catch (error) {
       toast.error(error as string);
     }

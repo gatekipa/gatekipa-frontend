@@ -6,14 +6,14 @@ import {
   IPlan,
 } from "./thunk";
 
-enum PricingApiEndpoints {
+enum PricingApiEndpoint {
   FETCH_PLANS = "FETCH_PLANS",
   CREATE_PAYMENT_INTENT = "CREATE_PAYMENT_INTENT",
 }
 
 export interface PricingState {
   paymentIntent: IPaymentIntent | null;
-  loading: { [key in PricingApiEndpoints]?: boolean };
+  loading: { [key in PricingApiEndpoint]?: boolean };
   plans: IPlan[];
 }
 
@@ -21,8 +21,8 @@ const initialState: PricingState = {
   plans: [],
   paymentIntent: null,
   loading: {
-    [PricingApiEndpoints.FETCH_PLANS]: false,
-    [PricingApiEndpoints.CREATE_PAYMENT_INTENT]: false,
+    [PricingApiEndpoint.FETCH_PLANS]: false,
+    [PricingApiEndpoint.CREATE_PAYMENT_INTENT]: false,
   },
 };
 
@@ -35,27 +35,27 @@ export const pricingSlice = createSlice({
       fetchPricingPlans.fulfilled,
       (state, action: PayloadAction<IPlan[]>) => {
         state.plans = action.payload;
-        state.loading[PricingApiEndpoints.FETCH_PLANS] = false;
+        state.loading[PricingApiEndpoint.FETCH_PLANS] = false;
       }
     );
     builder.addCase(fetchPricingPlans.pending, (state) => {
-      state.loading[PricingApiEndpoints.FETCH_PLANS] = true;
+      state.loading[PricingApiEndpoint.FETCH_PLANS] = true;
     });
     builder.addCase(fetchPricingPlans.rejected, (state) => {
-      state.loading[PricingApiEndpoints.FETCH_PLANS] = false;
+      state.loading[PricingApiEndpoint.FETCH_PLANS] = false;
     });
     builder.addCase(
       createPaymentIntent.fulfilled,
       (state, action: PayloadAction<IPaymentIntent>) => {
         state.paymentIntent = action.payload;
-        state.loading[PricingApiEndpoints.CREATE_PAYMENT_INTENT] = false;
+        state.loading[PricingApiEndpoint.CREATE_PAYMENT_INTENT] = false;
       }
     );
     builder.addCase(createPaymentIntent.pending, (state) => {
-      state.loading[PricingApiEndpoints.CREATE_PAYMENT_INTENT] = true;
+      state.loading[PricingApiEndpoint.CREATE_PAYMENT_INTENT] = true;
     });
     builder.addCase(createPaymentIntent.rejected, (state) => {
-      state.loading[PricingApiEndpoints.CREATE_PAYMENT_INTENT] = false;
+      state.loading[PricingApiEndpoint.CREATE_PAYMENT_INTENT] = false;
     });
   },
 });
