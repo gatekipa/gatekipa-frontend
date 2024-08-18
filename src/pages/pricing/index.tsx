@@ -1,140 +1,9 @@
+import { IPlan } from "@/app/features/pricing/thunk";
+import usePricingPlans from "@/hooks/pricing";
 import React from "react";
 
-type Plan = {
-  planName: string;
-  price: number;
-  subscriptionType: string;
-  description: string;
-  features: {
-    title: string;
-    details: { allowed: boolean; text: string }[];
-  }[];
-  isActive: boolean;
-};
-
-const plans: readonly Plan[] = [
-  {
-    planName: "Basic",
-    price: 20,
-    subscriptionType: "MONTHLY",
-    description: "This plan covers basic visitor management",
-    features: [
-      {
-        title: "Visitor Management",
-        details: [
-          {
-            allowed: true,
-            text: "Sign Up",
-          },
-          {
-            allowed: true,
-            text: "Login",
-          },
-          {
-            allowed: true,
-            text: "Check-In/Check-Out",
-          },
-          {
-            allowed: false,
-            text: "Digital Records",
-          },
-          {
-            allowed: false,
-            text: "Email Notifications",
-          },
-        ],
-      },
-      {
-        title: "Admin Dashboard",
-        details: [
-          {
-            allowed: true,
-            text: "Login",
-          },
-          {
-            allowed: true,
-            text: "Dashboard",
-          },
-          {
-            allowed: true,
-            text: "Data Management",
-          },
-          {
-            allowed: false,
-            text: "Reporting",
-          },
-          {
-            allowed: false,
-            text: "User Management",
-          },
-        ],
-      },
-    ],
-    isActive: true,
-  },
-  {
-    planName: "Standard",
-    price: 50,
-    subscriptionType: "MONTHLY",
-    description: "This plan covers visitor and employee management",
-    features: [
-      {
-        title: "Visitor Management",
-        details: [
-          {
-            allowed: true,
-            text: "Sign Up",
-          },
-          {
-            allowed: true,
-            text: "Login",
-          },
-          {
-            allowed: true,
-            text: "Check-In/Check-Out",
-          },
-          {
-            allowed: true,
-            text: "Digital Records",
-          },
-          {
-            allowed: true,
-            text: "Email Notifications",
-          },
-        ],
-      },
-      {
-        title: "Admin Dashboard",
-        details: [
-          {
-            allowed: true,
-            text: "Login",
-          },
-          {
-            allowed: true,
-            text: "Dashboard",
-          },
-          {
-            allowed: true,
-            text: "Data Management",
-          },
-          {
-            allowed: true,
-            text: "Reporting",
-          },
-          {
-            allowed: true,
-            text: "User Management",
-          },
-        ],
-      },
-    ],
-    isActive: true,
-  },
-];
-
 const PlanCard: React.FC<{
-  plan: Plan;
+  plan: IPlan;
 }> = ({ plan }) => {
   return (
     <div className="flex flex-col items-center bg-slate-950 p-8 rounded-lg shadow-xl max-w-sm">
@@ -204,6 +73,8 @@ const PlanCard: React.FC<{
 };
 
 const PricingPage: React.FC = () => {
+  const { plans } = usePricingPlans();
+
   return (
     <div className="h-screen flex justify-center items-center gap-x-2 text-white">
       {plans.map((plan, index) => (
