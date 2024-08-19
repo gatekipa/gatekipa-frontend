@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import {
+  confirmPayment,
   createPaymentIntent,
   fetchPricingPlans,
   IPaymentIntent,
@@ -9,6 +10,7 @@ import {
 enum PricingApiEndpoint {
   FETCH_PLANS = "FETCH_PLANS",
   CREATE_PAYMENT_INTENT = "CREATE_PAYMENT_INTENT",
+  CONFIRM_PAYMENT = "CONFIRM_PAYMENT",
 }
 
 export interface PricingState {
@@ -56,6 +58,20 @@ export const pricingSlice = createSlice({
     });
     builder.addCase(createPaymentIntent.rejected, (state) => {
       state.loading[PricingApiEndpoint.CREATE_PAYMENT_INTENT] = false;
+    });
+    builder.addCase(
+      confirmPayment.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        // state.paymentIntent = action.payload;
+        console.log("action.payload :>> ", action.payload);
+        state.loading[PricingApiEndpoint.CONFIRM_PAYMENT] = false;
+      }
+    );
+    builder.addCase(confirmPayment.pending, (state) => {
+      state.loading[PricingApiEndpoint.CONFIRM_PAYMENT] = true;
+    });
+    builder.addCase(confirmPayment.rejected, (state) => {
+      state.loading[PricingApiEndpoint.CONFIRM_PAYMENT] = false;
     });
   },
 });
