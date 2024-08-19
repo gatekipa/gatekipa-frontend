@@ -17,15 +17,13 @@ const DashboardPage: React.FC = () => {
 
   return (
     <div>
-      <div>
-        {role === UserRole.EMPLOYEE ? (
-          <EmployeeDashboard />
-        ) : role === UserRole.VISITOR ? (
-          <VisitorDashboard />
-        ) : (
-          <h2 className="text-2xl text-gray-950 font-semibold">Dashboard</h2>
-        )}
-      </div>
+      {role === UserRole.EMPLOYEE ? (
+        <EmployeeDashboard />
+      ) : role === UserRole.VISITOR ? (
+        <VisitorDashboard />
+      ) : (
+        <h2 className="text-2xl text-gray-950 font-semibold">Dashboard</h2>
+      )}
     </div>
   );
 };

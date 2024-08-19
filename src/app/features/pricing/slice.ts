@@ -2,7 +2,9 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import {
   confirmPayment,
   createPaymentIntent,
+  fetchInvoices,
   fetchPricingPlans,
+  IInvoice,
   IPaymentIntent,
   IPlan,
 } from "./thunk";
@@ -11,12 +13,14 @@ enum PricingApiEndpoint {
   FETCH_PLANS = "FETCH_PLANS",
   CREATE_PAYMENT_INTENT = "CREATE_PAYMENT_INTENT",
   CONFIRM_PAYMENT = "CONFIRM_PAYMENT",
+  INVOICE = "INVOICE",
 }
 
 export interface PricingState {
   paymentIntent: IPaymentIntent | null;
   loading: { [key in PricingApiEndpoint]?: boolean };
   plans: IPlan[];
+  invoices: IInvoice[];
 }
 
 const initialState: PricingState = {
@@ -25,7 +29,10 @@ const initialState: PricingState = {
   loading: {
     [PricingApiEndpoint.FETCH_PLANS]: false,
     [PricingApiEndpoint.CREATE_PAYMENT_INTENT]: false,
+    [PricingApiEndpoint.CONFIRM_PAYMENT]: false,
+    [PricingApiEndpoint.INVOICE]: false,
   },
+  invoices: [],
 };
 
 export const pricingSlice = createSlice({
@@ -45,6 +52,19 @@ export const pricingSlice = createSlice({
     });
     builder.addCase(fetchPricingPlans.rejected, (state) => {
       state.loading[PricingApiEndpoint.FETCH_PLANS] = false;
+    });
+    builder.addCase(
+      fetchInvoices.fulfilled,
+      (state, action: PayloadAction<IInvoice[]>) => {
+        state.invoices = action.payload;
+        state.loading[PricingApiEndpoint.INVOICE] = false;
+      }
+    );
+    builder.addCase(fetchInvoices.pending, (state) => {
+      state.loading[PricingApiEndpoint.INVOICE] = true;
+    });
+    builder.addCase(fetchInvoices.rejected, (state) => {
+      state.loading[PricingApiEndpoint.INVOICE] = false;
     });
     builder.addCase(
       createPaymentIntent.fulfilled,

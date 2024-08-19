@@ -26,6 +26,12 @@ export interface IConfirmPaymentRequest {
   stripePayment: any;
 }
 
+export interface IInvoice {
+  invoiceNo: string;
+  amount: number;
+  invoiceStatus: string;
+}
+
 export interface IPaymentIntent {
   clientSecret: string;
 }
@@ -36,6 +42,32 @@ const fetchPricingPlans: AsyncThunk<IPlan[], void, {}> = createAsyncThunk(
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_BASE_API_URL}/plan`,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
+
+const fetchInvoices: AsyncThunk<IInvoice[], void, {}> = createAsyncThunk(
+  "pricing/invoices",
+  async (_, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_API_URL}/invoice`,
         {
           withCredentials: true,
         }
@@ -119,4 +151,9 @@ const confirmPayment: AsyncThunk<any, IConfirmPaymentRequest, {}> =
     }
   );
 
-export { fetchPricingPlans, createPaymentIntent, confirmPayment };
+export {
+  fetchPricingPlans,
+  createPaymentIntent,
+  confirmPayment,
+  fetchInvoices,
+};
