@@ -1,11 +1,12 @@
 import {
   AlertCircleIcon,
   Clipboard,
+  FileIcon,
   LayoutDashboardIcon,
   User2Icon,
   UsersIcon,
-} from 'lucide-react';
-import { ReactElement } from 'react';
+} from "lucide-react";
+import { ReactElement } from "react";
 
 export type Route = {
   label: string;
@@ -15,41 +16,46 @@ export type Route = {
 
 const adminRoutes: Route[] = [
   {
-    label: 'Dashboard',
-    href: '/dashboard',
+    label: "Dashboard",
+    href: "/dashboard",
     icon: <LayoutDashboardIcon size={18} />,
   },
   {
-    label: 'Visitor Management',
-    href: '/dashboard/visitors',
+    label: "Visitor Management",
+    href: "/dashboard/visitors",
     icon: <User2Icon size={18} />,
   },
   {
-    label: 'Emergency',
-    href: '/dashboard/emergency',
+    label: "Emergency",
+    href: "/dashboard/emergency",
     icon: <AlertCircleIcon size={18} />,
   },
   {
-    label: 'Visitor Visits',
-    href: '/dashboard/visitors/visits',
+    label: "Visitor Visits",
+    href: "/dashboard/visitors/visits",
     icon: <User2Icon size={18} />,
   },
   {
-    label: 'Employee Management',
-    href: '/dashboard/employees',
+    label: "Employee Management",
+    href: "/dashboard/employees",
     icon: <UsersIcon size={18} />,
   },
   {
-    label: 'Employee Visits',
-    href: '/dashboard/employees/visits',
+    label: "Invoices",
+    href: "/dashboard/invoice",
+    icon: <FileIcon size={18} />,
+  },
+  {
+    label: "Employee Visits",
+    href: "/dashboard/employees/visits",
     icon: <Clipboard size={18} />,
   },
 ];
 
 const visitorRoutes: Route[] = [
   {
-    label: 'Dashboard',
-    href: '/dashboard',
+    label: "Dashboard",
+    href: "/dashboard",
     icon: <LayoutDashboardIcon size={18} />,
   },
   // {
@@ -61,8 +67,8 @@ const visitorRoutes: Route[] = [
 
 const employeeRoutes: Route[] = [
   {
-    label: 'Dashboard',
-    href: '/dashboard',
+    label: "Dashboard",
+    href: "/dashboard",
     icon: <LayoutDashboardIcon size={18} />,
   },
   // {

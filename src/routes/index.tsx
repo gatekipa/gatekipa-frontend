@@ -20,6 +20,7 @@ import CompanyRegistrationPage from "@/pages/auth/companyRegistration";
 import PricingPage from "@/pages/pricing";
 import PricingLayout from "@/components/layout/pricing";
 import CheckoutPage from "@/pages/pricing/checkout";
+import InvoicePage from "@/pages/dashboard/invoices";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "change-password",
         element: <ChangePasswordPage />,
+      },
+      {
+        path: "invoice",
+        element: <InvoicePage />,
       },
       {
         path: "visitors",
