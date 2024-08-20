@@ -167,7 +167,7 @@ const UsersPage: React.FC = () => {
               value={query.lastName}
               onChange={(e) => setQuery({ ...query, lastName: e.target.value })}
             />
-            <div className="flex">
+            <div className="flex items-center gap-x-2">
               <Label htmlFor="isActive">Active</Label>
               <Checkbox
                 id="isActive"
