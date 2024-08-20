@@ -61,6 +61,22 @@ export interface FetchCompanyUserParams {
   isActive: boolean;
 }
 
+export interface ICompanyUser {
+  id: string;
+  emailAddress: string;
+  firstName: string;
+  lastName: string;
+  mobileNo: string;
+  isLoggedIn: boolean;
+  isActive: boolean;
+  userType: string;
+  employeeId: any;
+  companyId: string;
+  visitorId: any;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ICompanyResponse {
   id: string;
   emailAddress: string;
@@ -109,7 +125,7 @@ const fetchCompanyThunk: AsyncThunk<ICompany[], void, {}> = createAsyncThunk(
 );
 
 const fetchCompanyUsersThunk: AsyncThunk<
-  any[],
+  ICompanyUser[],
   Partial<FetchCompanyUserParams>,
   {}
 > = createAsyncThunk("company/users", async (params, thunkAPI) => {
