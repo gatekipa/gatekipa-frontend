@@ -8,6 +8,7 @@ import {
   IPaymentIntent,
   IPlan,
 } from "./thunk";
+import { ICompanyResponse } from "../company/thunk";
 
 enum PricingApiEndpoint {
   FETCH_PLANS = "FETCH_PLANS",
@@ -17,6 +18,8 @@ enum PricingApiEndpoint {
 }
 
 export interface PricingState {
+  selectedPlan: IPlan | null;
+  paymentSuccessResponse: ICompanyResponse | null;
   paymentIntent: IPaymentIntent | null;
   loading: { [key in PricingApiEndpoint]?: boolean };
   plans: IPlan[];
@@ -25,7 +28,9 @@ export interface PricingState {
 
 const initialState: PricingState = {
   plans: [],
+  selectedPlan: null,
   paymentIntent: null,
+  paymentSuccessResponse: null,
   loading: {
     [PricingApiEndpoint.FETCH_PLANS]: false,
     [PricingApiEndpoint.CREATE_PAYMENT_INTENT]: false,
@@ -38,7 +43,11 @@ const initialState: PricingState = {
 export const pricingSlice = createSlice({
   name: "pricing",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedPlan: (state, action: PayloadAction<IPlan>) => {
+      state.selectedPlan = action.payload;
+    },
+  },
   extraReducers(builder) {
     builder.addCase(
       fetchPricingPlans.fulfilled,
@@ -81,9 +90,10 @@ export const pricingSlice = createSlice({
     });
     builder.addCase(
       confirmPayment.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        // state.paymentIntent = action.payload;
+      (state, action: PayloadAction<ICompanyResponse>) => {
+        state.paymentSuccessResponse = action.payload;
         console.log("action.payload :>> ", action.payload);
+        localStorage.setItem("userInfo", JSON.stringify(action.payload));
         state.loading[PricingApiEndpoint.CONFIRM_PAYMENT] = false;
       }
     );
@@ -95,5 +105,7 @@ export const pricingSlice = createSlice({
     });
   },
 });
+
+export const { setSelectedPlan } = pricingSlice.actions;
 
 export default pricingSlice.reducer;

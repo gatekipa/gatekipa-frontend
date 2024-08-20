@@ -1,6 +1,4 @@
 import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
-// import { IBaseResponse } from "../auth/thunk";
-// import NetworkManager from "@/api";
 import axios, { AxiosError } from "axios";
 import { IVisitorForm } from "@/components/features/visitors/toolbar";
 import { IVisitForm } from "@/components/features/visits/toolbar";
@@ -233,6 +231,36 @@ const addVisitorThunk: AsyncThunk<IVisitor, IVisitorForm, {}> =
     }
   );
 
+const changeCompanyUserStatusThunk: AsyncThunk<
+  any,
+  { isActive: boolean; companyUserId: string },
+  {}
+> = createAsyncThunk("company/visitors/status", async (payload, thunkAPI) => {
+  try {
+    const response = await axios.put(
+      `${import.meta.env.VITE_BASE_API_URL}/users/change-status/${
+        payload.companyUserId
+      }`,
+      { isActive: payload.isActive },
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    if (
+      axiosError.response &&
+      axiosError.response.data &&
+      axiosError.response.data.message
+    ) {
+      return thunkAPI.rejectWithValue(axiosError.response.data.message);
+    } else {
+      return thunkAPI.rejectWithValue("An unexpected error occurred");
+    }
+  }
+});
+
 const registerCompanyThunk: AsyncThunk<
   ICompanyResponse,
   ICompanyRegistration,
@@ -404,4 +432,5 @@ export {
   markVisitCheckoutThunk,
   registerCompanyThunk,
   fetchCompanyUsersThunk,
+  changeCompanyUserStatusThunk,
 };

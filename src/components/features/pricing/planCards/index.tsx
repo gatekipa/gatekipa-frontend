@@ -1,3 +1,4 @@
+import { setSelectedPlan } from "@/app/features/pricing/slice";
 import { createPaymentIntent, IPlan } from "@/app/features/pricing/thunk";
 import { useAppDispatch } from "@/app/hooks";
 import { X } from "lucide-react";
@@ -13,6 +14,7 @@ const PlanCard: React.FC<{
 
   const onPlanClickHandler = useCallback(async () => {
     try {
+      dispatch(setSelectedPlan(plan));
       await dispatch(
         createPaymentIntent({
           actualAmount: plan.price,

@@ -6,6 +6,7 @@ import { useAppDispatch } from "@/app/hooks";
 import ColumnHeader from "@/components/shared/columnHeader";
 import LoadingButton from "@/components/shared/loadingButton";
 import PaginatedTable from "@/components/shared/paginatedTable";
+import ToolTip from "@/components/shared/tooltip";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -14,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import useCompanyUsers from "@/hooks/company/users";
 import { formatDate } from "@/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { ExternalLink } from "lucide-react";
+import { Check, CircleOff, ExternalLink } from "lucide-react";
 import React, { useCallback, useMemo, useState } from "react";
 
 const columns: ColumnDef<ICompanyUser>[] = [
@@ -65,18 +66,27 @@ const columns: ColumnDef<ICompanyUser>[] = [
       const companyUser = row.original;
 
       const [isModalOpen, setIsModalOpen] = useState(false);
+
       return (
-        <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            className="text-xs"
-            variant="link"
-            title="Display visits"
-          >
-            <ExternalLink className="mr-2" size={12} />
-            Mark As Active
-          </Button>
-        </div>
+        <ToolTip
+          title={companyUser?.isActive ? "Mark as Inactive" : "Mark as Active"}
+        >
+          {companyUser?.isActive ? (
+            <CircleOff
+              className="text-red-500 cursor-pointer hover:text-red-700"
+              size={15}
+              onClick={() => setIsModalOpen(true)}
+            />
+          ) : (
+            <Check
+              className="text-green-500 cursor-pointer hover:text-green-600"
+              size={15}
+              strokeWidth={3}
+              onClick={() => setIsModalOpen(true)}
+            />
+          )}
+          {isModalOpen && <p></p>}
+        </ToolTip>
       );
     },
   },

@@ -18,7 +18,9 @@ const CheckoutPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { paymentIntent } = useAppSelector((state) => state.pricing);
+  const { paymentIntent, selectedPlan } = useAppSelector(
+    (state) => state.pricing
+  );
 
   const onSubmitHandler = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
@@ -45,9 +47,9 @@ const CheckoutPage: React.FC = () => {
       } else {
         await dispatch(
           confirmPayment({
-            actualAmount: 100,
-            payableAmount: 100,
-            planId: "1",
+            actualAmount: selectedPlan?.price!,
+            payableAmount: selectedPlan?.price!,
+            planId: selectedPlan?.id!,
             stripePayment: paymentInfo,
           })
         ).unwrap();
@@ -57,7 +59,7 @@ const CheckoutPage: React.FC = () => {
         navigate("/dashboard");
       }
     },
-    [paymentIntent, elements, paymentIntent?.clientSecret]
+    [paymentIntent, elements, paymentIntent?.clientSecret, selectedPlan]
   );
 
   return (
