@@ -30,6 +30,7 @@ export interface IInvoice {
   invoiceNo: string;
   amount: number;
   invoiceStatus: string;
+  createdAt: string;
 }
 
 export interface IPaymentIntent {
