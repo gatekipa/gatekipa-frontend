@@ -8,7 +8,9 @@ import LoadingButton from "@/components/shared/loadingButton";
 import PaginatedTable from "@/components/shared/paginatedTable";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import useCompanyUsers from "@/hooks/company/users";
 import { formatDate } from "@/utils";
 import { ColumnDef } from "@tanstack/react-table";
@@ -41,6 +43,10 @@ const columns: ColumnDef<ICompanyUser>[] = [
   {
     accessorKey: "isActive",
     header: ({ column }) => <ColumnHeader column={column} label="Active" />,
+    cell: ({ getValue }) => {
+      const isActive = getValue() as boolean;
+      return <span>{isActive ? "Yes" : "No"}</span>;
+    },
     enableSorting: true,
   },
   {
@@ -86,6 +92,7 @@ const UsersPage: React.FC = () => {
     phoneSearch: "",
     firstName: "",
     lastName: "",
+    isActive: false,
   });
 
   const handleSearch = useCallback(() => {
@@ -99,6 +106,7 @@ const UsersPage: React.FC = () => {
       phoneSearch: "",
       firstName: "",
       lastName: "",
+      isActive: false,
     });
   }, []);
 
@@ -145,6 +153,15 @@ const UsersPage: React.FC = () => {
               value={query.lastName}
               onChange={(e) => setQuery({ ...query, lastName: e.target.value })}
             />
+            <div className="flex">
+              <Label htmlFor="isActive">Active</Label>
+              <Checkbox
+                id="isActive"
+                onCheckedChange={(checked) => {
+                  setQuery({ ...query, isActive: !!checked.valueOf() });
+                }}
+              />
+            </div>
             <LoadingButton
               onClick={handleSearch}
               loading={loading}

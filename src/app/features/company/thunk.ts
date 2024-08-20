@@ -141,7 +141,7 @@ const fetchCompanyUsersThunk: AsyncThunk<
     const response = await axios.get(
       `${
         import.meta.env.VITE_BASE_API_URL
-      }/users/list-company-users/${queryParams.toString()}`,
+      }/users/list-company-users?${queryParams.toString()}`,
       {
         withCredentials: true,
       }
