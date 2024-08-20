@@ -6,6 +6,7 @@ import {
   IVisitor,
   addNewVisitThunk,
   addVisitorThunk,
+  changeCompanyUserStatusThunk,
   fetchCompanyThunk,
   fetchCompanyUsersThunk,
   fetchVisitorsThunk,
@@ -21,6 +22,7 @@ export interface CompanyState {
   visits: IVisit[];
   companyUsers: ICompanyUser[];
   loading: boolean;
+  companyUsersLoading: boolean;
 }
 
 const initialState: CompanyState = {
@@ -29,6 +31,7 @@ const initialState: CompanyState = {
   visits: [],
   companyUsers: [],
   loading: false,
+  companyUsersLoading: false,
 };
 
 export const companySlice = createSlice({
@@ -53,14 +56,14 @@ export const companySlice = createSlice({
       fetchCompanyUsersThunk.fulfilled,
       (state, action: PayloadAction<ICompanyUser[]>) => {
         state.companyUsers = action.payload;
-        state.loading = false;
+        state.companyUsersLoading = false;
       }
     );
     builder.addCase(fetchCompanyUsersThunk.pending, (state) => {
-      state.loading = true;
+      state.companyUsersLoading = true;
     });
     builder.addCase(fetchCompanyUsersThunk.rejected, (state) => {
-      state.loading = false;
+      state.companyUsersLoading = false;
     });
     builder.addCase(
       fetchVisitorsThunk.fulfilled,
@@ -157,6 +160,22 @@ export const companySlice = createSlice({
       state.loading = true;
     });
     builder.addCase(markVisitCheckoutThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      changeCompanyUserStatusThunk.fulfilled,
+      (state, action: PayloadAction<ICompanyUser>) => {
+        const index = state.companyUsers.findIndex(
+          (user) => user.id === action.payload.id
+        );
+        if (index !== -1) state.companyUsers[index] = action.payload;
+        state.loading = false;
+      }
+    );
+    builder.addCase(changeCompanyUserStatusThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(changeCompanyUserStatusThunk.rejected, (state) => {
       state.loading = false;
     });
   },

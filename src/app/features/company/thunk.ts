@@ -232,7 +232,7 @@ const addVisitorThunk: AsyncThunk<IVisitor, IVisitorForm, {}> =
   );
 
 const changeCompanyUserStatusThunk: AsyncThunk<
-  any,
+  ICompanyUser,
   { isActive: boolean; companyUserId: string },
   {}
 > = createAsyncThunk("company/visitors/status", async (payload, thunkAPI) => {

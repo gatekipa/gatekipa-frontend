@@ -3,10 +3,10 @@ import {
   ICompanyUser,
 } from "@/app/features/company/thunk";
 import { useAppDispatch } from "@/app/hooks";
+import ChangeCompanyUserStatusModal from "@/components/features/employees/changeCompanyUserStatus";
 import ColumnHeader from "@/components/shared/columnHeader";
 import LoadingButton from "@/components/shared/loadingButton";
 import PaginatedTable from "@/components/shared/paginatedTable";
-import ToolTip from "@/components/shared/tooltip";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import useCompanyUsers from "@/hooks/company/users";
 import { formatDate } from "@/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { Check, CircleOff, ExternalLink } from "lucide-react";
+import { Check, CircleOff } from "lucide-react";
 import React, { useCallback, useMemo, useState } from "react";
 
 const columns: ColumnDef<ICompanyUser>[] = [
@@ -46,6 +46,7 @@ const columns: ColumnDef<ICompanyUser>[] = [
     header: ({ column }) => <ColumnHeader column={column} label="Active" />,
     cell: ({ getValue }) => {
       const isActive = getValue() as boolean;
+
       return <span>{isActive ? "Yes" : "No"}</span>;
     },
     enableSorting: true,
@@ -68,10 +69,8 @@ const columns: ColumnDef<ICompanyUser>[] = [
       const [isModalOpen, setIsModalOpen] = useState(false);
 
       return (
-        <ToolTip
-          title={companyUser?.isActive ? "Mark as Inactive" : "Mark as Active"}
-        >
-          {companyUser?.isActive ? (
+        <>
+          {!companyUser?.isActive ? (
             <CircleOff
               className="text-red-500 cursor-pointer hover:text-red-700"
               size={15}
@@ -85,8 +84,14 @@ const columns: ColumnDef<ICompanyUser>[] = [
               onClick={() => setIsModalOpen(true)}
             />
           )}
-          {isModalOpen && <p></p>}
-        </ToolTip>
+          {isModalOpen && (
+            <ChangeCompanyUserStatusModal
+              companyUser={companyUser}
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+            />
+          )}
+        </>
       );
     },
   },
@@ -98,8 +103,8 @@ const UsersPage: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const [query, setQuery] = useState({
-    emailSearch: "",
-    phoneSearch: "",
+    emailAddress: "",
+    mobileNo: "",
     firstName: "",
     lastName: "",
     isActive: false,
@@ -112,8 +117,8 @@ const UsersPage: React.FC = () => {
   const handleReset = useCallback(() => {
     dispatch(fetchCompanyUsersThunk({}));
     setQuery({
-      emailSearch: "",
-      phoneSearch: "",
+      emailAddress: "",
+      mobileNo: "",
       firstName: "",
       lastName: "",
       isActive: false,
@@ -122,10 +127,11 @@ const UsersPage: React.FC = () => {
 
   const disableCondition = useMemo(() => {
     return (
-      !query.emailSearch &&
-      !query.phoneSearch &&
+      !query.emailAddress &&
+      !query.mobileNo &&
       !query.firstName &&
-      !query.lastName
+      !query.lastName &&
+      !query.isActive
     );
   }, [query]);
 
@@ -139,17 +145,15 @@ const UsersPage: React.FC = () => {
           <div className="flex gap-x-3 my-4">
             <Input
               placeholder="Search By Email"
-              value={query.emailSearch}
+              value={query.emailAddress}
               onChange={(e) =>
-                setQuery({ ...query, emailSearch: e.target.value })
+                setQuery({ ...query, emailAddress: e.target.value })
               }
             />
             <Input
               placeholder="Search By Mobile Number"
-              value={query.phoneSearch}
-              onChange={(e) =>
-                setQuery({ ...query, phoneSearch: e.target.value })
-              }
+              value={query.mobileNo}
+              onChange={(e) => setQuery({ ...query, mobileNo: e.target.value })}
             />
             <Input
               placeholder="Search By First Name"
