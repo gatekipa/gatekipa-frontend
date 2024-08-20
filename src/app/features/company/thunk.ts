@@ -1,10 +1,10 @@
-import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
+import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
 // import { IBaseResponse } from "../auth/thunk";
 // import NetworkManager from "@/api";
-import axios, { AxiosError } from 'axios';
-import { IVisitorForm } from '@/components/features/visitors/toolbar';
-import { IVisitForm } from '@/components/features/visits/toolbar';
-import { ICompanyRegistration } from '@/components/features/auth/companyRegistrationForm';
+import axios, { AxiosError } from "axios";
+import { IVisitorForm } from "@/components/features/visitors/toolbar";
+import { IVisitForm } from "@/components/features/visits/toolbar";
+import { ICompanyRegistration } from "@/components/features/auth/companyRegistrationForm";
 
 export interface ICompany {
   id: string;
@@ -53,6 +53,14 @@ export interface FetchVisitorsParams {
   lastName?: string;
 }
 
+export interface FetchCompanyUserParams {
+  firstName: string;
+  lastName: string;
+  emailAddress: string;
+  mobileNo: string;
+  isActive: boolean;
+}
+
 export interface ICompanyResponse {
   id: string;
   emailAddress: string;
@@ -71,7 +79,7 @@ export interface ICompanyResponse {
 }
 
 const fetchCompanyThunk: AsyncThunk<ICompany[], void, {}> = createAsyncThunk(
-  'company/',
+  "company/",
   async (_, thunkAPI) => {
     try {
       // const response = await NetworkManager.get<IBaseResponse<ICompany[]>>(
@@ -94,14 +102,52 @@ const fetchCompanyThunk: AsyncThunk<ICompany[], void, {}> = createAsyncThunk(
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   }
 );
 
+const fetchCompanyUsersThunk: AsyncThunk<
+  any[],
+  Partial<FetchCompanyUserParams>,
+  {}
+> = createAsyncThunk("company/users", async (params, thunkAPI) => {
+  try {
+    const queryParams = new URLSearchParams();
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (value) {
+        queryParams.append(key, value.toString());
+      }
+    });
+
+    const response = await axios.get(
+      `${
+        import.meta.env.VITE_BASE_API_URL
+      }/users/list-company-users/${queryParams.toString()}`,
+      {
+        withCredentials: true,
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    if (
+      axiosError.response &&
+      axiosError.response.data &&
+      axiosError.response.data.message
+    ) {
+      return thunkAPI.rejectWithValue(axiosError.response.data.message);
+    } else {
+      return thunkAPI.rejectWithValue("An unexpected error occurred");
+    }
+  }
+});
+
 const fetchVisitorsThunk: AsyncThunk<IVisitor[], FetchVisitorsParams, {}> =
-  createAsyncThunk('company/visitors', async (params, thunkAPI) => {
+  createAsyncThunk("company/visitors", async (params, thunkAPI) => {
     try {
       // const response = await NetworkManager.get<IBaseResponse<IVisitor[]>>(
       //   `/visitor`
@@ -134,14 +180,14 @@ const fetchVisitorsThunk: AsyncThunk<IVisitor[], FetchVisitorsParams, {}> =
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   });
 
 const addVisitorThunk: AsyncThunk<IVisitor, IVisitorForm, {}> =
   createAsyncThunk(
-    'company/visitors/create',
+    "company/visitors/create",
     async (payload: IVisitorForm, thunkAPI) => {
       try {
         // const response = await NetworkManager.post<
@@ -165,7 +211,7 @@ const addVisitorThunk: AsyncThunk<IVisitor, IVisitorForm, {}> =
         ) {
           return thunkAPI.rejectWithValue(axiosError.response.data.message);
         } else {
-          return thunkAPI.rejectWithValue('An unexpected error occurred');
+          return thunkAPI.rejectWithValue("An unexpected error occurred");
         }
       }
     }
@@ -176,7 +222,7 @@ const registerCompanyThunk: AsyncThunk<
   ICompanyRegistration,
   {}
 > = createAsyncThunk(
-  'company/register',
+  "company/register",
   async (payload: ICompanyRegistration, thunkAPI) => {
     try {
       const response = await axios.post(
@@ -196,14 +242,14 @@ const registerCompanyThunk: AsyncThunk<
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   }
 );
 
 const fetchVisitsThunk: AsyncThunk<IVisit[], { visitorId: string }, {}> =
-  createAsyncThunk('company/visits', async ({ visitorId }, thunkAPI) => {
+  createAsyncThunk("company/visits", async ({ visitorId }, thunkAPI) => {
     try {
       // const response = await NetworkManager.get<IBaseResponse<IVisit[]>>(
       //   `/visits/${visitorId}`
@@ -226,7 +272,7 @@ const fetchVisitsThunk: AsyncThunk<IVisit[], { visitorId: string }, {}> =
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   });
@@ -236,7 +282,7 @@ const addNewVisitThunk: AsyncThunk<
   { visitorId: string; payload: IVisitForm },
   {}
 > = createAsyncThunk(
-  'company/visits/create',
+  "company/visits/create",
   async ({ visitorId, payload }, thunkAPI) => {
     try {
       // const response = await NetworkManager.post<
@@ -262,14 +308,14 @@ const addNewVisitThunk: AsyncThunk<
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   }
 );
 
 const markVisitThunk: AsyncThunk<any, { visitId: string }, {}> =
-  createAsyncThunk('company/visits/mark', async ({ visitId }, thunkAPI) => {
+  createAsyncThunk("company/visits/mark", async ({ visitId }, thunkAPI) => {
     try {
       // const response = await NetworkManager.post<IBaseResponse<any>, any>(
       //   `/visits/checkin/${visitId}`,
@@ -294,14 +340,14 @@ const markVisitThunk: AsyncThunk<any, { visitId: string }, {}> =
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   });
 
 const markVisitCheckoutThunk: AsyncThunk<any, { visitId: string }, {}> =
   createAsyncThunk(
-    'company/visits/mark/checkout',
+    "company/visits/mark/checkout",
     async ({ visitId }, thunkAPI) => {
       try {
         // const response = await NetworkManager.post<IBaseResponse<any>, any>(
@@ -326,7 +372,7 @@ const markVisitCheckoutThunk: AsyncThunk<any, { visitId: string }, {}> =
         ) {
           return thunkAPI.rejectWithValue(axiosError.response.data.message);
         } else {
-          return thunkAPI.rejectWithValue('An unexpected error occurred');
+          return thunkAPI.rejectWithValue("An unexpected error occurred");
         }
       }
     }
@@ -341,4 +387,5 @@ export {
   markVisitThunk,
   markVisitCheckoutThunk,
   registerCompanyThunk,
+  fetchCompanyUsersThunk,
 };

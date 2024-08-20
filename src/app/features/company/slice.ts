@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import {
   ICompany,
   IVisit,
@@ -6,17 +6,19 @@ import {
   addNewVisitThunk,
   addVisitorThunk,
   fetchCompanyThunk,
+  fetchCompanyUsersThunk,
   fetchVisitorsThunk,
   fetchVisitsThunk,
   markVisitCheckoutThunk,
   markVisitThunk,
   registerCompanyThunk,
-} from './thunk';
+} from "./thunk";
 
 export interface CompanyState {
   companies: ICompany[];
   visitors: IVisitor[];
   visits: IVisit[];
+  companyUsers: any[];
   loading: boolean;
 }
 
@@ -24,11 +26,12 @@ const initialState: CompanyState = {
   companies: [],
   visitors: [],
   visits: [],
+  companyUsers: [],
   loading: false,
 };
 
 export const companySlice = createSlice({
-  name: 'company',
+  name: "company",
   initialState,
   reducers: {},
   extraReducers(builder) {
@@ -43,6 +46,20 @@ export const companySlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchCompanyThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      fetchCompanyUsersThunk.fulfilled,
+      (state, action: PayloadAction<any[]>) => {
+        console.log("action.payload :>> ", action.payload);
+        state.companyUsers = action.payload;
+        state.loading = false;
+      }
+    );
+    builder.addCase(fetchCompanyUsersThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchCompanyUsersThunk.rejected, (state) => {
       state.loading = false;
     });
     builder.addCase(

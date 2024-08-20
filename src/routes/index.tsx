@@ -21,6 +21,7 @@ import PricingPage from "@/pages/pricing";
 import PricingLayout from "@/components/layout/pricing";
 import CheckoutPage from "@/pages/pricing/checkout";
 import InvoicePage from "@/pages/dashboard/invoices";
+import UsersPage from "@/pages/dashboard/users";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "invoice",
         element: <InvoicePage />,
+      },
+      {
+        path: "users",
+        element: <UsersPage />,
       },
       {
         path: "visitors",

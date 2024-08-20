@@ -12,7 +12,7 @@ const DashboardPage: React.FC = () => {
   useEffect(() => {
     const userPlan = getUserPlan();
 
-    if (userPlan && !userPlan?.isSubscriptionActive) navigate("/pricing");
+    if (userPlan && userPlan?.isSubscriptionActive) navigate("/pricing");
   }, []);
 
   return (

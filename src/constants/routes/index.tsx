@@ -46,6 +46,11 @@ const adminRoutes: Route[] = [
     icon: <FileIcon size={18} />,
   },
   {
+    label: "User Management",
+    href: "/dashboard/users",
+    icon: <UsersIcon size={18} />,
+  },
+  {
     label: "Employee Visits",
     href: "/dashboard/employees/visits",
     icon: <Clipboard size={18} />,
