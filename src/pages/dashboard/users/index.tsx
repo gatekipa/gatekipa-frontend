@@ -70,7 +70,7 @@ const columns: ColumnDef<ICompanyUser>[] = [
 
       return (
         <>
-          {!companyUser?.isActive ? (
+          {companyUser?.isActive ? (
             <CircleOff
               className="text-red-500 cursor-pointer hover:text-red-700"
               size={15}
