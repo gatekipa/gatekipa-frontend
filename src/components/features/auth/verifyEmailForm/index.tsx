@@ -1,27 +1,28 @@
-import { verifyEmailThunk } from '@/app/features/auth/thunk';
-import { useAppDispatch } from '@/app/hooks';
-import LoadingButton from '@/components/shared/loadingButton';
+import { verifyEmailThunk } from "@/app/features/auth/thunk";
+import { useAppDispatch } from "@/app/hooks";
+import LoadingButton from "@/components/shared/loadingButton";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useCallback } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useCallback } from "react";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const verifyEmailSchema = z.object({
   emailAddress: z.string().email(),
@@ -35,7 +36,7 @@ const VerifyEmailForm: React.FC = () => {
   const form = useForm<IVerifyEmail>({
     resolver: zodResolver(verifyEmailSchema),
     defaultValues: {
-      emailAddress: '',
+      emailAddress: "",
     },
   });
 
@@ -43,60 +44,69 @@ const VerifyEmailForm: React.FC = () => {
     try {
       await dispatch(verifyEmailThunk(data)).unwrap();
       form.reset();
-      toast.success('Successfully Verified Email Address');
+      toast.success("Successfully Verified Email Address");
     } catch (error) {
       toast.error(error as string);
     }
   }, []);
 
   return (
-    <Card className='w-[350px] md:w-[700px]'>
-      <CardHeader className='space-y-2'>
+    <Card className="w-[350px] md:w-[700px]">
+      <CardHeader className="space-y-2">
         <CardTitle>Email Verification</CardTitle>
-        <CardDescription className='text-xs'>
+        <CardDescription className="text-xs">
           Get started by verifying your email address.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className='grid w-full items-center gap-4'>
-              <div className='flex flex-col space-y-1.5'>
+            <div className="grid w-full items-center gap-4">
+              <div className="flex flex-col space-y-1.5">
                 <FormField
                   control={form.control}
-                  name='emailAddress'
+                  name="emailAddress"
                   render={({ field }) => (
                     <FormItem>
-                      <Label id='emailAddress' className='text-xs'>
+                      <Label id="emailAddress" className="text-xs">
                         Email Address
                       </Label>
                       <FormControl>
                         <Input
-                          id='emailAddress'
-                          type='text'
-                          placeholder='Please enter your email address'
-                          autoComplete='off'
+                          id="emailAddress"
+                          type="text"
+                          placeholder="Please enter your email address"
+                          autoComplete="off"
                           className={`text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
                             form.formState.errors.emailAddress
-                              ? 'border-red-500'
-                              : ''
+                              ? "border-red-500"
+                              : ""
                           }`}
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage className='text-xs' />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
               </div>
-              <div className='mt-4'>
+              <div className="mt-4">
                 <LoadingButton
                   loading={false}
-                  type='submit'
-                  className='w-full'
-                  label='Verify'
+                  type="submit"
+                  className="w-full"
+                  label="Verify"
                 />
               </div>
+              <p>
+                Already have an account.? Please{" "}
+                <Link
+                  to="/auth/login"
+                  className="text-sm underline underline-offset-4 transition-opacity hover:opacity-80"
+                >
+                  Login
+                </Link>
+              </p>
             </div>
           </form>
         </Form>

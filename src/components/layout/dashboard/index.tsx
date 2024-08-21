@@ -23,6 +23,7 @@ const DashboardLayout: React.FC = () => {
 
   const routes = useMemo(() => {
     const role = getUserRole() as UserRole;
+    console.log(`role`, role);
     return mappedRoutes[role];
   }, []);
 

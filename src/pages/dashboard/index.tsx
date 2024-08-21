@@ -8,12 +8,13 @@ import { useNavigate } from "react-router-dom";
 
 const DashboardPage: React.FC = () => {
   const role = getUserRole();
+
+  console.log(`role`, role);
   const navigate = useNavigate();
   const { paymentSuccessResponse } = useAppSelector((state) => state.pricing);
 
   useEffect(() => {
     const userPlan = getUserPlan();
-    console.log("userPlan :>> ", userPlan);
     if (paymentSuccessResponse) return;
     if (userPlan && !userPlan?.isSubscriptionActive) navigate("/pricing");
   }, [paymentSuccessResponse]);
