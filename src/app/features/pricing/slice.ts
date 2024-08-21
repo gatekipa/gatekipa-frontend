@@ -93,7 +93,10 @@ export const pricingSlice = createSlice({
       (state, action: PayloadAction<ICompanyResponse>) => {
         state.paymentSuccessResponse = action.payload;
         console.log("action.payload :>> ", action.payload);
-        localStorage.setItem("userInfo", JSON.stringify(action.payload));
+        localStorage.setItem(
+          "userInfo",
+          JSON.stringify({ data: action.payload })
+        );
         state.loading[PricingApiEndpoint.CONFIRM_PAYMENT] = false;
       }
     );

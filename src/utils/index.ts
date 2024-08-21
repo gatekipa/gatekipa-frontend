@@ -1,4 +1,5 @@
 import { IUserPlan } from "@/app/features/auth/thunk";
+import { UserRole } from "@/constants/enums";
 
 function getUserInitials(): string {
   const user = JSON.parse(localStorage.getItem("userInfo")!);
@@ -9,13 +10,17 @@ function getUserInitials(): string {
 function getUsername(): string {
   const user = JSON.parse(localStorage.getItem("userInfo")!);
   if (!user) return "";
-  return `${user.data.firstName} ${user.data.lastName}`;
+
+  const firstName = user.data.firstName || user.data.ownerFirstName;
+  const lastName = user.data.lastName || user.data.ownerLastName;
+
+  return `${firstName} ${lastName}`;
 }
 
 function getUserRole(): string {
   const user = JSON.parse(localStorage.getItem("userInfo")!);
   if (!user) return "";
-  return user.data.userType ?? "ADMIN";
+  return user.data.userType ?? UserRole.ADMIN;
 }
 
 function getUserEmployeeId(): string {

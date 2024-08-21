@@ -12,6 +12,7 @@ const DashboardLayout: React.FC = () => {
   const navigate = useNavigate();
 
   const user = useAppSelector((state) => state.auth.user);
+  const role = getUserRole() as UserRole;
 
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
@@ -22,10 +23,9 @@ const DashboardLayout: React.FC = () => {
   }, [user]);
 
   const routes = useMemo(() => {
-    const role = getUserRole() as UserRole;
-    console.log(`role`, role);
+    console.log(`role INSIDE MEMO... `, role);
     return mappedRoutes[role];
-  }, []);
+  }, [role]);
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
