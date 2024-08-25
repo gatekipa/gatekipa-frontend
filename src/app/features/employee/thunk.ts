@@ -1,9 +1,9 @@
 // import NetworkManager from "@/api";
-import { ICreateEmployeeForm } from '@/components/features/employees/createEmployeeModal';
-import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
-import axios, { AxiosError } from 'axios';
-import { IVisitor } from '../company/thunk';
-import { EmergencyTab } from '@/pages/dashboard/emergency';
+import { ICreateEmployeeForm } from "@/components/features/employees/createEmployeeModal";
+import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
+import axios, { AxiosError } from "axios";
+import { IVisitor } from "../company/thunk";
+import { EmergencyTab } from "@/pages/dashboard/emergency";
 // import { IBaseResponse } from "../auth/thunk";
 
 export interface IShift {
@@ -64,11 +64,11 @@ export interface IVisitorReport {
   createdAt: string;
   employee: Pick<
     IEmployee,
-    'id' | 'firstName' | 'lastName' | 'emailAddress' | 'mobileNo'
+    "id" | "firstName" | "lastName" | "emailAddress" | "mobileNo"
   >;
   visitor: Pick<
     IVisitor,
-    'id' | 'firstName' | 'lastName' | 'emailAddress' | 'mobileNo'
+    "id" | "firstName" | "lastName" | "emailAddress" | "mobileNo"
   >;
 }
 
@@ -77,7 +77,7 @@ export interface IEmergencyEmployeeReport {
   checkInTime: string;
   employee: Pick<
     IEmployee,
-    'id' | 'firstName' | 'lastName' | 'mobileNo' | 'emailAddress'
+    "id" | "firstName" | "lastName" | "mobileNo" | "emailAddress"
   >;
   createdBy: string;
   createdAt: string;
@@ -90,7 +90,7 @@ export interface IEmergencyVisitorReport {
   checkInTime: string;
   employee: Pick<
     IVisitor,
-    'id' | 'firstName' | 'lastName' | 'mobileNo' | 'emailAddress'
+    "id" | "firstName" | "lastName" | "mobileNo" | "emailAddress"
   >;
   createdBy: string;
   createdAt: string;
@@ -99,8 +99,8 @@ export interface IEmergencyVisitorReport {
   visitDate: string;
 }
 
-export type IEmployeeUpdate = Omit<IEmployee, 'companyId' | 'shift'> & {
-  shift: Pick<IShift, 'id'>;
+export type IEmployeeUpdate = Omit<IEmployee, "companyId" | "shift"> & {
+  shift: Pick<IShift, "id">;
 };
 
 export interface IEmployeeQuery {
@@ -113,7 +113,7 @@ const fetchEmployeesThunk: AsyncThunk<
   IEmployee[],
   Partial<IEmployeeQuery>,
   {}
-> = createAsyncThunk('employee/', async (params, thunkAPI) => {
+> = createAsyncThunk("employee/", async (params, thunkAPI) => {
   try {
     // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
     //   `/employee`
@@ -143,13 +143,13 @@ const fetchEmployeesThunk: AsyncThunk<
     ) {
       return thunkAPI.rejectWithValue(axiosError.response.data.message);
     } else {
-      return thunkAPI.rejectWithValue('An unexpected error occurred');
+      return thunkAPI.rejectWithValue("An unexpected error occurred");
     }
   }
 });
 
 const createEmployeeThunk: AsyncThunk<IEmployee, ICreateEmployeeForm, {}> =
-  createAsyncThunk('employee/create/', async (body, thunkAPI) => {
+  createAsyncThunk("employee/create/", async (body, thunkAPI) => {
     try {
       // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
       //   `/employee`
@@ -172,7 +172,7 @@ const createEmployeeThunk: AsyncThunk<IEmployee, ICreateEmployeeForm, {}> =
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   });
@@ -182,7 +182,7 @@ const employeeCheckInThunk: AsyncThunk<
   { employeeId: string },
   {}
 > = createAsyncThunk(
-  'employee/visit/checkin',
+  "employee/visit/checkin",
   async ({ employeeId }, thunkAPI) => {
     try {
       // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
@@ -206,7 +206,7 @@ const employeeCheckInThunk: AsyncThunk<
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   }
@@ -216,7 +216,7 @@ const fetchEmergencyListByType: AsyncThunk<
   { records: IEmergencyEmployeeReport[]; type: EmergencyTab },
   { type: EmergencyTab },
   {}
-> = createAsyncThunk('employee/emergency/list', async ({ type }, thunkAPI) => {
+> = createAsyncThunk("employee/emergency/list", async ({ type }, thunkAPI) => {
   try {
     // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
     //   `/employee`
@@ -238,7 +238,7 @@ const fetchEmergencyListByType: AsyncThunk<
     ) {
       return thunkAPI.rejectWithValue(axiosError.response.data.message);
     } else {
-      return thunkAPI.rejectWithValue('An unexpected error occurred');
+      return thunkAPI.rejectWithValue("An unexpected error occurred");
     }
   }
 });
@@ -248,7 +248,7 @@ const employeeCheckOutThunk: AsyncThunk<
   { employeeId: string },
   {}
 > = createAsyncThunk(
-  'employee/visit/checkout',
+  "employee/visit/checkout",
   async ({ employeeId }, thunkAPI) => {
     try {
       // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
@@ -272,7 +272,7 @@ const employeeCheckOutThunk: AsyncThunk<
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   }
@@ -283,7 +283,7 @@ const sendEmergencyEmail: AsyncThunk<
   { type: string; subject: string; content: string },
   {}
 > = createAsyncThunk(
-  'employee/visit/checkout',
+  "employee/visit/checkout",
   async ({ type, subject, content }, thunkAPI) => {
     try {
       // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
@@ -311,14 +311,14 @@ const sendEmergencyEmail: AsyncThunk<
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   }
 );
 
 const changeEmployeeStatusThunk: AsyncThunk<IEmployee, IEmployee, {}> =
-  createAsyncThunk('employee/status/', async (body, thunkAPI) => {
+  createAsyncThunk("employee/status/", async (body, thunkAPI) => {
     try {
       // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
       //   `/employee`
@@ -343,13 +343,13 @@ const changeEmployeeStatusThunk: AsyncThunk<IEmployee, IEmployee, {}> =
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   });
 
 const editEmployeeThunk: AsyncThunk<IEmployee, IEmployee, {}> =
-  createAsyncThunk('employee/edit/', async (body, thunkAPI) => {
+  createAsyncThunk("employee/edit/", async (body, thunkAPI) => {
     try {
       // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
       //   `/employee`
@@ -377,13 +377,13 @@ const editEmployeeThunk: AsyncThunk<IEmployee, IEmployee, {}> =
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   });
 
 const fetchShiftsThunk: AsyncThunk<IShift[], void, {}> = createAsyncThunk(
-  'employee/shifts/',
+  "employee/shifts/",
   async (_, thunkAPI) => {
     try {
       // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
@@ -406,14 +406,14 @@ const fetchShiftsThunk: AsyncThunk<IShift[], void, {}> = createAsyncThunk(
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   }
 );
 
 const fetchAllEmployeesVisits: AsyncThunk<IEmployeeReport[], void, {}> =
-  createAsyncThunk('employee/visits/reports', async (_, thunkAPI) => {
+  createAsyncThunk("employee/visits/reports", async (_, thunkAPI) => {
     try {
       // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
       //   `/employee`
@@ -435,13 +435,13 @@ const fetchAllEmployeesVisits: AsyncThunk<IEmployeeReport[], void, {}> =
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   });
 
 const fetchVisitorReports: AsyncThunk<IVisitorReport[], void, {}> =
-  createAsyncThunk('visitor/reports', async (_, thunkAPI) => {
+  createAsyncThunk("visitor/reports", async (_, thunkAPI) => {
     try {
       // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
       //   `/employee`
@@ -463,7 +463,7 @@ const fetchVisitorReports: AsyncThunk<IVisitorReport[], void, {}> =
       ) {
         return thunkAPI.rejectWithValue(axiosError.response.data.message);
       } else {
-        return thunkAPI.rejectWithValue('An unexpected error occurred');
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
   });
@@ -472,7 +472,7 @@ const fetchEmployeeVisitsThunk: AsyncThunk<
   { employee: IEmployee; employeeVisits: IEmployeeVisit[] },
   { employeeId: string },
   {}
-> = createAsyncThunk('employee/visits/', async ({ employeeId }, thunkAPI) => {
+> = createAsyncThunk("employee/visits/", async ({ employeeId }, thunkAPI) => {
   try {
     // const response = await NetworkManager.get<IBaseResponse<IEmployee[]>>(
     //   `/employee`
@@ -494,7 +494,7 @@ const fetchEmployeeVisitsThunk: AsyncThunk<
     ) {
       return thunkAPI.rejectWithValue(axiosError.response.data.message);
     } else {
-      return thunkAPI.rejectWithValue('An unexpected error occurred');
+      return thunkAPI.rejectWithValue("An unexpected error occurred");
     }
   }
 });
