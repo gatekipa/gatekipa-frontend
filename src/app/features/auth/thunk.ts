@@ -51,6 +51,7 @@ interface IUserRequest
   > {
   password: string;
   mobileNo: string;
+  isEmailVerified: boolean;
 }
 
 type ILoginRequest = Pick<IUserRequest, "password" | "emailAddress">;

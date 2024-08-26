@@ -71,7 +71,9 @@ const RegistrationForm: React.FC = () => {
 
   const onSubmit = useCallback(async (values: IRegistrationForm) => {
     try {
-      await dispatch(registerUserThunk({ ...values, emailAddress })).unwrap();
+      await dispatch(
+        registerUserThunk({ ...values, emailAddress, isEmailVerified: true })
+      ).unwrap();
       toast.success("Registration Successfull");
       form.reset();
       navigate("/auth/login");
