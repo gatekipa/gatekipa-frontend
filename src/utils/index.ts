@@ -43,6 +43,13 @@ function getUserPlan(): IUserPlan | null {
   return user.data.planInfo;
 }
 
+function getCompanyPlan(): IUserPlan | null {
+  const user = JSON.parse(localStorage.getItem("userInfo")!);
+  if (!user) return null;
+
+  return user.data.planInfo;
+}
+
 function formatDate(date: Date): string {
   return new Intl.DateTimeFormat("en-US", {
     day: "2-digit",
@@ -71,4 +78,5 @@ export {
   getUserEmployeeId,
   getUserVisitorId,
   getUserPlan,
+  getCompanyPlan,
 };

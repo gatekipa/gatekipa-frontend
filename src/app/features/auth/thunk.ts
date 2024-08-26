@@ -26,6 +26,10 @@ export interface IUserPlan {
   address: string;
   createdAt: string;
   updatedAt: string;
+  plan: {
+    id: string;
+    planName: string;
+  };
 }
 
 export interface IUser {
