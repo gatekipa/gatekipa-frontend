@@ -7,6 +7,12 @@ function getUserInitials(): string {
   return `${user.data.firstName[0]}${user.data.lastName[0]}`;
 }
 
+function getCompany(): string {
+  const company = JSON.parse(localStorage.getItem("userInfo")!);
+  if (!company) return "";
+  return company.data.planInfo?.name;
+}
+
 function getUsername(): string {
   const user = JSON.parse(localStorage.getItem("userInfo")!);
   if (!user) return "";
@@ -39,7 +45,6 @@ function getUserPlan(): IUserPlan | null {
   const user = JSON.parse(localStorage.getItem("userInfo")!);
   if (!user) return null;
 
-  console.log("user.data.companyId :>> ", user.data.planInfo);
   return user.data.planInfo;
 }
 
@@ -79,4 +84,5 @@ export {
   getUserVisitorId,
   getUserPlan,
   getCompanyPlan,
+  getCompany,
 };

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/menubar";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronDownIcon, ChevronUpIcon, KeyRound, LogOut } from "lucide-react";
-import { getUserRole, getUsername } from "@/utils";
+import { getCompany, getUsername } from "@/utils";
 import { ModeToggle } from "../themeToggle";
 import { Badge } from "@/components/ui/badge";
 import logo from "../../../assets/logo.svg";
@@ -27,6 +27,8 @@ const Navbar: React.FC = () => {
     navigate("/auth/login");
   }, []);
 
+  const company = getCompany();
+
   return (
     <Menubar className="flex items-center py-7 px-3 rounded-none md:justify-between">
       <MenubarMenu>
@@ -37,10 +39,11 @@ const Navbar: React.FC = () => {
               GateKipa
             </span>
           </Link>
-
-          <Badge variant="destructive" className="hidden uppercase md:block">
-            {getUserRole()}
-          </Badge>
+          {company && (
+            <Badge variant="destructive" className="hidden uppercase md:block">
+              {company}
+            </Badge>
+          )}
         </div>
       </MenubarMenu>
       <div className="flex gap-x-2 ml-auto">
