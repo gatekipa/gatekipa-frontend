@@ -13,6 +13,12 @@ function getCompany(): string {
   return company.data.planInfo?.name;
 }
 
+function getCompanyInfo(): any {
+  const company = JSON.parse(localStorage.getItem("userInfo")!);
+  if (!company) return "";
+  return company.data.planInfo ?? {};
+}
+
 function getUsername(): string {
   const user = JSON.parse(localStorage.getItem("userInfo")!);
   if (!user) return "";
@@ -85,4 +91,5 @@ export {
   getUserPlan,
   getCompanyPlan,
   getCompany,
+  getCompanyInfo,
 };
