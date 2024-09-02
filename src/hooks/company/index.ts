@@ -7,7 +7,6 @@ const useCompany = () => {
   const dispatch = useAppDispatch();
 
   const { company, loading } = useAppSelector((state) => state.company);
-  console.log("company :>> ", company);
 
   useEffect(() => {
     const companyId = getCompanyId();

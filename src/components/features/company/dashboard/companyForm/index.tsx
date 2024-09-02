@@ -25,6 +25,9 @@ const companyDetailsSchema = z.object({
   name: z.string(),
   address: z.string(),
   companyCode: z.string(),
+  mobileNo: z.string(),
+  ownerFirstName: z.string(),
+  ownerLastName: z.string(),
 });
 
 export type ICompanyDetails = z.infer<typeof companyDetailsSchema>;
@@ -40,6 +43,9 @@ const CompanyDetailsForm: React.FC<CompanyDetailsFormProps> = ({ company }) => {
       name: company?.name ?? "",
       address: company?.address ?? "",
       companyCode: company?.companyCode ?? "",
+      mobileNo: company?.mobileNo ?? "",
+      ownerFirstName: company?.ownerFirstName ?? "",
+      ownerLastName: company?.ownerLastName ?? "",
     },
   });
 
@@ -114,6 +120,82 @@ const CompanyDetailsForm: React.FC<CompanyDetailsFormProps> = ({ company }) => {
                   />
                 </div>
               </div>
+              <div className="flex flex-col space-y-1.5">
+                <div className="flex flex-col space-y-1.5">
+                  <FormField
+                    control={form.control}
+                    name="ownerFirstName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Label id="ownerFirstName">Owner's First Name</Label>
+                        <FormControl>
+                          <Input
+                            id="ownerFirstName"
+                            placeholder="Please enter company's owner first name"
+                            autoComplete="off"
+                            className={`text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-700 dark:focus:border-white ${
+                              form.formState.errors.name ? "border-red-500" : ""
+                            }`}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-xs" />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <div className="flex flex-col space-y-1.5">
+                  <FormField
+                    control={form.control}
+                    name="ownerLastName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Label id="ownerLastName">Owner's Last Name</Label>
+                        <FormControl>
+                          <Input
+                            id="ownerLastName"
+                            placeholder="Please enter company's owner last name"
+                            autoComplete="off"
+                            className={`text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-700 dark:focus:border-white ${
+                              form.formState.errors.name ? "border-red-500" : ""
+                            }`}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-xs" />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <div className="flex flex-col space-y-1.5">
+                  <FormField
+                    control={form.control}
+                    name="mobileNo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Label id="mobileNo">Mobile No</Label>
+                        <FormControl>
+                          <Input
+                            id="mobileNo"
+                            placeholder="Please enter your mobile number"
+                            autoComplete="off"
+                            className={`text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-700 dark:focus:border-white ${
+                              form.formState.errors.name ? "border-red-500" : ""
+                            }`}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-xs" />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
               <div className="flex flex-col space-y-1.5">
                 <div className="flex flex-col space-y-1.5">
                   <FormField

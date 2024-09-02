@@ -23,7 +23,6 @@ const DashboardLayout: React.FC = () => {
   }, [user]);
 
   const routes = useMemo(() => {
-    console.log(`role INSIDE MEMO... `, role);
     return mappedRoutes[role];
   }, [role]);
 

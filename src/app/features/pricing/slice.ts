@@ -92,7 +92,6 @@ export const pricingSlice = createSlice({
       confirmPayment.fulfilled,
       (state, action: PayloadAction<ICompanyResponse>) => {
         state.paymentSuccessResponse = action.payload;
-        console.log("action.payload :>> ", action.payload);
         localStorage.setItem(
           "userInfo",
           JSON.stringify({ data: action.payload })
