@@ -8,6 +8,7 @@ import {
   addNewVisitThunk,
   addVisitorThunk,
   changeCompanyUserStatusThunk,
+  editCompanyByIdThunk,
   fetchCompanyByIdThunk,
   fetchCompanyThunk,
   fetchCompanyUsersThunk,
@@ -80,6 +81,19 @@ export const companySlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchVisitorsThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      editCompanyByIdThunk.fulfilled,
+      (state, action: PayloadAction<ICompanyResponse>) => {
+        state.company = action.payload;
+        state.loading = false;
+      }
+    );
+    builder.addCase(editCompanyByIdThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(editCompanyByIdThunk.rejected, (state) => {
       state.loading = false;
     });
     builder.addCase(

@@ -146,6 +146,34 @@ const fetchCompanyByIdThunk: AsyncThunk<ICompanyResponse, { id: string }, {}> =
     }
   });
 
+const editCompanyByIdThunk: AsyncThunk<
+  ICompanyResponse,
+  Partial<ICompanyResponse>,
+  {}
+> = createAsyncThunk("company/edit/id", async (params, thunkAPI) => {
+  try {
+    const response = await axios.put(
+      `${import.meta.env.VITE_BASE_API_URL}/company/${params.id}`,
+      params,
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    if (
+      axiosError.response &&
+      axiosError.response.data &&
+      axiosError.response.data.message
+    ) {
+      return thunkAPI.rejectWithValue(axiosError.response.data.message);
+    } else {
+      return thunkAPI.rejectWithValue("An unexpected error occurred");
+    }
+  }
+});
+
 const fetchCompanyUsersThunk: AsyncThunk<
   ICompanyUser[],
   Partial<FetchCompanyUserParams>,
@@ -458,4 +486,5 @@ export {
   fetchCompanyUsersThunk,
   changeCompanyUserStatusThunk,
   fetchCompanyByIdThunk,
+  editCompanyByIdThunk,
 };

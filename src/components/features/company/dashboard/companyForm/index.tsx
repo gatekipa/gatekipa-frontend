@@ -1,4 +1,8 @@
-import { ICompanyResponse } from "@/app/features/company/thunk";
+import {
+  editCompanyByIdThunk,
+  ICompanyResponse,
+} from "@/app/features/company/thunk";
+import { useAppDispatch } from "@/app/hooks";
 import LoadingButton from "@/components/shared/loadingButton";
 import {
   Card,
@@ -19,6 +23,7 @@ import { Label } from "@/components/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const companyDetailsSchema = z.object({
@@ -49,11 +54,21 @@ const CompanyDetailsForm: React.FC<CompanyDetailsFormProps> = ({ company }) => {
     },
   });
 
-  const onSubmit = useCallback(async (values: ICompanyDetails) => {
-    try {
-      console.log(`values`, values);
-    } catch (error) {}
-  }, []);
+  const dispatch = useAppDispatch();
+
+  const onSubmit = useCallback(
+    async (values: ICompanyDetails) => {
+      try {
+        await dispatch(
+          editCompanyByIdThunk({ ...values, id: company.id })
+        ).unwrap();
+        toast.success(`Successfully updated company details`);
+      } catch (error) {
+        toast.error(error as string);
+      }
+    },
+    [company]
+  );
 
   return (
     <Card>
