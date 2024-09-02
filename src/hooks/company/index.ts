@@ -6,14 +6,14 @@ import { getCompanyId } from "@/utils";
 const useCompany = () => {
   const dispatch = useAppDispatch();
 
-  const { company, loading } = useAppSelector((state) => state.company);
+  const { company, isLoading } = useAppSelector((state) => state.company);
 
   useEffect(() => {
     const companyId = getCompanyId();
     dispatch(fetchCompanyByIdThunk({ id: companyId }));
   }, []);
 
-  return { company, loading };
+  return { company, loading: isLoading["FETCH_COMPANY"] };
 };
 
 export default useCompany;

@@ -19,6 +19,11 @@ import {
   registerCompanyThunk,
 } from "./thunk";
 
+enum CompanyApiEndpoint {
+  FETCH_COMPANY = "FETCH_COMPANY",
+  EDIT_COMPANY = "EDIT_COMPANY",
+}
+
 export interface CompanyState {
   companies: ICompany[];
   visitors: IVisitor[];
@@ -27,6 +32,7 @@ export interface CompanyState {
   loading: boolean;
   company: ICompanyResponse | null;
   companyUsersLoading: boolean;
+  isLoading: { [key in CompanyApiEndpoint]: boolean };
 }
 
 const initialState: CompanyState = {
@@ -37,6 +43,10 @@ const initialState: CompanyState = {
   loading: false,
   company: null,
   companyUsersLoading: false,
+  isLoading: {
+    [CompanyApiEndpoint.FETCH_COMPANY]: false,
+    [CompanyApiEndpoint.EDIT_COMPANY]: false,
+  },
 };
 
 export const companySlice = createSlice({
@@ -87,27 +97,27 @@ export const companySlice = createSlice({
       editCompanyByIdThunk.fulfilled,
       (state, action: PayloadAction<ICompanyResponse>) => {
         state.company = action.payload;
-        state.loading = false;
+        state.isLoading[CompanyApiEndpoint.EDIT_COMPANY] = false;
       }
     );
     builder.addCase(editCompanyByIdThunk.pending, (state) => {
-      state.loading = true;
+      state.isLoading[CompanyApiEndpoint.EDIT_COMPANY] = true;
     });
     builder.addCase(editCompanyByIdThunk.rejected, (state) => {
-      state.loading = false;
+      state.isLoading[CompanyApiEndpoint.EDIT_COMPANY] = true;
     });
     builder.addCase(
       fetchCompanyByIdThunk.fulfilled,
       (state, action: PayloadAction<ICompanyResponse>) => {
         state.company = action.payload;
-        state.loading = false;
+        state.isLoading[CompanyApiEndpoint.FETCH_COMPANY] = false;
       }
     );
     builder.addCase(fetchCompanyByIdThunk.pending, (state) => {
-      state.loading = true;
+      state.isLoading[CompanyApiEndpoint.FETCH_COMPANY] = true;
     });
     builder.addCase(fetchCompanyByIdThunk.rejected, (state) => {
-      state.loading = false;
+      state.isLoading[CompanyApiEndpoint.FETCH_COMPANY] = true;
     });
     builder.addCase(
       addVisitorThunk.fulfilled,
