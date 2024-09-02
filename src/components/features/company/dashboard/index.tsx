@@ -9,7 +9,11 @@ const CompanyDashboard: React.FC = () => {
   return (
     <section>
       <Tiles />
-      {loading ? <p>Loading...</p> : <CompanyDetailsForm company={company!} />}
+      {loading || !company ? (
+        <p>Loading...</p>
+      ) : (
+        <CompanyDetailsForm company={company!} />
+      )}
     </section>
   );
 };
