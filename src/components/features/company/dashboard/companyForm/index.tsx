@@ -1,3 +1,4 @@
+import { ICompanyResponse } from "@/app/features/company/thunk";
 import LoadingButton from "@/components/shared/loadingButton";
 import {
   Card,
@@ -15,7 +16,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getCompanyInfo } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
@@ -29,19 +29,25 @@ const companyDetailsSchema = z.object({
 
 export type ICompanyDetails = z.infer<typeof companyDetailsSchema>;
 
-const CompanyDetailsForm: React.FC = () => {
-  const companyInfo = getCompanyInfo();
+type CompanyDetailsFormProps = {
+  company: ICompanyResponse;
+};
 
+const CompanyDetailsForm: React.FC<CompanyDetailsFormProps> = ({ company }) => {
   const form = useForm<ICompanyDetails>({
     resolver: zodResolver(companyDetailsSchema),
     defaultValues: {
-      name: companyInfo.name ?? "",
-      address: companyInfo.address ?? "",
-      companyCode: companyInfo.companyCode ?? "",
+      name: company?.name ?? "",
+      address: company?.address ?? "",
+      companyCode: company?.companyCode ?? "",
     },
   });
 
-  const onSubmit = useCallback(async (values: ICompanyDetails) => {}, []);
+  const onSubmit = useCallback(async (values: ICompanyDetails) => {
+    try {
+      console.log(`values`, values);
+    } catch (error) {}
+  }, []);
 
   return (
     <Card>

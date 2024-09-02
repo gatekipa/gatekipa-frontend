@@ -1,12 +1,14 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import {
   ICompany,
+  ICompanyResponse,
   ICompanyUser,
   IVisit,
   IVisitor,
   addNewVisitThunk,
   addVisitorThunk,
   changeCompanyUserStatusThunk,
+  fetchCompanyByIdThunk,
   fetchCompanyThunk,
   fetchCompanyUsersThunk,
   fetchVisitorsThunk,
@@ -22,6 +24,7 @@ export interface CompanyState {
   visits: IVisit[];
   companyUsers: ICompanyUser[];
   loading: boolean;
+  company: ICompanyResponse | null;
   companyUsersLoading: boolean;
 }
 
@@ -31,6 +34,7 @@ const initialState: CompanyState = {
   visits: [],
   companyUsers: [],
   loading: false,
+  company: null,
   companyUsersLoading: false,
 };
 
@@ -76,6 +80,19 @@ export const companySlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchVisitorsThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      fetchCompanyByIdThunk.fulfilled,
+      (state, action: PayloadAction<ICompanyResponse>) => {
+        state.company = action.payload;
+        state.loading = false;
+      }
+    );
+    builder.addCase(fetchCompanyByIdThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchCompanyByIdThunk.rejected, (state) => {
       state.loading = false;
     });
     builder.addCase(
