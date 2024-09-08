@@ -1,16 +1,9 @@
+import FeatureCard from "@/components/features/home/featureCards";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  AlertTriangle,
-  ArrowBigRight,
-  ArrowRight,
-  BarChart3,
-  Bell,
-  Calendar,
-  CheckCircle,
-  Clock,
-} from "lucide-react";
+import { featureCardList } from "@/constants/data";
+import { ArrowBigRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 
@@ -59,7 +52,7 @@ const HomePage = () => {
           <span className="relative font-semibold">Login / Sign Up</span>
         </Link>
       </header>
-      <main className="flex-1 bg-primary text-white">
+      <main className="flex-1 bg-gradient-to-r from-primary to-slate-950 text-white">
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center space-y-7 text-center">
@@ -85,36 +78,14 @@ const HomePage = () => {
               Key Features
             </h2>
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-              <FeatureCard
-                icon={<CheckCircle className="h-10 w-10 text-primary" />}
-                title="Quick Check-In/Check-Out"
-                description="Simplified visitor management with just a phone number or QR code."
-              />
-              <FeatureCard
-                icon={<Clock className="h-10 w-10 text-primary" />}
-                title="Digital Records"
-                description="Store and access visitor and employee data securely in the cloud."
-              />
-              <FeatureCard
-                icon={<Bell className="h-10 w-10 text-primary" />}
-                title="Host Notifications"
-                description="Notify hosts when visitors arrive via in-app or SMS notifications."
-              />
-              <FeatureCard
-                icon={<Calendar className="h-10 w-10 text-primary" />}
-                title="Shift Scheduling & Payroll Integration"
-                description="Manage staff shifts and integrate with payroll systems seamlessly."
-              />
-              <FeatureCard
-                icon={<AlertTriangle className="h-10 w-10 text-primary" />}
-                title="Emergency Reporting"
-                description="Generate lists of everyone currently in the building in case of emergencies."
-              />
-              <FeatureCard
-                icon={<BarChart3 className="h-10 w-10 text-primary" />}
-                title="Customizable Dashboards"
-                description="Get a complete overview of visitor and employee activity with detailed analytics."
-              />
+              {featureCardList.map((feature, index) => (
+                <FeatureCard
+                  key={index}
+                  icon={feature.icon}
+                  title={feature.title}
+                  description={feature.description}
+                />
+              ))}
             </div>
           </div>
         </section>
@@ -130,7 +101,7 @@ const HomePage = () => {
                     1
                   </div>
                   <h3 className="mt-4 text-xl font-bold">Sign Up and Set Up</h3>
-                  <p className="text-center text-gray-500 dark:text-gray-400">
+                  <p className="text-center text-sm text-gray-500 dark:text-gray-400">
                     Create an account and configure Gatekipa to suit your
                     business.
                   </p>
@@ -163,7 +134,7 @@ const HomePage = () => {
         </section>
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
           <div className="container px-4 md:px-6">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12 text-gray-950">
               Customer Testimonials
             </h2>
             <div className="grid gap-10 sm:grid-cols-2">
@@ -202,12 +173,9 @@ const HomePage = () => {
               <div className="w-full max-w-sm space-y-2">
                 <form className="flex flex-col gap-2">
                   <Input placeholder="Enter your email" type="email" />
-                  <Button
-                    className="bg-primary text-primary-foreground"
-                    type="submit"
-                  >
-                    Get Started
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                  <Button variant="getStarted" size="lg">
+                    Get Started for Free
+                    <ArrowBigRight className="ml-4" size={28} />
                   </Button>
                 </form>
               </div>
@@ -231,27 +199,5 @@ const HomePage = () => {
     </div>
   );
 };
-
-function FeatureCard({
-  icon,
-  title,
-  description,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}) {
-  return (
-    <Card>
-      <CardContent className="flex flex-col items-center p-6">
-        {icon}
-        <h3 className="mt-4 text-xl font-bold">{title}</h3>
-        <p className="text-center text-gray-500 dark:text-gray-400">
-          {description}
-        </p>
-      </CardContent>
-    </Card>
-  );
-}
 
 export default HomePage;
