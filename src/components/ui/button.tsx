@@ -20,6 +20,8 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         getStarted:
           "bg-[#17CF97] rounded-xl px-10 py-6 text-white text-2xl font-cursive__pacifico transition-opacity hover:opacity-75",
+        accent:
+          "bg-[#17CF97] text-white font-semibold transition-opacity hover:opacity-75",
       },
       size: {
         default: "h-10 px-4 py-2",

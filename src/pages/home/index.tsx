@@ -49,13 +49,9 @@ const HomePage = () => {
           </Link>
         </nav>
 
-        <Link
-          to="/auth/login"
-          className="ml-4 rounded relative inline-flex group items-center justify-center px-3.5 py-1 m-1 cursor-pointer border-b-4 border-l-2 active:border-[#17CF97]active:shadow-none shadow-lg bg-gradient-to-tr from-teal-600 to-teal-500 border-teal-700 text-white"
-        >
-          <span className="absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-full group-hover:w-32 group-hover:h-32 opacity-10"></span>
-          <span className="relative font-semibold">Login / Sign Up</span>
-        </Link>
+        <Button variant="accent" size="sm" className="ml-3">
+          Login / Sign Up
+        </Button>
       </header>
       <main className="flex-1 bg-gradient-to-r from-primary to-slate-950 text-white">
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">

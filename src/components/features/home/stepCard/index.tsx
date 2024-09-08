@@ -14,8 +14,8 @@ const StepCard: React.FC<StepCardProps> = ({ step, title, description }) => {
         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
           {step}
         </div>
-        <h3 className="mt-4 text-xl font-bold">{title}</h3>
-        <p className="text-center text-gray-500 dark:text-gray-400">
+        <h3 className="mt-4 text-xl font-bold mb-3">{title}</h3>
+        <p className="text-center text-sm text-gray-500 dark:text-gray-400">
           {description}
         </p>
       </CardContent>
