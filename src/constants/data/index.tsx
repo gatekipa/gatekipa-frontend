@@ -24,6 +24,11 @@ interface Testimonial {
   logo: string;
 }
 
+interface NavLink {
+  name: string;
+  href: string;
+}
+
 const featureCardList: FeatureCard[] = [
   {
     icon: <CheckCircle className="h-10 w-10 text-primary" />,
@@ -102,4 +107,23 @@ const testimonialList: Testimonial[] = [
   },
 ];
 
-export { featureCardList, stepCardList, testimonialList };
+const navLinks: NavLink[] = [
+  {
+    name: "Home",
+    href: "#",
+  },
+  {
+    name: "Features",
+    href: "#",
+  },
+  {
+    name: "Pricing",
+    href: "#",
+  },
+  {
+    name: "Contact Us",
+    href: "#",
+  },
+];
+
+export { featureCardList, stepCardList, testimonialList, navLinks };

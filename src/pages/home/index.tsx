@@ -1,4 +1,5 @@
 import FeatureCard from "@/components/features/home/featureCard";
+import Navbar from "@/components/features/home/navbar";
 import StepCard from "@/components/features/home/stepCard";
 import Testimonial from "@/components/features/home/testimonials";
 import { Button } from "@/components/ui/button";
@@ -10,49 +11,11 @@ import {
 } from "@/constants/data";
 import { ArrowBigRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import logo from "../../assets/logo.svg";
 
 const HomePage = () => {
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="px-4 lg:px-6 h-16 flex items-center bg-primary text-white">
-        <Link className="flex items-center justify-center" to="#">
-          <img src={logo} alt="logo" className="w-8" />
-          <span className="ml-2 text-2xl font-bold font-cursive__pacifico">
-            Gate Kipa
-          </span>
-        </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
-          <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
-            to="#"
-          >
-            Home
-          </Link>
-          <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
-            to="#"
-          >
-            Features
-          </Link>
-          <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
-            to="#"
-          >
-            Pricing
-          </Link>
-          <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
-            to="#"
-          >
-            Contact Us
-          </Link>
-        </nav>
-
-        <Button variant="accent" size="sm" className="ml-3">
-          Login / Sign Up
-        </Button>
-      </header>
+      <Navbar />
       <main className="flex-1 bg-gradient-to-r from-primary to-slate-950 text-white">
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
           <div className="container px-4 md:px-6">
