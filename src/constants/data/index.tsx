@@ -18,6 +18,12 @@ interface StepCard {
   description: string;
 }
 
+interface Testimonial {
+  text: string;
+  reviewer: string;
+  logo: string;
+}
+
 const featureCardList: FeatureCard[] = [
   {
     icon: <CheckCircle className="h-10 w-10 text-primary" />,
@@ -73,4 +79,27 @@ const stepCardList: StepCard[] = [
   },
 ];
 
-export { featureCardList, stepCardList };
+const testimonialList: Testimonial[] = [
+  {
+    text: "Gatekipa helped us streamline visitor check-ins and made shift management a breeze.",
+    reviewer: "Company Name",
+    logo: "https://www.vectorlogo.zone/logos/google/google-icon.svg",
+  },
+  {
+    text: "Gatekipa has been a game-changer for our business. We can now manage visitors and staff with ease.",
+    reviewer: "Company Name",
+    logo: "https://www.vectorlogo.zone/logos/google/google-icon.svg",
+  },
+  {
+    text: "We have been using Gatekipa for a few months now and it has made a huge difference in our operations.",
+    reviewer: "Company Name",
+    logo: "https://www.vectorlogo.zone/logos/google/google-icon.svg",
+  },
+  {
+    text: "We love how easy it is to track employee attendance and generate payroll reports.",
+    reviewer: "Company Name",
+    logo: "https://www.vectorlogo.zone/logos/google/google-icon.svg",
+  },
+];
+
+export { featureCardList, stepCardList, testimonialList };

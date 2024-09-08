@@ -1,12 +1,16 @@
 import FeatureCard from "@/components/features/home/featureCard";
+import StepCard from "@/components/features/home/stepCard";
+import Testimonial from "@/components/features/home/testimonials";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { featureCardList, stepCardList } from "@/constants/data";
+import {
+  featureCardList,
+  stepCardList,
+  testimonialList,
+} from "@/constants/data";
 import { ArrowBigRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.svg";
-import StepCard from "@/components/features/home/stepCard";
 
 const HomePage = () => {
   return (
@@ -113,24 +117,14 @@ const HomePage = () => {
               Customer Testimonials
             </h2>
             <div className="grid gap-10 sm:grid-cols-2">
-              <Card>
-                <CardContent className="p-6">
-                  <p className="mb-4 italic">
-                    "Gatekipa helped us streamline visitor check-ins and made
-                    shift management a breeze."
-                  </p>
-                  <p className="font-semibold">- Company Name</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-6">
-                  <p className="mb-4 italic">
-                    "We love how easy it is to track employee attendance and
-                    generate payroll reports."
-                  </p>
-                  <p className="font-semibold">- User Review</p>
-                </CardContent>
-              </Card>
+              {testimonialList.map((testimonial, index) => (
+                <Testimonial
+                  key={index}
+                  reviewer={testimonial.reviewer}
+                  text={testimonial.text}
+                  logo={testimonial.logo}
+                />
+              ))}
             </div>
           </div>
         </section>
