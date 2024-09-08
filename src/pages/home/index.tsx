@@ -20,7 +20,9 @@ const HomePage = () => {
       <header className="px-4 lg:px-6 h-16 flex items-center bg-primary text-white">
         <Link className="flex items-center justify-center" to="#">
           <img src={logo} alt="logo" className="w-8" />
-          <span className="ml-2 text-2xl font-bold">Gatekipa</span>
+          <span className="ml-2 text-2xl font-bold font-cursive__pacifico">
+            Gatekipa
+          </span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
           <Link
@@ -48,15 +50,20 @@ const HomePage = () => {
             Contact Us
           </Link>
         </nav>
-        <Button className="ml-4 text-gray-950" variant="outline">
-          Login / Sign Up
-        </Button>
+
+        <Link
+          to="/auth/login"
+          className="ml-4 rounded relative inline-flex group items-center justify-center px-3.5 py-1 m-1 cursor-pointer border-b-4 border-l-2 active:border-[#17CF97]active:shadow-none shadow-lg bg-gradient-to-tr from-teal-600 to-teal-500 border-teal-700 text-white"
+        >
+          <span className="absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-full group-hover:w-32 group-hover:h-32 opacity-10"></span>
+          <span className="relative font-semibold">Login / Sign Up</span>
+        </Link>
       </header>
       <main className="flex-1 bg-primary text-white">
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center space-y-7 text-center">
-              <div className="space-y-2">
+              <div className="space-y-4">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
                   Seamless Visitor & Employee Management, Anytime, Anywhere
                 </h1>
@@ -74,7 +81,7 @@ const HomePage = () => {
         </section>
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
           <div className="container px-4 md:px-6">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12 text-gray-950">
               Key Features
             </h2>
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
@@ -210,7 +217,7 @@ const HomePage = () => {
       </main>
       <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
         <p className="text-xs text-gray-500 dark:text-gray-400">
-          © 2023 Gatekipa. All rights reserved.
+          © {new Date().getFullYear()} Gatekipa. All rights reserved.
         </p>
         <nav className="sm:ml-auto flex gap-4 sm:gap-6">
           <Link className="text-xs hover:underline underline-offset-4" to="#">
