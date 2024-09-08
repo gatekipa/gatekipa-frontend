@@ -1,11 +1,12 @@
-import FeatureCard from "@/components/features/home/featureCards";
+import FeatureCard from "@/components/features/home/featureCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { featureCardList } from "@/constants/data";
+import { featureCardList, stepCardList } from "@/constants/data";
 import { ArrowBigRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.svg";
+import StepCard from "@/components/features/home/stepCard";
 
 const HomePage = () => {
   return (
@@ -14,7 +15,7 @@ const HomePage = () => {
         <Link className="flex items-center justify-center" to="#">
           <img src={logo} alt="logo" className="w-8" />
           <span className="ml-2 text-2xl font-bold font-cursive__pacifico">
-            Gatekipa
+            Gate Kipa
           </span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
@@ -95,40 +96,14 @@ const HomePage = () => {
               How It Works
             </h2>
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-              <Card>
-                <CardContent className="flex flex-col items-center p-6">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                    1
-                  </div>
-                  <h3 className="mt-4 text-xl font-bold">Sign Up and Set Up</h3>
-                  <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-                    Create an account and configure Gatekipa to suit your
-                    business.
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="flex flex-col items-center p-6">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                    2
-                  </div>
-                  <h3 className="mt-4 text-xl font-bold">Check-In Visitors</h3>
-                  <p className="text-center text-gray-500 dark:text-gray-400">
-                    Use digital check-in/check-out for visitors with ease.
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="flex flex-col items-center p-6">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                    3
-                  </div>
-                  <h3 className="mt-4 text-xl font-bold">Track and Report</h3>
-                  <p className="text-center text-gray-500 dark:text-gray-400">
-                    Generate comprehensive reports and manage staff shifts.
-                  </p>
-                </CardContent>
-              </Card>
+              {stepCardList.map((step, index) => (
+                <StepCard
+                  key={index}
+                  step={index + 1}
+                  title={step.title}
+                  description={step.description}
+                />
+              ))}
             </div>
           </div>
         </section>

@@ -13,6 +13,11 @@ interface FeatureCard {
   description: string;
 }
 
+interface StepCard {
+  title: string;
+  description: string;
+}
+
 const featureCardList: FeatureCard[] = [
   {
     icon: <CheckCircle className="h-10 w-10 text-primary" />,
@@ -52,4 +57,20 @@ const featureCardList: FeatureCard[] = [
   },
 ];
 
-export { featureCardList };
+const stepCardList: StepCard[] = [
+  {
+    title: "Sign Up and Set Up",
+    description:
+      "Create an account and configure Gatekipa to suit your business.",
+  },
+  {
+    title: "Check-In Visitors",
+    description: "Use digital check-in/check-out for visitors with ease.",
+  },
+  {
+    title: "Track and Report",
+    description: "Generate comprehensive reports and manage staff shifts.",
+  },
+];
+
+export { featureCardList, stepCardList };
