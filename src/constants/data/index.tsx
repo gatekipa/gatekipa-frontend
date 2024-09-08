@@ -10,6 +10,9 @@ import {
   UserCog,
   Users,
   Lock,
+  Zap,
+  Shield,
+  Mail,
 } from "lucide-react";
 
 interface FeatureCard {
@@ -32,6 +35,11 @@ interface Testimonial {
 interface NavLink {
   name: string;
   href: string;
+}
+
+interface SellingPoint {
+  icon: React.ElementType;
+  text: string;
 }
 
 const featureCardList: FeatureCard[] = [
@@ -195,6 +203,25 @@ const privacyPolicies = [
   },
 ];
 
+const sellingPoints: SellingPoint[] = [
+  {
+    icon: Zap,
+    text: "User-Friendly Interface: Easy to set up and use, so you can get started in minutes.",
+  },
+  {
+    icon: Users,
+    text: "Flexible Plans: Scalable to fit businesses of any size.",
+  },
+  {
+    icon: Shield,
+    text: "Secure and Reliable: Built with the highest security standards to keep your data safe.",
+  },
+  {
+    icon: Mail,
+    text: "Dedicated Support: Our team is always here to help you make the most out of Gatekipa.",
+  },
+];
+
 export {
   featureCardList,
   stepCardList,
@@ -202,4 +229,5 @@ export {
   navLinks,
   footerLinks,
   privacyPolicies,
+  sellingPoints,
 };

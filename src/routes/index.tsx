@@ -23,6 +23,7 @@ import CheckoutPage from "@/pages/pricing/checkout";
 import InvoicePage from "@/pages/dashboard/invoices";
 import UsersPage from "@/pages/dashboard/users";
 import PrivacyPage from "@/pages/privacy";
+import AboutPage from "@/pages/about";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "/privacy",
     element: <PrivacyPage />,
+  },
+  {
+    path: "/about",
+    element: <AboutPage />,
   },
   {
     path: "dashboard",
