@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import logo from "../../../../assets/logo.svg";
 import { navLinks } from "@/constants/data";
 import { MenuIcon, X } from "lucide-react";
+import CompanyLogo from "../companyLogo";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -14,12 +14,7 @@ const Navbar: React.FC = () => {
 
   return (
     <header className="px-4 lg:px-6 h-16 flex items-center bg-primary text-white">
-      <Link className="flex items-center justify-center" to="#">
-        <img src={logo} alt="logo" className="w-8" />
-        <span className="ml-2 text-2xl font-bold font-cursive__pacifico">
-          Gate Kipa
-        </span>
-      </Link>
+      <CompanyLogo />
       <button
         className="ml-auto block lg:hidden"
         onClick={toggleMenu}
@@ -48,6 +43,10 @@ const Navbar: React.FC = () => {
           isMenuOpen ? "translate-x-0 z-40" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out lg:hidden`}
       >
+        <div className="p-5">
+          <CompanyLogo />
+        </div>
+
         <nav className="flex flex-col p-6 gap-6">
           {navLinks.map((link) => (
             <Link
