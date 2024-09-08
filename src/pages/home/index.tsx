@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   AlertTriangle,
+  ArrowBigRight,
   ArrowRight,
   BarChart3,
   Bell,
@@ -11,25 +12,14 @@ import {
   Clock,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import logo from "../../assets/logo.svg";
 
 const HomePage = () => {
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="px-4 lg:px-6 h-16 flex items-center">
+      <header className="px-4 lg:px-6 h-16 flex items-center bg-primary text-white">
         <Link className="flex items-center justify-center" to="#">
-          <span className="sr-only">Gatekipa</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="h-6 w-6"
-          >
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
-          </svg>
+          <img src={logo} alt="logo" className="w-8" />
           <span className="ml-2 text-2xl font-bold">Gatekipa</span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
@@ -58,14 +48,14 @@ const HomePage = () => {
             Contact Us
           </Link>
         </nav>
-        <Button className="ml-4" variant="outline">
+        <Button className="ml-4 text-gray-950" variant="outline">
           Login / Sign Up
         </Button>
       </header>
-      <main className="flex-1">
+      <main className="flex-1 bg-primary text-white">
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
           <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center space-y-4 text-center">
+            <div className="flex flex-col items-center space-y-7 text-center">
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
                   Seamless Visitor & Employee Management, Anytime, Anywhere
@@ -75,8 +65,9 @@ const HomePage = () => {
                   security and streamlining your operations.
                 </p>
               </div>
-              <Button className="bg-primary text-primary-foreground" size="lg">
+              <Button variant="getStarted" size="lg">
                 Get Started for Free
+                <ArrowBigRight className="ml-4" size={28} />
               </Button>
             </div>
           </div>
