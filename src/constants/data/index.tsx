@@ -1,10 +1,15 @@
 import {
   AlertTriangle,
+  BarChart,
   BarChart3,
   Bell,
   Calendar,
   CheckCircle,
   Clock,
+  Share2,
+  UserCog,
+  Users,
+  Lock,
 } from "lucide-react";
 
 interface FeatureCard {
@@ -141,10 +146,60 @@ const footerLinks: NavLink[] = [
   },
 ];
 
+const privacyPolicies = [
+  {
+    title: "Information We Collect",
+    icon: <Users className="h-6 w-6" />,
+    content: [
+      "Personal Information: When you sign up for Gatekipa, we collect personal information such as your name, email address, phone number, and billing details.",
+      "Visitor and Employee Data: We collect data on visitors and employees when they check in or out using our platform, including names, phone numbers, and photos.",
+      "Usage Data: We collect data about how you interact with our website and application to improve our services.",
+    ],
+  },
+  {
+    title: "How We Use Your Information",
+    icon: <BarChart className="h-6 w-6" />,
+    content: [
+      "Service Delivery: We use your data to provide and improve our visitor and employee management services.",
+      "Communication: We use your email and phone number to send notifications, updates, and respond to inquiries.",
+      "Analytics: We use usage data to analyze how our services are used and make improvements.",
+    ],
+  },
+  {
+    title: "Sharing of Data",
+    icon: <Share2 className="h-6 w-6" />,
+    content: [
+      "We do not sell or share your personal information with third parties except when required by law or with your consent.",
+    ],
+  },
+  {
+    title: "Security",
+    icon: <Lock className="h-6 w-6" />,
+    content: [
+      "We implement industry-standard security measures to protect your data from unauthorized access and breaches.",
+    ],
+  },
+  {
+    title: "Data Retention",
+    icon: <Clock className="h-6 w-6" />,
+    content: [
+      "We retain your personal information for as long as necessary to fulfill the purposes outlined in this policy, unless a longer retention period is required by law.",
+    ],
+  },
+  {
+    title: "Your Rights",
+    icon: <UserCog className="h-6 w-6" />,
+    content: [
+      "You have the right to access, update, or delete your personal information. To exercise these rights, contact us at support@gatekipas.com.",
+    ],
+  },
+];
+
 export {
   featureCardList,
   stepCardList,
   testimonialList,
   navLinks,
   footerLinks,
+  privacyPolicies,
 };

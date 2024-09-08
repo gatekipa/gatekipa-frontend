@@ -22,11 +22,16 @@ import PricingLayout from "@/components/layout/pricing";
 import CheckoutPage from "@/pages/pricing/checkout";
 import InvoicePage from "@/pages/dashboard/invoices";
 import UsersPage from "@/pages/dashboard/users";
+import PrivacyPage from "@/pages/privacy";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />,
+  },
+  {
+    path: "/privacy",
+    element: <PrivacyPage />,
   },
   {
     path: "dashboard",
