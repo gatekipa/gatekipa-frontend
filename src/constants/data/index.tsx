@@ -126,4 +126,25 @@ const navLinks: NavLink[] = [
   },
 ];
 
-export { featureCardList, stepCardList, testimonialList, navLinks };
+const footerLinks: NavLink[] = [
+  {
+    name: "Terms of Service",
+    href: "#",
+  },
+  {
+    name: "Privacy",
+    href: "#",
+  },
+  {
+    name: "About Us",
+    href: "#",
+  },
+];
+
+export {
+  featureCardList,
+  stepCardList,
+  testimonialList,
+  navLinks,
+  footerLinks,
+};

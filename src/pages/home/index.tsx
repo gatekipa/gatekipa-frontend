@@ -2,6 +2,7 @@ import FeatureCard from "@/components/features/home/featureCard";
 import Navbar from "@/components/features/home/navbar";
 import StepCard from "@/components/features/home/stepCard";
 import Testimonial from "@/components/features/home/testimonials";
+import Footer from "@/components/shared/footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,7 +11,6 @@ import {
   testimonialList,
 } from "@/constants/data";
 import { ArrowBigRight } from "lucide-react";
-import { Link } from "react-router-dom";
 
 const HomePage = () => {
   return (
@@ -111,19 +111,7 @@ const HomePage = () => {
           </div>
         </section>
       </main>
-      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
-        <p className="text-xs text-gray-500 dark:text-gray-400">
-          © {new Date().getFullYear()} Gate Kipa. All rights reserved.
-        </p>
-        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-xs hover:underline underline-offset-4" to="#">
-            Terms of Service
-          </Link>
-          <Link className="text-xs hover:underline underline-offset-4" to="#">
-            Privacy
-          </Link>
-        </nav>
-      </footer>
+      <Footer />
     </div>
   );
 };
