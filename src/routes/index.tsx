@@ -24,6 +24,7 @@ import InvoicePage from "@/pages/dashboard/invoices";
 import UsersPage from "@/pages/dashboard/users";
 import PrivacyPage from "@/pages/privacy";
 import AboutPage from "@/pages/about";
+import TermsAndConditionsPage from "@/pages/terms";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
   {
     path: "/about",
     element: <AboutPage />,
+  },
+  {
+    path: "/terms-conditions",
+    element: <TermsAndConditionsPage />,
   },
   {
     path: "dashboard",

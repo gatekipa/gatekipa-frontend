@@ -81,6 +81,11 @@ const featureCardList: FeatureCard[] = [
   },
 ];
 
+interface Condition {
+  title: string;
+  content: string;
+}
+
 const stepCardList: StepCard[] = [
   {
     title: "Sign Up and Set Up",
@@ -222,6 +227,39 @@ const sellingPoints: SellingPoint[] = [
   },
 ];
 
+const conditions: Condition[] = [
+  {
+    title: "Use of Services",
+    content:
+      "Gatekipa provides visitor and employee management software for businesses. You agree to use our services in accordance with applicable laws and these terms.",
+  },
+  {
+    title: "User Accounts",
+    content:
+      "You are responsible for maintaining the confidentiality of your account credentials. You must notify us immediately if you suspect any unauthorized use of your account.",
+  },
+  {
+    title: "Subscription and Billing",
+    content:
+      "Gatekipa operates on a subscription model. By subscribing, you agree to provide accurate billing information and pay the fees associated with your chosen plan.",
+  },
+  {
+    title: "Termination",
+    content:
+      "We reserve the right to suspend or terminate your account if you violate these terms.",
+  },
+  {
+    title: "Limitation of Liability",
+    content:
+      "Gatekipa is not liable for any direct, indirect, incidental, or consequential damages that arise from your use of the platform.",
+  },
+  {
+    title: "Governing Law",
+    content:
+      "These terms shall be governed by the laws of [Country], without regard to its conflict of law provisions.",
+  },
+];
+
 export {
   featureCardList,
   stepCardList,
@@ -230,4 +268,5 @@ export {
   footerLinks,
   privacyPolicies,
   sellingPoints,
+  conditions,
 };
