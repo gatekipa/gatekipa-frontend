@@ -116,9 +116,10 @@ const HomePage = () => {
                     type="email"
                     className="text-xs text-gray-900 focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-#17CF97 dark:focus:border-white"
                     value={email}
+                    required
                     onChange={(e) => setEmail(e.target.value)}
                   />
-                  <Button variant="getStarted" size="lg">
+                  <Button variant="getStarted" size="lg" type="submit">
                     Get Started for Free
                     <ArrowBigRight className="ml-4" size={28} />
                   </Button>
