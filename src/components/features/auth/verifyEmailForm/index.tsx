@@ -20,7 +20,7 @@ import { Label } from "@/components/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -32,11 +32,14 @@ export type IVerifyEmail = z.infer<typeof verifyEmailSchema>;
 
 const VerifyEmailForm: React.FC = () => {
   const dispatch = useAppDispatch();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const email = queryParams.get("email") || "";
 
   const form = useForm<IVerifyEmail>({
     resolver: zodResolver(verifyEmailSchema),
     defaultValues: {
-      emailAddress: "",
+      emailAddress: email,
     },
   });
 

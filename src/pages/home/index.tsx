@@ -11,8 +11,13 @@ import {
   testimonialList,
 } from "@/constants/data";
 import { ArrowBigRight } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState<string>("");
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
@@ -99,8 +104,20 @@ const HomePage = () => {
                 </p>
               </div>
               <div className="w-full max-w-sm space-y-2">
-                <form className="flex flex-col gap-2">
-                  <Input placeholder="Enter your email" type="email" />
+                <form
+                  className="flex flex-col gap-2"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    navigate(`/auth/register?email=${email}`);
+                  }}
+                >
+                  <Input
+                    placeholder="Please enter your email to get started"
+                    type="email"
+                    className="text-xs text-gray-900 focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-#17CF97 dark:focus:border-white"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                   <Button variant="getStarted" size="lg">
                     Get Started for Free
                     <ArrowBigRight className="ml-4" size={28} />
