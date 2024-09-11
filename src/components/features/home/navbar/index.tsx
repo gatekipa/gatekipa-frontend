@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
           </Link>
         ))}
         <Button variant="accent" size="sm" className="ml-3">
-          Login / Sign Up
+          <Link to="/auth/login">Login / Sign Up</Link>
         </Button>
       </nav>
 
@@ -59,7 +59,7 @@ const Navbar: React.FC = () => {
             </Link>
           ))}
           <Button variant="accent" size="sm" className="mt-3">
-            Login / Sign Up
+            <Link to="/auth/login">Login / Sign Up</Link>
           </Button>
         </nav>
       </div>
