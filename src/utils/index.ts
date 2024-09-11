@@ -86,6 +86,12 @@ function formatTime(date: Date): string {
   });
 }
 
+function isMultiFactorAuthEnabled() {
+  const user = JSON.parse(localStorage.getItem("userInfo")!);
+  if (!user) return false;
+  return user.data.isMultiFactorAuthEnabled;
+}
+
 export {
   getUserInitials,
   getUsername,
@@ -99,4 +105,5 @@ export {
   getCompany,
   getCompanyInfo,
   getCompanyId,
+  isMultiFactorAuthEnabled,
 };

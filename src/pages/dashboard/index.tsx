@@ -1,6 +1,7 @@
 import { useAppSelector } from "@/app/hooks";
 import CompanyDashboard from "@/components/features/company/dashboard";
 import EmployeeDashboard from "@/components/features/employees/dashboard";
+import MFAWarningDialog from "@/components/features/mfa/warningDialog";
 import VisitorDashboard from "@/components/features/visitors/dashboard";
 import { UserRole } from "@/constants/enums";
 import { getUserPlan, getUserRole } from "@/utils";
@@ -21,6 +22,7 @@ const DashboardPage: React.FC = () => {
 
   return (
     <div>
+      <MFAWarningDialog />
       {role === UserRole.EMPLOYEE ? (
         <EmployeeDashboard />
       ) : role === UserRole.VISITOR ? (
