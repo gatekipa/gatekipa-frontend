@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { navLinks } from "@/constants/data";
 import { MenuIcon, X } from "lucide-react";
 import CompanyLogo from "../companyLogo";
+import { getUsername } from "@/utils";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -33,9 +34,7 @@ const Navbar: React.FC = () => {
             {link.name}
           </Link>
         ))}
-        <Button variant="accent" size="sm" className="ml-3">
-          <Link to="/auth/login">Login / Sign Up</Link>
-        </Button>
+        <NavbarActionButton />
       </nav>
 
       <div
@@ -58,12 +57,26 @@ const Navbar: React.FC = () => {
               {link.name}
             </Link>
           ))}
-          <Button variant="accent" size="sm" className="mt-3">
-            <Link to="/auth/login">Login / Sign Up</Link>
-          </Button>
+          <NavbarActionButton />
         </nav>
       </div>
     </header>
+  );
+};
+
+const NavbarActionButton: React.FC = () => {
+  return (
+    <>
+      {!getUsername() ? (
+        <Button variant="accent" size="sm" className="ml-3">
+          <Link to="/auth/login">Login / Sign Up</Link>
+        </Button>
+      ) : (
+        <Button variant="accent" size="sm" className="ml-3">
+          <Link to="/dashboard">Dashboard</Link>
+        </Button>
+      )}
+    </>
   );
 };
 
