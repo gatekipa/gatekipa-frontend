@@ -34,7 +34,11 @@ const HomePage = () => {
                   security and streamlining your operations.
                 </p>
               </div>
-              <Button variant="getStarted" size="lg">
+              <Button
+                variant="getStarted"
+                size="lg"
+                onClick={() => navigate(`/auth/register`)}
+              >
                 Get Started for Free
                 <ArrowBigRight className="ml-4" size={28} />
               </Button>
