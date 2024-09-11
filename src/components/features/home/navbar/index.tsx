@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
         {navLinks.map((link) => (
           <Link
             key={link.name}
-            className="text-sm font-medium hover:underline underline-offset-4"
+            className="text-sm font-medium hover:underline underline-offset-4 transition-opacity hover:opacity-80"
             to={link.href}
           >
             {link.name}
