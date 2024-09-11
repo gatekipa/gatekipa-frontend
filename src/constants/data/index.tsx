@@ -132,7 +132,7 @@ const navLinks: NavLink[] = [
   },
   {
     name: "Features",
-    href: "#",
+    href: "#features",
   },
   {
     name: "Pricing",
@@ -147,15 +147,15 @@ const navLinks: NavLink[] = [
 const footerLinks: NavLink[] = [
   {
     name: "Terms of Service",
-    href: "#",
+    href: "/terms-conditions",
   },
   {
     name: "Privacy",
-    href: "#",
+    href: "/privacy",
   },
   {
     name: "About Us",
-    href: "#",
+    href: "/about",
   },
 ];
 
