@@ -25,6 +25,7 @@ import UsersPage from "@/pages/dashboard/users";
 import PrivacyPage from "@/pages/privacy";
 import AboutPage from "@/pages/about";
 import TermsAndConditionsPage from "@/pages/terms";
+import SettingsPage from "@/pages/settings";
 
 const router = createBrowserRouter([
   {
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
       {
         path: "employees",
         element: <EmployeesPage />,
+      },
+      {
+        path: "settings",
+        element: <SettingsPage />,
       },
       {
         path: "employees/visits/:employeeId",
