@@ -3,6 +3,7 @@ import {
   Clipboard,
   FileIcon,
   LayoutDashboardIcon,
+  Settings,
   User2Icon,
   UsersIcon,
 } from "lucide-react";
@@ -55,6 +56,11 @@ const adminRoutes: Route[] = [
     href: "/dashboard/employees/visits",
     icon: <Clipboard size={18} />,
   },
+  {
+    label: "Settings",
+    href: "/dashboard/settings",
+    icon: <Settings size={18} />,
+  },
 ];
 
 const visitorRoutes: Route[] = [
@@ -63,11 +69,11 @@ const visitorRoutes: Route[] = [
     href: "/dashboard",
     icon: <LayoutDashboardIcon size={18} />,
   },
-  // {
-  //   label: 'Visits',
-  //   href: '/dashboard/visits/:visitorId',
-  //   icon: <User2Icon size={18} />,
-  // },
+  {
+    label: "Settings",
+    href: "/dashboard/settings",
+    icon: <Settings size={18} />,
+  },
 ];
 
 const employeeRoutes: Route[] = [
@@ -76,11 +82,11 @@ const employeeRoutes: Route[] = [
     href: "/dashboard",
     icon: <LayoutDashboardIcon size={18} />,
   },
-  // {
-  //   label: 'Employee',
-  //   href: '/dashboard/employees/visits/:employeeId',
-  //   icon: <User2Icon size={18} />,
-  // },
+  {
+    label: "Settings",
+    href: "/dashboard/settings",
+    icon: <Settings size={18} />,
+  },
 ];
 
 export { adminRoutes, visitorRoutes, employeeRoutes };
