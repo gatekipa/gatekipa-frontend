@@ -4,7 +4,6 @@ import React from "react";
 
 const Tiles: React.FC = () => {
   const data = getCompanyPlan();
-  console.log("data KOHLI :>> ", data);
 
   return (
     <section>

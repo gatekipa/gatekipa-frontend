@@ -37,7 +37,6 @@ const Verify2FAForm = () => {
 
   const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-  console.log("user :>> ", user);
 
   useEffect(() => {
     if (

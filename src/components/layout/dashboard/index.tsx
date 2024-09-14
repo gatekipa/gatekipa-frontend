@@ -14,8 +14,6 @@ const DashboardLayout: React.FC = () => {
   const user = useAppSelector((state) => state.auth.user);
   const role = getUserRole() as UserRole;
 
-  console.log("role:>> ", role);
-
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
 

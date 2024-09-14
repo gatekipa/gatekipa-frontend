@@ -334,7 +334,6 @@ const VerifyEmail2FA: React.FC<{
       ).unwrap();
 
       if (step === Step.EMAIL && both) {
-        console.log(`Inside here for EMAIL and BOTH`);
         await dispatch(verifySMSThunk({ mobileNo: `+13014335857` })).unwrap();
         setStep(Step.SMS);
         return;

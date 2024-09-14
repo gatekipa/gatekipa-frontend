@@ -37,7 +37,6 @@ function getUsername(): string {
 
 function getUserRole(): string {
   const user = JSON.parse(localStorage.getItem("userInfo")!);
-  console.log("user LS:>> ", user.userType);
   if (!user) return "";
   return user.userType ?? UserRole.ADMIN;
 }
