@@ -26,12 +26,19 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { useAppDispatch } from "@/app/hooks";
+import { createPricingPlan } from "@/app/features/pricing/thunk";
+
+export enum SubscriptionType {
+  MONTHLY = "MONTHLY",
+  YEARLY = "YEARLY",
+}
 
 const createPricingPlanSchema = z.object({
   name: z.string(),
   price: z.number(),
   description: z.string(),
-  subscriptionType: z.enum(["MONTHLY", "YEARLY"]),
+  subscriptionType: z.nativeEnum(SubscriptionType),
   isPromotionalPlan: z.boolean(),
   isActive: z.boolean(),
   promotionalPricing: z.object({
@@ -40,15 +47,12 @@ const createPricingPlanSchema = z.object({
   }),
 });
 
-enum SubscriptionType {
-  MONTHLY = "MONTHLY",
-  YEARLY = "YEARLY",
-}
-
 export type ICreatePricingPlan = z.infer<typeof createPricingPlanSchema>;
 
 const CreatePricingPage: React.FC = () => {
   const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
 
   const form = useForm<ICreatePricingPlan>({
     resolver: zodResolver(createPricingPlanSchema),
@@ -82,8 +86,15 @@ const CreatePricingPage: React.FC = () => {
     setPromotionalPrices((prev) => [...prev, { noOfMonths, discountedPrice }]);
   }, [form]);
 
-  const onSubmit = useCallback((values: ICreatePricingPlan) => {
+  const onSubmit = useCallback(async (values: ICreatePricingPlan) => {
     try {
+      await dispatch(
+        createPricingPlan({
+          ...values,
+          promotionalPricing: promotionalPrices,
+          assignedFeatures: [],
+        })
+      ).unwrap();
       console.log(values);
     } catch (err) {
       toast.error(err as string);

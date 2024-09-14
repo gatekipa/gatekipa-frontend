@@ -1,3 +1,4 @@
+import { SubscriptionType } from "@/pages/pricing/create";
 import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 
@@ -35,6 +36,17 @@ export interface IInvoice {
 
 export interface IPaymentIntent {
   clientSecret: string;
+}
+
+export interface IPlanRequest {
+  name: string;
+  description: string;
+  price: number;
+  subscriptionType: SubscriptionType;
+  assignedFeatures: { feature: string; subFeature: string[] }[];
+  promotionalPricing: { discountedPrice: number; noOfMonths: number }[];
+  isActive: boolean;
+  isPromotionalPlan: boolean;
 }
 
 const fetchPricingPlans: AsyncThunk<IPlan[], void, {}> = createAsyncThunk(
@@ -152,9 +164,38 @@ const confirmPayment: AsyncThunk<any, IConfirmPaymentRequest, {}> =
     }
   );
 
+const createPricingPlan: AsyncThunk<any, IPlanRequest, {}> = createAsyncThunk(
+  "pricing/plan",
+  async (paymentIntentRequest, thunkAPI) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL}/plan`,
+        paymentIntentRequest,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
+
 export {
   fetchPricingPlans,
   createPaymentIntent,
   confirmPayment,
   fetchInvoices,
+  createPricingPlan,
 };
