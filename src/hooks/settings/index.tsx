@@ -11,8 +11,10 @@ const useSettings = () => {
   } = useAppSelector((state) => state.setting);
 
   useEffect(() => {
-    dispatch(fetchUserSettingsThunk());
-  }, []);
+    if (!userSettings) {
+      dispatch(fetchUserSettingsThunk());
+    }
+  }, [dispatch, userSettings]);
 
   return { userSettings, loading: FETCH_SETTINGS };
 };
