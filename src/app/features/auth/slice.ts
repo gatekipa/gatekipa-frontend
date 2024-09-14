@@ -60,9 +60,7 @@ export const authSlice = createSlice({
     builder.addCase(
       loginThunk.fulfilled,
       (state, action: PayloadAction<IUser>) => {
-        console.log("action.payload :>> ", action.payload);
         state.user = action.payload;
-        console.log("state.user :>> ", state.user);
         localStorage.setItem("userInfo", JSON.stringify(action.payload));
         state.loading = false;
       }
