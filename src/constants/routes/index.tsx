@@ -1,6 +1,7 @@
 import {
   AlertCircleIcon,
   Clipboard,
+  DollarSignIcon,
   FileIcon,
   LayoutDashboardIcon,
   Settings,
@@ -99,6 +100,11 @@ const superAdminRoutes: Route[] = [
     label: "Settings",
     href: "/dashboard/settings",
     icon: <Settings size={18} />,
+  },
+  {
+    label: "Pricing",
+    href: "/dashboard/pricing",
+    icon: <DollarSignIcon size={18} />,
   },
 ];
 

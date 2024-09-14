@@ -26,6 +26,8 @@ import PrivacyPage from "@/pages/privacy";
 import AboutPage from "@/pages/about";
 import TermsAndConditionsPage from "@/pages/terms";
 import SettingsPage from "@/pages/settings";
+import CreatePricingPage from "@/pages/pricing/create";
+import ListPricingPage from "@/pages/pricing/list";
 
 const router = createBrowserRouter([
   {
@@ -95,6 +97,14 @@ const router = createBrowserRouter([
       {
         path: "visits/:visitorId",
         element: <VisitsPage />,
+      },
+      {
+        path: "pricing",
+        element: <ListPricingPage />,
+      },
+      {
+        path: "pricing/create",
+        element: <CreatePricingPage />,
       },
     ],
   },
