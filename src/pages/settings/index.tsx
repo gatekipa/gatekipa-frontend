@@ -86,10 +86,19 @@ const SettingsPage: React.FC = () => {
   const form = useForm<IMultiFactorAuth>({
     resolver: zodResolver(multiFactorAuthenticationFormSchema),
     defaultValues: {
-      isMultiFactorAuthEnabled: userSettings?.isMultiFactorAuthEnabled ?? false,
-      multiFactorAuthMediums: userSettings?.multiFactorAuthMediums ?? [],
+      isMultiFactorAuthEnabled: false,
+      multiFactorAuthMediums: [],
     },
   });
+
+  useEffect(() => {
+    if (!loading) {
+      form.reset({
+        isMultiFactorAuthEnabled: userSettings?.isMultiFactorAuthEnabled,
+        multiFactorAuthMediums: userSettings?.multiFactorAuthMediums ?? [],
+      });
+    }
+  }, [loading]);
 
   const multiFactorAuthMediums = useWatch({
     control: form.control,
@@ -209,7 +218,8 @@ const SettingsPage: React.FC = () => {
                     </FormLabel>
                     <FormControl>
                       <Switch
-                        checked={field.value}
+                        // checked={field.value}
+                        checked={userSettings?.isMultiFactorAuthEnabled}
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
