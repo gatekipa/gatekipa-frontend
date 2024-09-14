@@ -22,6 +22,9 @@ import {
 } from "@/components/ui/form";
 import LoadingButton from "@/components/shared/loadingButton";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useAppDispatch } from "@/app/hooks";
+import { changeUserSettingsThunk } from "@/app/features/settings/thunk";
+import { toast } from "sonner";
 
 const multiFactorAuthenticationFormSchema = z.object({
   isMultiFactorAuthEnabled: z.boolean(),
@@ -39,6 +42,8 @@ export type IMultiFactorAuth = z.infer<
 
 const SettingsPage: React.FC = () => {
   const { userSettings, loading } = useSettings();
+
+  const dispatch = useAppDispatch();
 
   const form = useForm<IMultiFactorAuth>({
     resolver: zodResolver(multiFactorAuthenticationFormSchema),
@@ -71,8 +76,24 @@ const SettingsPage: React.FC = () => {
     }
   };
 
-  const onSubmit = useCallback((values: IMultiFactorAuth) => {
+  const onSubmit = useCallback(async (values: IMultiFactorAuth) => {
     console.log("values :>> ", values);
+    try {
+      // CASE 1: User has disabled multi factor authentication
+
+      if (!values.isMultiFactorAuthEnabled) {
+        await dispatch(
+          changeUserSettingsThunk({
+            isMultiFactorAuthEnabled: false,
+            multiFactorAuthMediums: [],
+          })
+        ).unwrap();
+
+        toast.success("Multi factor authentication disabled successfully.");
+      }
+    } catch (e) {
+      toast.error(e as string);
+    }
   }, []);
 
   return (
