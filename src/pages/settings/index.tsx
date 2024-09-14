@@ -28,6 +28,11 @@ const multiFactorAuthenticationFormSchema = z.object({
   multiFactorAuthMediums: z.array(z.string()),
 });
 
+enum MultiFactorAuthMedium {
+  EMAIL = "EMAIL",
+  SMS = "SMS",
+}
+
 export type IMultiFactorAuth = z.infer<
   typeof multiFactorAuthenticationFormSchema
 >;
@@ -49,8 +54,7 @@ const SettingsPage: React.FC = () => {
   });
 
   useEffect(() => {
-    // If the array is empty, disable the switch
-    if (multiFactorAuthMediums.length === 0) {
+    if (!multiFactorAuthMediums.length) {
       form.setValue("isMultiFactorAuthEnabled", false);
     }
   }, [multiFactorAuthMediums, form]);
@@ -110,10 +114,10 @@ const SettingsPage: React.FC = () => {
                   id="mobile"
                   checked={form
                     .watch("multiFactorAuthMediums")
-                    .includes("EMAIL")}
+                    .includes(MultiFactorAuthMedium.EMAIL)}
                   disabled={!form.watch("isMultiFactorAuthEnabled")}
                   onCheckedChange={(checked) =>
-                    handleMediumChange("EMAIL", !!checked)
+                    handleMediumChange(MultiFactorAuthMedium.EMAIL, !!checked)
                   }
                 />
                 <div className="grid gap-1 leading-none">
@@ -128,10 +132,12 @@ const SettingsPage: React.FC = () => {
               <div className="flex items-start space-x-2 border rounded-md p-4">
                 <Checkbox
                   id="mobile"
-                  checked={form.watch("multiFactorAuthMediums").includes("SMS")}
+                  checked={form
+                    .watch("multiFactorAuthMediums")
+                    .includes(MultiFactorAuthMedium.SMS)}
                   disabled={!form.watch("isMultiFactorAuthEnabled")}
                   onCheckedChange={(checked) =>
-                    handleMediumChange("SMS", !!checked)
+                    handleMediumChange(MultiFactorAuthMedium.SMS, !!checked)
                   }
                 />
                 <div className="grid gap-1 leading-none">
