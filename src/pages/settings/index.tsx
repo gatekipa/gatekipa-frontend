@@ -43,6 +43,7 @@ import {
   verifySMSThunk,
   verifySMSWithTokenThunk,
 } from "@/app/features/auth/thunk";
+import { Button } from "@/components/ui/button";
 
 const multiFactorAuthenticationFormSchema = z.object({
   isMultiFactorAuthEnabled: z.boolean(),
@@ -62,6 +63,7 @@ enum Step {
   CONFIGURE = "CONFIGURE",
   EMAIL = "EMAIL",
   SMS = "SMS",
+  BOTH = "BOTH",
   COMPLETE = "COMPLETE",
 }
 
@@ -77,6 +79,7 @@ const SettingsPage: React.FC = () => {
   const { userSettings, loading } = useSettings();
 
   const [step, setStep] = useState<Step>(Step.CONFIGURE);
+  const [both, setBoth] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
 
@@ -94,7 +97,7 @@ const SettingsPage: React.FC = () => {
   });
 
   useEffect(() => {
-    if (!multiFactorAuthMediums.length) {
+    if (multiFactorAuthMediums.length === 0) {
       form.setValue("isMultiFactorAuthEnabled", false);
     }
   }, [multiFactorAuthMediums, form]);
@@ -112,7 +115,6 @@ const SettingsPage: React.FC = () => {
   };
 
   const onSubmit = useCallback(async (values: IMultiFactorAuth) => {
-    console.log("values :>> ", values);
     try {
       // CASE 1: User has disabled multi factor authentication
 
@@ -125,9 +127,28 @@ const SettingsPage: React.FC = () => {
         ).unwrap();
 
         toast.success("Multi factor authentication disabled successfully.");
+
+        return;
       }
 
       // CASE 2: User has enabled multi factor authentication for email
+
+      if (
+        values.isMultiFactorAuthEnabled &&
+        values.multiFactorAuthMediums.includes(MultiFactorAuthMedium.SMS) &&
+        values.multiFactorAuthMediums.includes(MultiFactorAuthMedium.EMAIL)
+      ) {
+        // 1. HIT VERIFY EMAIL API
+        await dispatch(
+          verifyEmailThunk({ emailAddress: `ukn.umer@gmail.com` })
+        ).unwrap();
+
+        setBoth(true);
+        setStep(Step.EMAIL);
+
+        return;
+      }
+
       if (
         values.isMultiFactorAuthEnabled &&
         values.multiFactorAuthMediums.includes(MultiFactorAuthMedium.EMAIL)
@@ -138,11 +159,12 @@ const SettingsPage: React.FC = () => {
         ).unwrap();
 
         setStep(Step.EMAIL);
+
+        return;
       }
 
       // CASE 3: User has enabled multi factor authentication for sms
 
-      // CASE 2: User has enabled multi factor authentication for email
       if (
         values.isMultiFactorAuthEnabled &&
         values.multiFactorAuthMediums.includes(MultiFactorAuthMedium.SMS)
@@ -151,7 +173,11 @@ const SettingsPage: React.FC = () => {
         await dispatch(verifySMSThunk({ mobileNo: `+13014335857` })).unwrap();
 
         setStep(Step.SMS);
+
+        return;
       }
+
+      // CASE 4: User has enabled multi factor authentication for both email and sms
     } catch (e) {
       toast.error(e as string);
     }
@@ -243,9 +269,32 @@ const SettingsPage: React.FC = () => {
           </Form>
         )}
         {step === Step.EMAIL && (
-          <VerifyEmail2FA setStep={setStep} step={step} />
+          <VerifyEmail2FA
+            setStep={setStep}
+            step={step}
+            both={both}
+            setBoth={setBoth}
+          />
         )}
-        {step === Step.SMS && <VerifyMobile2FA setStep={setStep} step={step} />}
+        {step === Step.SMS && (
+          <VerifyMobile2FA
+            setStep={setStep}
+            step={step}
+            both={both}
+            setBoth={setBoth}
+          />
+        )}
+
+        {step === Step.COMPLETE && (
+          <div>
+            <p>Two factor authentication has been enabled successfully. </p>
+            <span>
+              <Button variant="link" onClick={() => setStep(Step.CONFIGURE)}>
+                Click here to revisit configuration.
+              </Button>
+            </span>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
@@ -253,8 +302,10 @@ const SettingsPage: React.FC = () => {
 
 const VerifyEmail2FA: React.FC<{
   step: Step;
+  both: boolean;
   setStep: Dispatch<SetStateAction<Step>>;
-}> = ({ setStep }) => {
+  setBoth: Dispatch<SetStateAction<boolean>>;
+}> = ({ setStep, step, both }) => {
   const dispatch = useAppDispatch();
 
   const emailTokenform = useForm<IMultiFactorAuthEmail>({
@@ -264,11 +315,7 @@ const VerifyEmail2FA: React.FC<{
     },
   });
 
-  const onSubmit = useCallback(async (values: IMultiFactorAuthEmail) => {
-    // 1. HIT VERIFY EMAIL TOKEN API
-    // 2. IF SUCCESS, SET STEP TO COMPLETE
-    // 3. HIT CHANGE USER SETTINGS API
-
+  const onSubmit = async (values: IMultiFactorAuthEmail) => {
     try {
       await dispatch(
         verifyEmailWithTokenThunk({
@@ -277,24 +324,32 @@ const VerifyEmail2FA: React.FC<{
         })
       ).unwrap();
 
-      await dispatch(
-        changeUserSettingsThunk({
-          isMultiFactorAuthEnabled: true,
-          multiFactorAuthMediums: [MultiFactorAuthMedium.EMAIL],
-        })
-      ).unwrap();
+      if (step === Step.EMAIL && both) {
+        console.log(`Inside here for EMAIL and BOTH`);
+        await dispatch(verifySMSThunk({ mobileNo: `+13014335857` })).unwrap();
+        setStep(Step.SMS);
+        return;
+      } else if (step === Step.BOTH && !both) {
+        await dispatch(
+          changeUserSettingsThunk({
+            isMultiFactorAuthEnabled: true,
+            multiFactorAuthMediums: [MultiFactorAuthMedium.EMAIL],
+          })
+        ).unwrap();
 
-      setStep(Step.COMPLETE);
+        setStep(Step.COMPLETE);
 
-      toast.success("Email setup successfully for 2FA.");
+        toast.success("Email setup successfully for 2FA.");
+      }
     } catch (e) {
       toast.error(e as string);
     }
-  }, []);
+  };
 
   return (
     <Form {...emailTokenform}>
       <form onSubmit={emailTokenform.handleSubmit(onSubmit)} className="my-4">
+        <h3 className="text-sm">Verify Email</h3>
         <div className="grid w-full items-center gap-4">
           <div className="flex flex-col space-y-1.5">
             <FormField
@@ -337,7 +392,9 @@ const VerifyEmail2FA: React.FC<{
 const VerifyMobile2FA: React.FC<{
   step: Step;
   setStep: Dispatch<SetStateAction<Step>>;
-}> = ({ setStep }) => {
+  both: boolean;
+  setBoth: Dispatch<SetStateAction<boolean>>;
+}> = ({ setStep, both, setBoth }) => {
   const dispatch = useAppDispatch();
 
   const emailTokenform = useForm<IMultiFactorAuthEmail>({
@@ -348,10 +405,6 @@ const VerifyMobile2FA: React.FC<{
   });
 
   const onSubmit = useCallback(async (values: IMultiFactorAuthEmail) => {
-    // 1. HIT VERIFY EMAIL TOKEN API
-    // 2. IF SUCCESS, SET STEP TO COMPLETE
-    // 3. HIT CHANGE USER SETTINGS API
-
     try {
       await dispatch(
         verifySMSWithTokenThunk({
@@ -360,12 +413,18 @@ const VerifyMobile2FA: React.FC<{
         })
       ).unwrap();
 
+      const multiFactorAuthMediums = both
+        ? [MultiFactorAuthMedium.SMS, MultiFactorAuthMedium.EMAIL]
+        : [MultiFactorAuthMedium.SMS];
+
       await dispatch(
         changeUserSettingsThunk({
           isMultiFactorAuthEnabled: true,
-          multiFactorAuthMediums: [MultiFactorAuthMedium.SMS],
+          multiFactorAuthMediums,
         })
       ).unwrap();
+
+      if (both) setBoth(false);
 
       setStep(Step.COMPLETE);
 
