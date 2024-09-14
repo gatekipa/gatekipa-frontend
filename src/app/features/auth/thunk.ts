@@ -69,8 +69,18 @@ interface IVerifyEmailWithTokenRequest {
   emailAddress: string;
 }
 
+interface IVerifySMSWithTokenRequest {
+  token: string;
+  mobileNo: string;
+}
+
 interface IVerifyEmailRequest {
   emailAddress: string;
+}
+
+interface IVerifySMSTokenRequest {
+  mobileNo: string;
+  forSignUp?: boolean;
 }
 
 interface IUpdatePasswordRequest {
@@ -229,6 +239,33 @@ const verifyEmailThunk: AsyncThunk<any, IVerifyEmailRequest, {}> =
     }
   );
 
+const verifySMSThunk: AsyncThunk<any, IVerifySMSTokenRequest, {}> =
+  createAsyncThunk(
+    "users/verify-sms",
+    async (verifyEmailRequest: IVerifySMSTokenRequest, thunkAPI) => {
+      try {
+        await axios.post(
+          `${import.meta.env.VITE_BASE_API_URL}/users/verify-mobileno`,
+          verifyEmailRequest,
+          { withCredentials: true }
+        );
+
+        return { mobileNo: verifyEmailRequest.mobileNo };
+      } catch (error) {
+        const axiosError = error as AxiosError<{ message: string }>;
+        if (
+          axiosError.response &&
+          axiosError.response.data &&
+          axiosError.response.data.message
+        ) {
+          return thunkAPI.rejectWithValue(axiosError.response.data.message);
+        } else {
+          return thunkAPI.rejectWithValue("An unexpected error occurred");
+        }
+      }
+    }
+  );
+
 const verifyEmailWithTokenThunk: AsyncThunk<
   any,
   IVerifyEmailWithTokenRequest,
@@ -258,6 +295,33 @@ const verifyEmailWithTokenThunk: AsyncThunk<
     }
   }
 );
+
+const verifySMSWithTokenThunk: AsyncThunk<any, IVerifySMSWithTokenRequest, {}> =
+  createAsyncThunk(
+    "users/verify-sms-token",
+    async (verifyEmailRequest: IVerifySMSWithTokenRequest, thunkAPI) => {
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_BASE_API_URL}/users/verify-mobileno-token`,
+          verifyEmailRequest,
+          { withCredentials: true }
+        );
+
+        return response.data;
+      } catch (error) {
+        const axiosError = error as AxiosError<{ message: string }>;
+        if (
+          axiosError.response &&
+          axiosError.response.data &&
+          axiosError.response.data.message
+        ) {
+          return thunkAPI.rejectWithValue(axiosError.response.data.message);
+        } else {
+          return thunkAPI.rejectWithValue("An unexpected error occurred");
+        }
+      }
+    }
+  );
 
 const updatePasswordThunk: AsyncThunk<any, IUpdatePasswordRequest, {}> =
   createAsyncThunk(
@@ -292,4 +356,6 @@ export {
   updatePasswordThunk,
   verifyEmailThunk,
   verifyEmailWithTokenThunk,
+  verifySMSThunk,
+  verifySMSWithTokenThunk,
 };

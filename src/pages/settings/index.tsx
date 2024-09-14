@@ -40,6 +40,8 @@ import {
 import {
   verifyEmailThunk,
   verifyEmailWithTokenThunk,
+  verifySMSThunk,
+  verifySMSWithTokenThunk,
 } from "@/app/features/auth/thunk";
 
 const multiFactorAuthenticationFormSchema = z.object({
@@ -137,6 +139,19 @@ const SettingsPage: React.FC = () => {
 
         setStep(Step.EMAIL);
       }
+
+      // CASE 3: User has enabled multi factor authentication for sms
+
+      // CASE 2: User has enabled multi factor authentication for email
+      if (
+        values.isMultiFactorAuthEnabled &&
+        values.multiFactorAuthMediums.includes(MultiFactorAuthMedium.SMS)
+      ) {
+        // 1. HIT VERIFY SMS API
+        await dispatch(verifySMSThunk({ mobileNo: `+13014335857` })).unwrap();
+
+        setStep(Step.SMS);
+      }
     } catch (e) {
       toast.error(e as string);
     }
@@ -230,6 +245,7 @@ const SettingsPage: React.FC = () => {
         {step === Step.EMAIL && (
           <VerifyEmail2FA setStep={setStep} step={step} />
         )}
+        {step === Step.SMS && <VerifyMobile2FA setStep={setStep} step={step} />}
       </CardContent>
     </Card>
   );
@@ -265,6 +281,89 @@ const VerifyEmail2FA: React.FC<{
         changeUserSettingsThunk({
           isMultiFactorAuthEnabled: true,
           multiFactorAuthMediums: [MultiFactorAuthMedium.EMAIL],
+        })
+      ).unwrap();
+
+      setStep(Step.COMPLETE);
+
+      toast.success("Email setup successfully for 2FA.");
+    } catch (e) {
+      toast.error(e as string);
+    }
+  }, []);
+
+  return (
+    <Form {...emailTokenform}>
+      <form onSubmit={emailTokenform.handleSubmit(onSubmit)} className="my-4">
+        <div className="grid w-full items-center gap-4">
+          <div className="flex flex-col space-y-1.5">
+            <FormField
+              control={emailTokenform.control}
+              name="token"
+              render={({ field }) => (
+                <FormItem>
+                  <Label id="token">Token</Label>
+                  <FormControl>
+                    <InputOTP maxLength={6} {...field}>
+                      <InputOTPGroup className="w-full">
+                        <InputOTPSlot index={0} className="w-1/2" />
+                        <InputOTPSlot index={1} className="w-1/2" />
+                        <InputOTPSlot index={2} className="w-1/2" />
+                        <InputOTPSlot index={3} className="w-1/2" />
+                        <InputOTPSlot index={4} className="w-1/2" />
+                        <InputOTPSlot index={5} className="w-1/2" />
+                      </InputOTPGroup>
+                    </InputOTP>
+                  </FormControl>
+                  <FormMessage className="text-xs" />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="mt-4">
+            <LoadingButton
+              loading={false}
+              type="submit"
+              className="w-full"
+              label="Verify"
+            />
+          </div>
+        </div>
+      </form>
+    </Form>
+  );
+};
+
+const VerifyMobile2FA: React.FC<{
+  step: Step;
+  setStep: Dispatch<SetStateAction<Step>>;
+}> = ({ setStep }) => {
+  const dispatch = useAppDispatch();
+
+  const emailTokenform = useForm<IMultiFactorAuthEmail>({
+    resolver: zodResolver(multiFactorAuthEmailFormSchema),
+    defaultValues: {
+      token: "",
+    },
+  });
+
+  const onSubmit = useCallback(async (values: IMultiFactorAuthEmail) => {
+    // 1. HIT VERIFY EMAIL TOKEN API
+    // 2. IF SUCCESS, SET STEP TO COMPLETE
+    // 3. HIT CHANGE USER SETTINGS API
+
+    try {
+      await dispatch(
+        verifySMSWithTokenThunk({
+          mobileNo: `+13014335857`,
+          token: values.token,
+        })
+      ).unwrap();
+
+      await dispatch(
+        changeUserSettingsThunk({
+          isMultiFactorAuthEnabled: true,
+          multiFactorAuthMediums: [MultiFactorAuthMedium.SMS],
         })
       ).unwrap();
 

@@ -9,6 +9,8 @@ import {
   updatePasswordThunk,
   verifyEmailThunk,
   verifyEmailWithTokenThunk,
+  verifySMSThunk,
+  verifySMSWithTokenThunk,
   verifyTokenThunk,
 } from "./thunk";
 
@@ -142,6 +144,26 @@ export const authSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(verifyEmailWithTokenThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(verifySMSWithTokenThunk.fulfilled, (state) => {
+      state.loading = false;
+      state.registerUser.isEmailVerified = true;
+    });
+    builder.addCase(verifySMSWithTokenThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(verifySMSWithTokenThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(verifySMSThunk.fulfilled, (state) => {
+      state.loading = false;
+      // state.registerUser.isEmailVerified = true;
+    });
+    builder.addCase(verifySMSThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(verifySMSThunk.rejected, (state) => {
       state.loading = false;
     });
     builder.addCase(updatePasswordThunk.fulfilled, (state) => {
