@@ -89,4 +89,17 @@ const employeeRoutes: Route[] = [
   },
 ];
 
-export { adminRoutes, visitorRoutes, employeeRoutes };
+const superAdminRoutes: Route[] = [
+  {
+    label: "Dashboard",
+    href: "/dashboard",
+    icon: <LayoutDashboardIcon size={18} />,
+  },
+  {
+    label: "Settings",
+    href: "/dashboard/settings",
+    icon: <Settings size={18} />,
+  },
+];
+
+export { adminRoutes, visitorRoutes, employeeRoutes, superAdminRoutes };
