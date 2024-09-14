@@ -218,8 +218,7 @@ const SettingsPage: React.FC = () => {
                     </FormLabel>
                     <FormControl>
                       <Switch
-                        // checked={field.value}
-                        checked={userSettings?.isMultiFactorAuthEnabled}
+                        checked={field.value}
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
