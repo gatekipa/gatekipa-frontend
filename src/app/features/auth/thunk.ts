@@ -42,6 +42,8 @@ export interface IUser {
   companyId: string | null;
   planInfo: IUserPlan | null;
   employeeId: string | null;
+  isMultiFactorAuthEnabled?: boolean;
+  multiFactorAuthMediums?: string[];
 }
 
 interface IUserRequest
@@ -131,7 +133,7 @@ const loginThunk: AsyncThunk<IUser, ILoginRequest, {}> = createAsyncThunk(
         { withCredentials: true }
       );
 
-      return response.data;
+      return response.data.data;
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
       if (

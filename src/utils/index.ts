@@ -10,61 +10,62 @@ function getUserInitials(): string {
 function getCompany(): string {
   const company = JSON.parse(localStorage.getItem("userInfo")!);
   if (!company) return "";
-  return company.data.planInfo?.name;
+  return company?.planInfo?.name;
 }
 
 function getCompanyId(): string {
   const company = JSON.parse(localStorage.getItem("userInfo")!);
   if (!company) return "";
-  return company.data?.companyId ?? "";
+  return company?.companyId ?? "";
 }
 
 function getCompanyInfo(): any {
   const company = JSON.parse(localStorage.getItem("userInfo")!);
   if (!company) return "";
-  return company.data.planInfo ?? {};
+  return company.planInfo ?? {};
 }
 
 function getUsername(): string {
   const user = JSON.parse(localStorage.getItem("userInfo")!);
   if (!user) return "";
 
-  const firstName = user.data.firstName || user.data.ownerFirstName;
-  const lastName = user.data.lastName || user.data.ownerLastName;
+  const firstName = user.firstName || user.ownerFirstName;
+  const lastName = user.lastName || user.ownerLastName;
 
   return `${firstName} ${lastName}`;
 }
 
 function getUserRole(): string {
   const user = JSON.parse(localStorage.getItem("userInfo")!);
+  console.log("user LS:>> ", user.userType);
   if (!user) return "";
-  return user.data.userType ?? UserRole.ADMIN;
+  return user.userType ?? UserRole.ADMIN;
 }
 
 function getUserEmployeeId(): string {
   const user = JSON.parse(localStorage.getItem("userInfo")!);
   if (!user) return "";
-  return user.data.employeeId;
+  return user?.employeeId ?? "";
 }
 
 function getUserVisitorId(): string {
   const user = JSON.parse(localStorage.getItem("userInfo")!);
   if (!user) return "";
-  return user.data.visitorId;
+  return user.visitorId ?? "";
 }
 
 function getUserPlan(): IUserPlan | null {
   const user = JSON.parse(localStorage.getItem("userInfo")!);
   if (!user) return null;
 
-  return user.data.planInfo;
+  return user.planInfo;
 }
 
 function getCompanyPlan(): IUserPlan | null {
   const user = JSON.parse(localStorage.getItem("userInfo")!);
   if (!user) return null;
 
-  return user.data.planInfo;
+  return user.planInfo;
 }
 
 function formatDate(date: Date): string {
@@ -89,7 +90,7 @@ function formatTime(date: Date): string {
 function isMultiFactorAuthEnabled() {
   const user = JSON.parse(localStorage.getItem("userInfo")!);
   if (!user) return false;
-  return user.data.isMultiFactorAuthEnabled;
+  return user.isMultiFactorAuthEnabled;
 }
 
 export {
