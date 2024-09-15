@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import usePricingPlans from "@/hooks/pricing";
 import { ColumnDef } from "@tanstack/react-table";
-import { ExternalLink } from "lucide-react";
-import React from "react";
+import { ExternalLink, Trash2Icon } from "lucide-react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import DeletePricingModal from "../deleteModal";
 
 const columns: ColumnDef<IPlan>[] = [
   {
@@ -51,7 +52,7 @@ const columns: ColumnDef<IPlan>[] = [
         currency: "USD",
       }).format(value);
 
-      return <span>{formattedValue}</span>;
+      return <div className="text-center">{formattedValue}</div>;
     },
   },
   {
@@ -68,9 +69,11 @@ const columns: ColumnDef<IPlan>[] = [
       const value = getValue() as string;
 
       return (
-        <Badge variant={value === "MONTHLY" ? "secondary" : "default"}>
-          {value}
-        </Badge>
+        <div className="text-center">
+          <Badge variant={value === "MONTHLY" ? "secondary" : "default"}>
+            {value}
+          </Badge>
+        </div>
       );
     },
   },
@@ -110,7 +113,7 @@ const columns: ColumnDef<IPlan>[] = [
     header: "Actions",
     cell: ({ row }) => {
       const plan = row.original;
-      // const [isModalOpen, setIsModalOpen] = useState(false);
+      const [isModalOpen, setIsModalOpen] = useState(false);
       return (
         <div className="flex items-center gap-2">
           <Link to={`/dashboard/pricing/${plan.id}`}>
@@ -124,6 +127,19 @@ const columns: ColumnDef<IPlan>[] = [
               Edit
             </Button>
           </Link>
+          <Button
+            variant="link"
+            className="text-red-600 text-xs underline transition-opacity hover:opacity-80"
+            onClick={() => setIsModalOpen(true)}
+          >
+            <Trash2Icon className="text-red-700 size-4 mr-2" />
+            Delete
+          </Button>
+          <DeletePricingModal
+            open={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            plan={plan}
+          />
         </div>
       );
     },
