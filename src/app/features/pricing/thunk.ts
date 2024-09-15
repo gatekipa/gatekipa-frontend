@@ -13,6 +13,7 @@ export interface IPlan {
     details: { allowed: boolean; text: string }[];
   }[];
   isActive: boolean;
+  isPromotionalPlan: boolean;
 }
 
 export interface IPaymentIntentRequest {
