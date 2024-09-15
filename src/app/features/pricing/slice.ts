@@ -3,11 +3,14 @@ import {
   confirmPayment,
   createPaymentIntent,
   createPricingPlan,
+  fetchFeatures,
   fetchInvoices,
   fetchPricingPlans,
+  IFeature,
   IInvoice,
   IPaymentIntent,
   IPlan,
+  TransformedFeatureResponse,
 } from "./thunk";
 import { ICompanyResponse } from "../company/thunk";
 
@@ -17,6 +20,7 @@ enum PricingApiEndpoint {
   CONFIRM_PAYMENT = "CONFIRM_PAYMENT",
   INVOICE = "INVOICE",
   CREATE_PLAN = "CREATE_PLAN",
+  FETCH_FEATURES = "FETCH_FEATURES",
 }
 
 export interface PricingState {
@@ -26,6 +30,8 @@ export interface PricingState {
   loading: { [key in PricingApiEndpoint]?: boolean };
   plans: IPlan[];
   invoices: IInvoice[];
+  modules: IFeature[];
+  permissions: IFeature[];
 }
 
 const initialState: PricingState = {
@@ -39,8 +45,11 @@ const initialState: PricingState = {
     [PricingApiEndpoint.CONFIRM_PAYMENT]: false,
     [PricingApiEndpoint.INVOICE]: false,
     [PricingApiEndpoint.CREATE_PLAN]: false,
+    [PricingApiEndpoint.FETCH_FEATURES]: false,
   },
   invoices: [],
+  modules: [],
+  permissions: [],
 };
 
 export const pricingSlice = createSlice({
@@ -77,6 +86,23 @@ export const pricingSlice = createSlice({
     });
     builder.addCase(fetchInvoices.rejected, (state) => {
       state.loading[PricingApiEndpoint.INVOICE] = false;
+    });
+    builder.addCase(
+      fetchFeatures.fulfilled,
+      (state, action: PayloadAction<TransformedFeatureResponse>) => {
+        if (action.payload.type === "MODULE") {
+          state.modules = action.payload.data;
+        } else {
+          state.permissions = action.payload.data;
+        }
+        state.loading[PricingApiEndpoint.FETCH_FEATURES] = false;
+      }
+    );
+    builder.addCase(fetchFeatures.pending, (state) => {
+      state.loading[PricingApiEndpoint.FETCH_FEATURES] = true;
+    });
+    builder.addCase(fetchFeatures.rejected, (state) => {
+      state.loading[PricingApiEndpoint.FETCH_FEATURES] = false;
     });
     builder.addCase(
       createPaymentIntent.fulfilled,

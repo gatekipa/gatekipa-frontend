@@ -49,6 +49,16 @@ export interface IPlanRequest {
   isPromotionalPlan: boolean;
 }
 
+export interface IFeature {
+  id: string;
+  type: "MODULE" | "PERMISSION";
+  name: string;
+}
+export interface TransformedFeatureResponse {
+  type: "MODULE" | "PERMISSION";
+  data: IFeature[];
+}
+
 const fetchPricingPlans: AsyncThunk<IPlan[], void, {}> = createAsyncThunk(
   "pricing/plans",
   async (_, thunkAPI) => {
@@ -74,6 +84,34 @@ const fetchPricingPlans: AsyncThunk<IPlan[], void, {}> = createAsyncThunk(
     }
   }
 );
+
+const fetchFeatures: AsyncThunk<
+  TransformedFeatureResponse,
+  { type: string },
+  {}
+> = createAsyncThunk("pricing/features", async ({ type }, thunkAPI) => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_API_URL}/feature/${type}`,
+      {
+        withCredentials: true,
+      }
+    );
+
+    return { type, data: response.data.data } as TransformedFeatureResponse;
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    if (
+      axiosError.response &&
+      axiosError.response.data &&
+      axiosError.response.data.message
+    ) {
+      return thunkAPI.rejectWithValue(axiosError.response.data.message);
+    } else {
+      return thunkAPI.rejectWithValue("An unexpected error occurred");
+    }
+  }
+});
 
 const fetchInvoices: AsyncThunk<IInvoice[], void, {}> = createAsyncThunk(
   "pricing/invoices",
@@ -198,4 +236,5 @@ export {
   confirmPayment,
   fetchInvoices,
   createPricingPlan,
+  fetchFeatures,
 };

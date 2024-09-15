@@ -28,6 +28,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch } from "@/app/hooks";
 import { createPricingPlan } from "@/app/features/pricing/thunk";
+import useFeatures from "@/hooks/features";
 
 export enum SubscriptionType {
   MONTHLY = "MONTHLY",
@@ -36,7 +37,7 @@ export enum SubscriptionType {
 
 const createPricingPlanSchema = z.object({
   name: z.string(),
-  price: z.number(),
+  price: z.preprocess((val) => Number(val), z.number()),
   description: z.string(),
   subscriptionType: z.nativeEnum(SubscriptionType),
   isPromotionalPlan: z.boolean(),
@@ -53,6 +54,8 @@ const CreatePricingPage: React.FC = () => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
+
+  const { transformedModules } = useFeatures();
 
   const form = useForm<ICreatePricingPlan>({
     resolver: zodResolver(createPricingPlanSchema),
@@ -86,20 +89,58 @@ const CreatePricingPage: React.FC = () => {
     setPromotionalPrices((prev) => [...prev, { noOfMonths, discountedPrice }]);
   }, [form]);
 
-  const onSubmit = useCallback(async (values: ICreatePricingPlan) => {
-    try {
-      await dispatch(
-        createPricingPlan({
-          ...values,
-          promotionalPricing: promotionalPrices,
-          assignedFeatures: [],
-        })
-      ).unwrap();
-      console.log(values);
-    } catch (err) {
-      toast.error(err as string);
-    }
-  }, []);
+  const [assignedFeatures, setAssignedFeatures] = useState<
+    { feature: string; subFeature: string[] }[]
+  >([]);
+
+  const onSubmit = useCallback(
+    async (values: ICreatePricingPlan) => {
+      const _values = {
+        ...values,
+        promotionalPricing: promotionalPrices,
+        assignedFeatures: assignedFeatures,
+      };
+
+      try {
+        await dispatch(createPricingPlan(_values)).unwrap();
+        toast.success("Pricing plan created successfully");
+        navigate("/dashboard/pricing");
+        form.reset();
+        setPromotionalPrices([]);
+        setAssignedFeatures([]);
+      } catch (err) {
+        toast.error(err as string);
+      }
+    },
+    [assignedFeatures, promotionalPrices]
+  );
+
+  const handleModuleChange = (moduleId: string) => {
+    setAssignedFeatures((prev) => {
+      const existingModule = prev.find((item) => item.feature === moduleId);
+      if (existingModule) {
+        // If the module is already selected, remove it
+        return prev.filter((item) => item.feature !== moduleId);
+      } else {
+        // If the module is not selected, add it with empty subFeatures
+        return [...prev, { feature: moduleId, subFeature: [] }];
+      }
+    });
+  };
+
+  const handlePermissionChange = (moduleId: string, permissionId: string) => {
+    setAssignedFeatures((prev) =>
+      prev.map((item) => {
+        if (item.feature === moduleId) {
+          const subFeatures = item.subFeature.includes(permissionId)
+            ? item.subFeature.filter((sub) => sub !== permissionId)
+            : [...item.subFeature, permissionId];
+          return { ...item, subFeature: subFeatures };
+        }
+        return item;
+      })
+    );
+  };
 
   return (
     <Card>
@@ -269,7 +310,7 @@ const CreatePricingPage: React.FC = () => {
                   Promotional Pricing
                 </h4>
                 <div className="flex w-full gap-3 items-center my-5">
-                  <div className="flex flex-col space-y-1.5 w-1/3">
+                  <div className="flex flex-col space-y-1.5 w-1/2">
                     <FormField
                       control={form.control}
                       name="promotionalPricing.noOfMonths"
@@ -296,7 +337,7 @@ const CreatePricingPage: React.FC = () => {
                     />
                   </div>
 
-                  <div className="flex flex-col space-y-1.5 w-1/3">
+                  <div className="flex flex-col space-y-1.5 w-1/2">
                     <FormField
                       control={form.control}
                       name="promotionalPricing.discountedPrice"
@@ -353,6 +394,52 @@ const CreatePricingPage: React.FC = () => {
               </div>
 
               <Separator />
+
+              <div className="p-6">
+                <h4 className="text-lg font-semibold mb-4">Features</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {transformedModules.map((module) => (
+                    <div
+                      key={module.id}
+                      className="p-4 bg-white shadow rounded-lg"
+                    >
+                      <h5 className="text-lg font-semibold mb-2">
+                        <Checkbox
+                          checked={assignedFeatures.some(
+                            (item) => item.feature === module.id
+                          )}
+                          onCheckedChange={() => handleModuleChange(module.id)}
+                        />
+                        <span className="ml-2">{module.name}</span>
+                      </h5>
+                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                        {module.permissions.map((permission) => (
+                          <div
+                            key={permission.id}
+                            className="flex items-center"
+                          >
+                            <Checkbox
+                              checked={
+                                assignedFeatures
+                                  .find((item) => item.feature === module.id)
+                                  ?.subFeature.includes(permission.id) || false
+                              }
+                              onCheckedChange={() =>
+                                handlePermissionChange(module.id, permission.id)
+                              }
+                            />
+                            <p className="ml-2 text-sm">{permission.name}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="text-end">
+                <Button type="submit">Submit</Button>
+              </div>
             </div>
           </form>
         </Form>
