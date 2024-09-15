@@ -29,6 +29,7 @@ import SettingsPage from "@/pages/settings";
 import CreatePricingPage from "@/pages/pricing/create";
 import ListPricingPage from "@/pages/pricing/list";
 import EditPricingPage from "@/pages/pricing/edit";
+import ContactPage from "@/pages/contact";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
   {
     path: "/about",
     element: <AboutPage />,
+  },
+  {
+    path: "/contact",
+    element: <ContactPage />,
   },
   {
     path: "/terms-conditions",
