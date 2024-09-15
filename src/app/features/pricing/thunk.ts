@@ -50,6 +50,17 @@ export interface IPlanRequest {
   isPromotionalPlan: boolean;
 }
 
+export interface IPlanDetail {
+  plan: IPlan & {
+    promotionalPricing: { discountedPrice: number; noOfMonths: number }[];
+  };
+  assignedFeatures: any[];
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+}
+
 export interface IFeature {
   id: string;
   type: "MODULE" | "PERMISSION";
@@ -85,6 +96,30 @@ const fetchPricingPlans: AsyncThunk<IPlan[], void, {}> = createAsyncThunk(
     }
   }
 );
+
+const fetchPricingPlanById: AsyncThunk<IPlanDetail, { id: string }, {}> =
+  createAsyncThunk("pricing/plans/id", async ({ id }, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_API_URL}/plan/${id}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  });
 
 const fetchFeatures: AsyncThunk<
   TransformedFeatureResponse,
@@ -231,6 +266,34 @@ const createPricingPlan: AsyncThunk<any, IPlanRequest, {}> = createAsyncThunk(
   }
 );
 
+const editPricingPlan: AsyncThunk<IPlan, IPlan, {}> = createAsyncThunk(
+  "pricing/plan/edit",
+  async (plan, thunkAPI) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL}/plan/${plan.id}`,
+        plan,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
+
 export {
   fetchPricingPlans,
   createPaymentIntent,
@@ -238,4 +301,6 @@ export {
   fetchInvoices,
   createPricingPlan,
   fetchFeatures,
+  fetchPricingPlanById,
+  editPricingPlan,
 };

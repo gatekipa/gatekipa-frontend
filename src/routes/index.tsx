@@ -28,6 +28,7 @@ import TermsAndConditionsPage from "@/pages/terms";
 import SettingsPage from "@/pages/settings";
 import CreatePricingPage from "@/pages/pricing/create";
 import ListPricingPage from "@/pages/pricing/list";
+import EditPricingPage from "@/pages/pricing/edit";
 
 const router = createBrowserRouter([
   {
@@ -105,6 +106,10 @@ const router = createBrowserRouter([
       {
         path: "pricing/create",
         element: <CreatePricingPage />,
+      },
+      {
+        path: "pricing/edit/:id",
+        element: <EditPricingPage />,
       },
     ],
   },

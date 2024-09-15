@@ -5,17 +5,20 @@ import {
   createPricingPlan,
   fetchFeatures,
   fetchInvoices,
+  fetchPricingPlanById,
   fetchPricingPlans,
   IFeature,
   IInvoice,
   IPaymentIntent,
   IPlan,
+  IPlanDetail,
   TransformedFeatureResponse,
 } from "./thunk";
 import { ICompanyResponse } from "../company/thunk";
 
 enum PricingApiEndpoint {
   FETCH_PLANS = "FETCH_PLANS",
+  FETCH_PLAN = "FETCH_PLAN",
   CREATE_PAYMENT_INTENT = "CREATE_PAYMENT_INTENT",
   CONFIRM_PAYMENT = "CONFIRM_PAYMENT",
   INVOICE = "INVOICE",
@@ -29,6 +32,7 @@ export interface PricingState {
   paymentIntent: IPaymentIntent | null;
   loading: { [key in PricingApiEndpoint]?: boolean };
   plans: IPlan[];
+  plan: IPlanDetail | null;
   invoices: IInvoice[];
   modules: IFeature[];
   permissions: IFeature[];
@@ -36,11 +40,13 @@ export interface PricingState {
 
 const initialState: PricingState = {
   plans: [],
+  plan: null,
   selectedPlan: null,
   paymentIntent: null,
   paymentSuccessResponse: null,
   loading: {
     [PricingApiEndpoint.FETCH_PLANS]: false,
+    [PricingApiEndpoint.FETCH_PLAN]: false,
     [PricingApiEndpoint.CREATE_PAYMENT_INTENT]: false,
     [PricingApiEndpoint.CONFIRM_PAYMENT]: false,
     [PricingApiEndpoint.INVOICE]: false,
@@ -103,6 +109,19 @@ export const pricingSlice = createSlice({
     });
     builder.addCase(fetchFeatures.rejected, (state) => {
       state.loading[PricingApiEndpoint.FETCH_FEATURES] = false;
+    });
+    builder.addCase(
+      fetchPricingPlanById.fulfilled,
+      (state, action: PayloadAction<IPlanDetail>) => {
+        state.plan = action.payload;
+        state.loading[PricingApiEndpoint.FETCH_PLAN] = false;
+      }
+    );
+    builder.addCase(fetchPricingPlanById.pending, (state) => {
+      state.loading[PricingApiEndpoint.FETCH_PLAN] = true;
+    });
+    builder.addCase(fetchPricingPlanById.rejected, (state) => {
+      state.loading[PricingApiEndpoint.FETCH_PLAN] = false;
     });
     builder.addCase(
       createPaymentIntent.fulfilled,

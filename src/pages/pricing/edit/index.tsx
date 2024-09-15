@@ -1,6 +1,3 @@
-import React, { useCallback, useState } from "react";
-import { ArrowLeft, XCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
@@ -10,12 +7,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
 import {
   Select,
   SelectContent,
@@ -23,39 +15,39 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import { ArrowLeft, XCircle } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  createPricingPlanSchema,
+  ICreatePricingPlan,
+  SubscriptionType,
+} from "../create";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { useAppDispatch } from "@/app/hooks";
-import { createPricingPlan } from "@/app/features/pricing/thunk";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { Separator } from "@/components/ui/separator";
 import useFeatures from "@/hooks/features";
+import { usePricingPlanById } from "@/hooks/pricing";
+import { useAppDispatch } from "@/app/hooks";
+import { editPricingPlan } from "@/app/features/pricing/thunk";
 
-export enum SubscriptionType {
-  MONTHLY = "MONTHLY",
-  YEARLY = "YEARLY",
-}
+const EditPricingPage: React.FC = () => {
+  const { id } = useParams();
 
-export const createPricingPlanSchema = z.object({
-  name: z.string(),
-  price: z.preprocess((val) => Number(val), z.number()),
-  description: z.string(),
-  subscriptionType: z.nativeEnum(SubscriptionType),
-  isPromotionalPlan: z.boolean(),
-  isActive: z.boolean(),
-  promotionalPricing: z.object({
-    noOfMonths: z.preprocess((val) => Number(val), z.number()),
-    discountedPrice: z.preprocess((val) => Number(val), z.number()),
-  }),
-});
-
-export type ICreatePricingPlan = z.infer<typeof createPricingPlanSchema>;
-
-const CreatePricingPage: React.FC = () => {
+  const { plan, loading } = usePricingPlanById(id!);
   const navigate = useNavigate();
 
-  const dispatch = useAppDispatch();
+  const [assignedFeatures, setAssignedFeatures] = useState<
+    { feature: string; subFeature: string[] }[]
+  >([]);
 
-  const { transformedModules } = useFeatures();
+  const [promotionalPrices, setPromotionalPrices] = useState<
+    { noOfMonths: number; discountedPrice: number }[]
+  >([]);
 
   const form = useForm<ICreatePricingPlan>({
     resolver: zodResolver(createPricingPlanSchema),
@@ -73,25 +65,24 @@ const CreatePricingPage: React.FC = () => {
     },
   });
 
-  const [promotionalPrices, setPromotionalPrices] = useState<
-    { noOfMonths: number; discountedPrice: number }[]
-  >([]);
+  const dispatch = useAppDispatch();
 
-  const addPromotionalPricing = useCallback(() => {
-    let { noOfMonths, discountedPrice } = form.getValues().promotionalPricing;
+  useEffect(() => {
+    if (!loading && plan) {
+      form.reset({
+        name: plan.plan.planName,
+        price: plan.plan.price,
+        description: plan.plan.description,
+        subscriptionType: plan.plan.subscriptionType as SubscriptionType,
+        isPromotionalPlan: plan.plan.isPromotionalPlan,
+        isActive: plan.plan.isActive,
+      });
+      setAssignedFeatures(plan.assignedFeatures);
+      setPromotionalPrices(plan.plan.promotionalPricing);
+    }
+  }, [plan, loading]);
 
-    // @ts-ignore
-    noOfMonths = parseInt(noOfMonths);
-
-    // @ts-ignore
-    discountedPrice = parseInt(discountedPrice);
-
-    setPromotionalPrices((prev) => [...prev, { noOfMonths, discountedPrice }]);
-  }, [form]);
-
-  const [assignedFeatures, setAssignedFeatures] = useState<
-    { feature: string; subFeature: string[] }[]
-  >([]);
+  const { transformedModules } = useFeatures();
 
   const onSubmit = useCallback(
     async (values: ICreatePricingPlan) => {
@@ -99,10 +90,12 @@ const CreatePricingPage: React.FC = () => {
         ...values,
         promotionalPricing: promotionalPrices,
         assignedFeatures: assignedFeatures,
+        id: id!,
       };
 
       try {
-        await dispatch(createPricingPlan(_values)).unwrap();
+        // @ts-ignore
+        await dispatch(editPricingPlan(_values)).unwrap();
         toast.success("Pricing plan created successfully");
         navigate("/dashboard/pricing");
         form.reset();
@@ -142,6 +135,18 @@ const CreatePricingPage: React.FC = () => {
     );
   };
 
+  const addPromotionalPricing = useCallback(() => {
+    let { noOfMonths, discountedPrice } = form.getValues().promotionalPricing;
+
+    // @ts-ignore
+    noOfMonths = parseInt(noOfMonths);
+
+    // @ts-ignore
+    discountedPrice = parseInt(discountedPrice);
+
+    setPromotionalPrices((prev) => [...prev, { noOfMonths, discountedPrice }]);
+  }, [form]);
+
   return (
     <Card>
       <div className="flex items-center p-5 gap-4">
@@ -149,7 +154,7 @@ const CreatePricingPage: React.FC = () => {
           className="cursor-pointer size-6 hover:opacity-70"
           onClick={() => navigate("/dashboard/pricing")}
         />
-        <h2 className="text-2xl font-semibold">Create Pricing Plan</h2>
+        <h2 className="text-2xl font-semibold">Edit Pricing Plan</h2>
       </div>
       <CardContent>
         <Form {...form}>
@@ -448,4 +453,4 @@ const CreatePricingPage: React.FC = () => {
   );
 };
 
-export default CreatePricingPage;
+export default EditPricingPage;

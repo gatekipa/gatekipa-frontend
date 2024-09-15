@@ -1,4 +1,7 @@
-import { fetchPricingPlans } from "@/app/features/pricing/thunk";
+import {
+  fetchPricingPlanById,
+  fetchPricingPlans,
+} from "@/app/features/pricing/thunk";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useEffect } from "react";
 
@@ -16,5 +19,22 @@ const usePricingPlans = () => {
 
   return { plans, loading: FETCH_PLANS };
 };
+
+const usePricingPlanById = (id: string) => {
+  const dispatch = useAppDispatch();
+
+  const {
+    plan,
+    loading: { FETCH_PLAN },
+  } = useAppSelector((state) => state.pricing);
+
+  useEffect(() => {
+    dispatch(fetchPricingPlanById({ id }));
+  }, [id]);
+
+  return { plan, loading: FETCH_PLAN };
+};
+
+export { usePricingPlanById };
 
 export default usePricingPlans;

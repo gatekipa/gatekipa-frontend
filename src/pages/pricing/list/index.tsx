@@ -116,7 +116,7 @@ const columns: ColumnDef<IPlan>[] = [
       const [isModalOpen, setIsModalOpen] = useState(false);
       return (
         <div className="flex items-center gap-2">
-          <Link to={`/dashboard/pricing/${plan.id}`}>
+          <Link to={`/dashboard/pricing/edit/${plan.id}`}>
             <Button
               size="sm"
               className="text-xs"
