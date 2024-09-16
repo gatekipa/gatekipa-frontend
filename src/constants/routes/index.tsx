@@ -3,6 +3,7 @@ import {
   Clipboard,
   DollarSignIcon,
   FileIcon,
+  GemIcon,
   LayoutDashboardIcon,
   Settings,
   User2Icon,
@@ -105,6 +106,11 @@ const superAdminRoutes: Route[] = [
     label: "Pricing",
     href: "/dashboard/pricing",
     icon: <DollarSignIcon size={18} />,
+  },
+  {
+    label: "Companies",
+    href: "/dashboard/discounted-companies",
+    icon: <GemIcon size={18} />,
   },
 ];
 
