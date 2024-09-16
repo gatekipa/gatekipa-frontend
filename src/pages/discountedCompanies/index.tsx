@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PaginatedTable from "@/components/shared/paginatedTable";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import useDiscountedCompanies from "@/hooks/company/discounted";
@@ -6,6 +6,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { IDiscountedCompany } from "@/app/features/pricing/thunk";
 import ColumnHeader from "@/components/shared/columnHeader";
 import { Button } from "@/components/ui/button";
+import { MailIcon } from "lucide-react";
+import SendDiscountMailModal from "@/components/features/discount/sendDiscountMailModal";
 
 export const columns: ColumnDef<IDiscountedCompany>[] = [
   {
@@ -75,8 +77,21 @@ export const columns: ColumnDef<IDiscountedCompany>[] = [
     cell: ({ row }) => {
       const discountedCompany = row.original;
       console.log("discountedCompany :>> ", discountedCompany);
+      const [open, setOpen] = useState(false);
 
-      return <Button>Send Mail</Button>;
+      return (
+        <>
+          <Button className="text-xs" size="sm" onClick={() => setOpen(true)}>
+            <MailIcon size={16} className="mr-2" />
+            Send Mail
+          </Button>
+          <SendDiscountMailModal
+            open={open}
+            discountedCompany={discountedCompany}
+            onClose={() => setOpen(false)}
+          />
+        </>
+      );
     },
     enableSorting: true,
   },
