@@ -1,4 +1,5 @@
 import { IDiscountedCompany } from "@/app/features/pricing/thunk";
+import { useAppSelector } from "@/app/hooks";
 import {
   Dialog,
   DialogContent,
@@ -14,6 +15,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useCallback } from "react";
@@ -29,6 +37,7 @@ type SendDiscountMailModalProps = {
 const sendDiscountedMailSchema = z.object({
   subject: z.string(),
   message: z.string(),
+  discountId: z.string(),
 });
 
 export type ISendDiscountedMailForm = z.infer<typeof sendDiscountedMailSchema>;
@@ -45,6 +54,8 @@ const SendDiscountMailModal: React.FC<SendDiscountMailModalProps> = ({
       message: "",
     },
   });
+
+  const { activeDiscounts } = useAppSelector((state) => state.pricing);
 
   const onSubmitHandler = useCallback(() => {}, [discountedCompany]);
 
@@ -86,6 +97,35 @@ const SendDiscountMailModal: React.FC<SendDiscountMailModalProps> = ({
                         />
                       </FormControl>
                       <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <FormField
+                  control={form.control}
+                  name="discountId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Label className="text-xs">Discount</Label>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0">
+                            <SelectValue placeholder="Please select discount you want to apply" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {activeDiscounts.map((company) => (
+                            <SelectItem key={company.id} value={company.id}>
+                              {company.code}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
