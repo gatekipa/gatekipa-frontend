@@ -6,11 +6,13 @@ import {
   createPricingPlan,
   deleteDiscount,
   editDiscount,
+  fetchDiscountedCompanies,
   fetchDiscounts,
   fetchFeatures,
   fetchInvoices,
   fetchPricingPlanById,
   fetchPricingPlans,
+  IDiscountedCompany,
   IDiscountModel,
   IFeature,
   IInvoice,
@@ -33,6 +35,7 @@ enum PricingApiEndpoint {
   CREATE_DISCOUNT = "CREATE_DISCOUNT",
   EDIT_DISCOUNT = "EDIT_DISCOUNT",
   DELETE_DISCOUNT = "DELETE_DISCOUNT",
+  FETCH_DISCOUNTED_COMPANIES = "FETCH_DISCOUNTED_COMPANIES",
 }
 
 export interface PricingState {
@@ -46,6 +49,7 @@ export interface PricingState {
   modules: IFeature[];
   permissions: IFeature[];
   discounts: IDiscountModel[];
+  discountedCompanies: IDiscountedCompany[];
 }
 
 const initialState: PricingState = {
@@ -70,6 +74,7 @@ const initialState: PricingState = {
   modules: [],
   permissions: [],
   discounts: [],
+  discountedCompanies: [],
 };
 
 export const pricingSlice = createSlice({
@@ -241,6 +246,19 @@ export const pricingSlice = createSlice({
     });
     builder.addCase(deleteDiscount.rejected, (state) => {
       state.loading[PricingApiEndpoint.DELETE_DISCOUNT] = false;
+    });
+    builder.addCase(
+      fetchDiscountedCompanies.fulfilled,
+      (state, action: PayloadAction<IDiscountedCompany[]>) => {
+        state.discountedCompanies = action.payload;
+        state.loading[PricingApiEndpoint.FETCH_DISCOUNTED_COMPANIES] = false;
+      }
+    );
+    builder.addCase(fetchDiscountedCompanies.pending, (state) => {
+      state.loading[PricingApiEndpoint.FETCH_DISCOUNTED_COMPANIES] = true;
+    });
+    builder.addCase(fetchDiscountedCompanies.rejected, (state) => {
+      state.loading[PricingApiEndpoint.FETCH_DISCOUNTED_COMPANIES] = false;
     });
   },
 });

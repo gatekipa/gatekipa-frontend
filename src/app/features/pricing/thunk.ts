@@ -85,6 +85,14 @@ export interface IDiscountModel {
   updatedAt: string;
 }
 
+export interface IDiscountedCompany {
+  id: string;
+  emailAddress: string;
+  name: string;
+  isSubscriptionActive: boolean;
+  companyCode: string;
+}
+
 const fetchPricingPlans: AsyncThunk<IPlan[], void, {}> = createAsyncThunk(
   "pricing/plans",
   async (_, thunkAPI) => {
@@ -413,6 +421,31 @@ const deleteDiscount: AsyncThunk<string, { id: string }, {}> = createAsyncThunk(
   }
 );
 
+const fetchDiscountedCompanies: AsyncThunk<IDiscountedCompany[], void, {}> =
+  createAsyncThunk("pricing/discounts/companies", async (_, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_API_URL}/company/discount-mailing-list`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  });
+
 export {
   fetchPricingPlans,
   createPaymentIntent,
@@ -426,4 +459,5 @@ export {
   createDiscount,
   editDiscount,
   deleteDiscount,
+  fetchDiscountedCompanies,
 };
