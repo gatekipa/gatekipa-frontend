@@ -4,6 +4,7 @@ import {
   createDiscount,
   createPaymentIntent,
   createPricingPlan,
+  deleteDiscount,
   editDiscount,
   fetchDiscounts,
   fetchFeatures,
@@ -31,6 +32,7 @@ enum PricingApiEndpoint {
   FETCH_FEATURES = "FETCH_FEATURES",
   CREATE_DISCOUNT = "CREATE_DISCOUNT",
   EDIT_DISCOUNT = "EDIT_DISCOUNT",
+  DELETE_DISCOUNT = "DELETE_DISCOUNT",
 }
 
 export interface PricingState {
@@ -223,6 +225,22 @@ export const pricingSlice = createSlice({
     });
     builder.addCase(editDiscount.rejected, (state) => {
       state.loading[PricingApiEndpoint.EDIT_DISCOUNT] = false;
+    });
+    builder.addCase(
+      deleteDiscount.fulfilled,
+      (state, action: PayloadAction<string>) => {
+        state.discounts = state.discounts.filter(
+          (discount) => discount.id !== action.payload
+        );
+
+        state.loading[PricingApiEndpoint.DELETE_DISCOUNT] = false;
+      }
+    );
+    builder.addCase(deleteDiscount.pending, (state) => {
+      state.loading[PricingApiEndpoint.DELETE_DISCOUNT] = true;
+    });
+    builder.addCase(deleteDiscount.rejected, (state) => {
+      state.loading[PricingApiEndpoint.DELETE_DISCOUNT] = false;
     });
   },
 });

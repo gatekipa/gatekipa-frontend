@@ -386,6 +386,33 @@ const editDiscount: AsyncThunk<IDiscountModel, IDiscountModel, {}> =
     }
   });
 
+const deleteDiscount: AsyncThunk<string, { id: string }, {}> = createAsyncThunk(
+  "pricing/discount/delete",
+  async ({ id }, thunkAPI) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_BASE_API_URL}/discount/${id}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return id;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
+
 export {
   fetchPricingPlans,
   createPaymentIntent,
@@ -398,4 +425,5 @@ export {
   fetchDiscounts,
   createDiscount,
   editDiscount,
+  deleteDiscount,
 };

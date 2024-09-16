@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Trash2Icon } from "lucide-react";
 import { Pencil2Icon } from "@radix-ui/react-icons";
 import { IDiscountModel } from "@/app/features/pricing/thunk";
+import DeleteDiscountModal from "../discount/delete";
 
 export const columns: ColumnDef<IDiscountModel>[] = [
   {
@@ -118,6 +119,7 @@ export const columns: ColumnDef<IDiscountModel>[] = [
     cell: ({ row }) => {
       const discount = row.original;
       const [open, setOpen] = useState(false);
+      const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
       return (
         <div className="flex items-center justify-end gap-2">
@@ -130,7 +132,7 @@ export const columns: ColumnDef<IDiscountModel>[] = [
             Edit
           </Button>
           <Button
-            onClick={() => setOpen(true)}
+            onClick={() => setIsDeleteModalOpen(true)}
             variant="link"
             className="text-sm text-red-700 hover:text-red-900 transition-colors"
           >
@@ -141,6 +143,11 @@ export const columns: ColumnDef<IDiscountModel>[] = [
             open={open}
             onClose={() => setOpen(false)}
             discount={discount}
+          />
+          <DeleteDiscountModal
+            id={discount.id}
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
           />
         </div>
       );
