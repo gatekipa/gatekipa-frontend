@@ -8,6 +8,7 @@ import ColumnHeader from "@/components/shared/columnHeader";
 import { Button } from "@/components/ui/button";
 import { MailIcon } from "lucide-react";
 import SendDiscountMailModal from "@/components/features/discount/sendDiscountMailModal";
+import useActiveDiscounts from "@/hooks/company/active";
 
 export const columns: ColumnDef<IDiscountedCompany>[] = [
   {
@@ -99,6 +100,7 @@ export const columns: ColumnDef<IDiscountedCompany>[] = [
 
 const DiscountedCompaniesPage: React.FC = () => {
   const { discountedCompanies, loading } = useDiscountedCompanies();
+  useActiveDiscounts();
 
   if (loading) {
     return <div>Loading...</div>;
