@@ -72,6 +72,19 @@ export interface TransformedFeatureResponse {
   data: IFeature[];
 }
 
+export interface IDiscountModel {
+  id: string;
+  code: string;
+  maxNoUsage: number;
+  discountType: string;
+  discountValue: number;
+  expiryDate: string;
+  isActive: boolean;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const fetchPricingPlans: AsyncThunk<IPlan[], void, {}> = createAsyncThunk(
   "pricing/plans",
   async (_, thunkAPI) => {
@@ -321,9 +334,8 @@ const fetchDiscounts: AsyncThunk<any, void, {}> = createAsyncThunk(
   }
 );
 
-const createDiscount: AsyncThunk<IDiscount, IDiscount, {}> = createAsyncThunk(
-  "pricing/discount",
-  async (discount, thunkAPI) => {
+const createDiscount: AsyncThunk<IDiscountModel, IDiscount, {}> =
+  createAsyncThunk("pricing/discount", async (discount, thunkAPI) => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_API_URL}/discount`,
@@ -346,8 +358,33 @@ const createDiscount: AsyncThunk<IDiscount, IDiscount, {}> = createAsyncThunk(
         return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
-  }
-);
+  });
+
+const editDiscount: AsyncThunk<IDiscountModel, IDiscountModel, {}> =
+  createAsyncThunk("pricing/discount/edit", async (discount, thunkAPI) => {
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_BASE_API_URL}/discount/${discount.id}`,
+        discount,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  });
 
 export {
   fetchPricingPlans,
@@ -360,4 +397,5 @@ export {
   editPricingPlan,
   fetchDiscounts,
   createDiscount,
+  editDiscount,
 };

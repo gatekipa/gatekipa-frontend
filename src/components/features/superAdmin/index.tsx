@@ -5,12 +5,13 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import useDiscounts from "@/hooks/discounts";
 import { ColumnDef } from "@tanstack/react-table";
 import React, { useState } from "react";
-import CreateDiscountModal, { IDiscount } from "../discount/create";
+import CreateDiscountModal from "../discount/create";
 import { Badge } from "@/components/ui/badge";
-import { Trash2Icon, TrashIcon } from "lucide-react";
+import { Trash2Icon } from "lucide-react";
 import { Pencil2Icon } from "@radix-ui/react-icons";
+import { IDiscountModel } from "@/app/features/pricing/thunk";
 
-export const columns: ColumnDef<IDiscount>[] = [
+export const columns: ColumnDef<IDiscountModel>[] = [
   {
     accessorKey: "code",
     header: ({ column }) => (
@@ -119,7 +120,7 @@ export const columns: ColumnDef<IDiscount>[] = [
       const [open, setOpen] = useState(false);
 
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-end gap-2">
           <Button
             onClick={() => setOpen(true)}
             variant="link"
@@ -136,6 +137,11 @@ export const columns: ColumnDef<IDiscount>[] = [
             <Trash2Icon className="size-5 mr-1" />
             Delete
           </Button>
+          <CreateDiscountModal
+            open={open}
+            onClose={() => setOpen(false)}
+            discount={discount}
+          />
         </div>
       );
     },

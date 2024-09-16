@@ -1,4 +1,4 @@
-import { createDiscount } from "@/app/features/pricing/thunk";
+import { createDiscount, editDiscount } from "@/app/features/pricing/thunk";
 import { useAppDispatch } from "@/app/hooks";
 import LoadingButton from "@/components/shared/loadingButton";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -54,6 +54,8 @@ const discountSchema = z.object({
 
 export type IDiscount = z.infer<typeof discountSchema>;
 
+export type IDiscountWithId = IDiscount & { id: string };
+
 const CreateDiscountModal: React.FC<CreateDiscountModalProps> = ({
   open,
   onClose,
@@ -73,19 +75,30 @@ const CreateDiscountModal: React.FC<CreateDiscountModalProps> = ({
     },
   });
 
-  const onSubmit = useCallback(async (data: IDiscount) => {
-    try {
-      const _expiryDate = new Date(data.expiryDate);
-      await dispatch(
-        createDiscount({ ...data, expiryDate: _expiryDate.toString() })
-      ).unwrap();
-      toast.success("Discount Created successfully");
-      form.reset();
-      onClose();
-    } catch (error) {
-      toast.error(error as string);
-    }
-  }, []);
+  const onSubmit = useCallback(
+    async (data: IDiscount) => {
+      try {
+        if (!discount) {
+          const _expiryDate = new Date(data.expiryDate);
+          await dispatch(
+            createDiscount({ ...data, expiryDate: _expiryDate.toString() })
+          ).unwrap();
+        } else {
+          await dispatch(editDiscount({ ...discount, ...data })).unwrap();
+        }
+
+        toast.success(
+          `${discount ? "Discount Updated" : "Discount Created"} Successfully!`
+        );
+
+        form.reset();
+        onClose();
+      } catch (error) {
+        toast.error(error as string);
+      }
+    },
+    [discount]
+  );
 
   return (
     <Dialog

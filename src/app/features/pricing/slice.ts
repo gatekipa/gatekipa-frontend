@@ -4,11 +4,13 @@ import {
   createDiscount,
   createPaymentIntent,
   createPricingPlan,
+  editDiscount,
   fetchDiscounts,
   fetchFeatures,
   fetchInvoices,
   fetchPricingPlanById,
   fetchPricingPlans,
+  IDiscountModel,
   IFeature,
   IInvoice,
   IPaymentIntent,
@@ -17,7 +19,6 @@ import {
   TransformedFeatureResponse,
 } from "./thunk";
 import { ICompanyResponse } from "../company/thunk";
-import { IDiscount } from "@/components/features/discount/create";
 
 enum PricingApiEndpoint {
   FETCH_PLANS = "FETCH_PLANS",
@@ -29,6 +30,7 @@ enum PricingApiEndpoint {
   CREATE_PLAN = "CREATE_PLAN",
   FETCH_FEATURES = "FETCH_FEATURES",
   CREATE_DISCOUNT = "CREATE_DISCOUNT",
+  EDIT_DISCOUNT = "EDIT_DISCOUNT",
 }
 
 export interface PricingState {
@@ -41,7 +43,7 @@ export interface PricingState {
   invoices: IInvoice[];
   modules: IFeature[];
   permissions: IFeature[];
-  discounts: any[];
+  discounts: IDiscountModel[];
 }
 
 const initialState: PricingState = {
@@ -60,6 +62,7 @@ const initialState: PricingState = {
     [PricingApiEndpoint.FETCH_FEATURES]: false,
     [PricingApiEndpoint.FETCH_DISCOUNTS]: false,
     [PricingApiEndpoint.CREATE_DISCOUNT]: false,
+    [PricingApiEndpoint.EDIT_DISCOUNT]: false,
   },
   invoices: [],
   modules: [],
@@ -191,9 +194,8 @@ export const pricingSlice = createSlice({
     });
     builder.addCase(
       createDiscount.fulfilled,
-      (state, action: PayloadAction<IDiscount>) => {
-        // state.discounts = action.payload;
-        console.log("action :>> DS", action.payload);
+      (state, action: PayloadAction<IDiscountModel>) => {
+        state.discounts = [...state.discounts, action.payload];
         state.loading[PricingApiEndpoint.CREATE_DISCOUNT] = false;
       }
     );
@@ -202,6 +204,25 @@ export const pricingSlice = createSlice({
     });
     builder.addCase(createDiscount.rejected, (state) => {
       state.loading[PricingApiEndpoint.CREATE_DISCOUNT] = false;
+    });
+    builder.addCase(
+      editDiscount.fulfilled,
+      (state, action: PayloadAction<IDiscountModel>) => {
+        state.discounts = state.discounts.map((discount) => {
+          if (discount.id === action.payload.id) {
+            return action.payload;
+          }
+          return discount;
+        });
+
+        state.loading[PricingApiEndpoint.EDIT_DISCOUNT] = false;
+      }
+    );
+    builder.addCase(editDiscount.pending, (state) => {
+      state.loading[PricingApiEndpoint.EDIT_DISCOUNT] = true;
+    });
+    builder.addCase(editDiscount.rejected, (state) => {
+      state.loading[PricingApiEndpoint.EDIT_DISCOUNT] = false;
     });
   },
 });
