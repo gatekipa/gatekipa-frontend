@@ -1,3 +1,4 @@
+import { IDiscount } from "@/components/features/discount/create";
 import { SubscriptionType } from "@/pages/pricing/create";
 import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
@@ -294,6 +295,60 @@ const editPricingPlan: AsyncThunk<IPlan, IPlan, {}> = createAsyncThunk(
   }
 );
 
+const fetchDiscounts: AsyncThunk<any, void, {}> = createAsyncThunk(
+  "pricing/discounts",
+  async (_, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_API_URL}/discount`,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
+
+const createDiscount: AsyncThunk<IDiscount, IDiscount, {}> = createAsyncThunk(
+  "pricing/discount",
+  async (discount, thunkAPI) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL}/discount`,
+        discount,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
+
 export {
   fetchPricingPlans,
   createPaymentIntent,
@@ -303,4 +358,6 @@ export {
   fetchFeatures,
   fetchPricingPlanById,
   editPricingPlan,
+  fetchDiscounts,
+  createDiscount,
 };

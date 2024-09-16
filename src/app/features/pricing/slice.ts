@@ -1,8 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import {
   confirmPayment,
+  createDiscount,
   createPaymentIntent,
   createPricingPlan,
+  fetchDiscounts,
   fetchFeatures,
   fetchInvoices,
   fetchPricingPlanById,
@@ -15,15 +17,18 @@ import {
   TransformedFeatureResponse,
 } from "./thunk";
 import { ICompanyResponse } from "../company/thunk";
+import { IDiscount } from "@/components/features/discount/create";
 
 enum PricingApiEndpoint {
   FETCH_PLANS = "FETCH_PLANS",
   FETCH_PLAN = "FETCH_PLAN",
+  FETCH_DISCOUNTS = "FETCH_DISCOUNTS",
   CREATE_PAYMENT_INTENT = "CREATE_PAYMENT_INTENT",
   CONFIRM_PAYMENT = "CONFIRM_PAYMENT",
   INVOICE = "INVOICE",
   CREATE_PLAN = "CREATE_PLAN",
   FETCH_FEATURES = "FETCH_FEATURES",
+  CREATE_DISCOUNT = "CREATE_DISCOUNT",
 }
 
 export interface PricingState {
@@ -36,6 +41,7 @@ export interface PricingState {
   invoices: IInvoice[];
   modules: IFeature[];
   permissions: IFeature[];
+  discounts: any[];
 }
 
 const initialState: PricingState = {
@@ -52,10 +58,13 @@ const initialState: PricingState = {
     [PricingApiEndpoint.INVOICE]: false,
     [PricingApiEndpoint.CREATE_PLAN]: false,
     [PricingApiEndpoint.FETCH_FEATURES]: false,
+    [PricingApiEndpoint.FETCH_DISCOUNTS]: false,
+    [PricingApiEndpoint.CREATE_DISCOUNT]: false,
   },
   invoices: [],
   modules: [],
   permissions: [],
+  discounts: [],
 };
 
 export const pricingSlice = createSlice({
@@ -166,6 +175,33 @@ export const pricingSlice = createSlice({
     });
     builder.addCase(confirmPayment.rejected, (state) => {
       state.loading[PricingApiEndpoint.CONFIRM_PAYMENT] = false;
+    });
+    builder.addCase(
+      fetchDiscounts.fulfilled,
+      (state, action: PayloadAction<any[]>) => {
+        state.discounts = action.payload;
+        state.loading[PricingApiEndpoint.FETCH_DISCOUNTS] = false;
+      }
+    );
+    builder.addCase(fetchDiscounts.pending, (state) => {
+      state.loading[PricingApiEndpoint.FETCH_DISCOUNTS] = true;
+    });
+    builder.addCase(fetchDiscounts.rejected, (state) => {
+      state.loading[PricingApiEndpoint.FETCH_DISCOUNTS] = false;
+    });
+    builder.addCase(
+      createDiscount.fulfilled,
+      (state, action: PayloadAction<IDiscount>) => {
+        // state.discounts = action.payload;
+        console.log("action :>> DS", action.payload);
+        state.loading[PricingApiEndpoint.CREATE_DISCOUNT] = false;
+      }
+    );
+    builder.addCase(createDiscount.pending, (state) => {
+      state.loading[PricingApiEndpoint.CREATE_DISCOUNT] = true;
+    });
+    builder.addCase(createDiscount.rejected, (state) => {
+      state.loading[PricingApiEndpoint.CREATE_DISCOUNT] = false;
     });
   },
 });
