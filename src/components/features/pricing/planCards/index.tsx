@@ -15,7 +15,8 @@ const PlanCard: React.FC<{
   plan: IPlan;
   gradientClass: string;
   assignedFeatures: IAssignFeature[];
-}> = ({ plan, gradientClass, assignedFeatures }) => {
+  onPlanStartedClick?: () => void;
+}> = ({ plan, gradientClass, assignedFeatures, onPlanStartedClick }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [showMore, setShowMore] = useState(true);
@@ -113,7 +114,9 @@ const PlanCard: React.FC<{
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className={`mt-6 w-full bg-gradient-to-r ${gradientClass} text-white py-2 px-4 rounded-full transition-all duration-200 hover:shadow-lg`}
-          onClick={onPlanClickHandler}
+          onClick={() => {
+            onPlanStartedClick ? onPlanStartedClick() : onPlanClickHandler();
+          }}
         >
           Choose Plan
         </motion.button>

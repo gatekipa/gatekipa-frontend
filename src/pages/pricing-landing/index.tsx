@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Navbar from "@/components/features/home/navbar";
 import PlanCard from "@/components/features/pricing/planCards";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { gradients } from "../pricing";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Footer from "@/components/shared/footer";
+import { getUsername } from "@/utils";
 
 const faqs: { question: string; answer: string }[] = [
   {
@@ -30,6 +31,12 @@ const PricingLandingPage: React.FC = () => {
   const navigate = useNavigate();
   const { plans } = usePricingPlans();
 
+  const isLoggedIn = useMemo(() => !!getUsername(), []);
+
+  const handleNavigate = () => {
+    isLoggedIn ? navigate(`/pricing`) : navigate(`/auth/register`);
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
@@ -46,11 +53,7 @@ const PricingLandingPage: React.FC = () => {
                   plan that scales with your business.
                 </p>
               </div>
-              <Button
-                variant="getStarted"
-                size="lg"
-                onClick={() => navigate(`/auth/register`)}
-              >
+              <Button variant="getStarted" size="lg" onClick={handleNavigate}>
                 Get Started for Free
                 <ArrowBigRight className="ml-4" size={28} />
               </Button>
@@ -75,6 +78,7 @@ const PricingLandingPage: React.FC = () => {
                   plan={item.plan}
                   assignedFeatures={item.assignedFeatures}
                   gradientClass={gradients[index % gradients.length]}
+                  onPlanStartedClick={handleNavigate}
                 />
               ))}
             </div>
@@ -110,11 +114,7 @@ const PricingLandingPage: React.FC = () => {
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-gray-950">
                 Start Your Free Trial Today
               </h2>
-              <Button
-                variant="getStarted"
-                size="lg"
-                onClick={() => navigate(`/auth/register`)}
-              >
+              <Button variant="getStarted" size="lg" onClick={handleNavigate}>
                 Get Started for Free
                 <ArrowBigRight className="ml-4" size={28} />
               </Button>
