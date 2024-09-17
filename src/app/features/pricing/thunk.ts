@@ -10,9 +10,9 @@ export interface IPlan {
   price: number;
   subscriptionType: string;
   description: string;
-  features: {
-    title: string;
-    details: { allowed: boolean; text: string }[];
+  promotionalPricing: {
+    discountedPrice: number;
+    noOfMonths: number;
   }[];
   isActive: boolean;
   isPromotionalPlan: boolean;
@@ -96,12 +96,35 @@ export interface IDiscountedCompany {
 
 export interface IActiveDiscount extends Pick<IDiscountModel, "code" | "id"> {}
 
-const fetchPricingPlans: AsyncThunk<IPlan[], void, {}> = createAsyncThunk(
-  "pricing/plans",
-  async (_, thunkAPI) => {
+export interface IAssignedFeatureModel {
+  featureId: string;
+  name: string;
+  code: string;
+}
+
+export interface IAssignFeature {
+  feature: IAssignedFeatureModel;
+  subFeature: IAssignedFeatureModel[];
+}
+
+export interface IPricingPlanModel {
+  plan: IPlan;
+  assignedFeatures: IAssignFeature[];
+}
+
+const fetchPricingPlans: AsyncThunk<IPricingPlanModel[], void, {}> =
+  createAsyncThunk("pricing/plans", async (_, thunkAPI) => {
     try {
+      // TODO: Confirm Endpoint
+
+      // const response = await axios.get(
+      //   `${import.meta.env.VITE_BASE_API_URL}/plan`,
+      //   {
+      //     withCredentials: true,
+      //   }
+      // );
       const response = await axios.get(
-        `${import.meta.env.VITE_BASE_API_URL}/plan`,
+        `${import.meta.env.VITE_BASE_API_URL}/pricing-plans`,
         {
           withCredentials: true,
         }
@@ -119,8 +142,7 @@ const fetchPricingPlans: AsyncThunk<IPlan[], void, {}> = createAsyncThunk(
         return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
-  }
-);
+  });
 
 const fetchPricingPlanById: AsyncThunk<IPlanDetail, { id: string }, {}> =
   createAsyncThunk("pricing/plans/id", async ({ id }, thunkAPI) => {

@@ -20,7 +20,7 @@ const ContactPage: React.FC = () => {
               <div className="space-y-4">
                 <div className="flex items-center space-x-4">
                   <Mail className="h-6 w-6" />
-                  <span className="text-lg">Support@Gatekipass.com</span>
+                  <span className="text-lg">support@gatekipas.com</span>
                 </div>
                 <div className="flex items-center space-x-4">
                   <MessageSquare className="h-6 w-6" />

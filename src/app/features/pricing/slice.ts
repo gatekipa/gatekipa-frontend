@@ -21,6 +21,7 @@ import {
   IPaymentIntent,
   IPlan,
   IPlanDetail,
+  IPricingPlanModel,
   sendDiscountMail,
   TransformedFeatureResponse,
 } from "./thunk";
@@ -48,7 +49,7 @@ export interface PricingState {
   paymentSuccessResponse: ICompanyResponse | null;
   paymentIntent: IPaymentIntent | null;
   loading: { [key in PricingApiEndpoint]?: boolean };
-  plans: IPlan[];
+  plans: IPricingPlanModel[];
   plan: IPlanDetail | null;
   invoices: IInvoice[];
   modules: IFeature[];
@@ -96,7 +97,7 @@ export const pricingSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(
       fetchPricingPlans.fulfilled,
-      (state, action: PayloadAction<IPlan[]>) => {
+      (state, action: PayloadAction<IPricingPlanModel[]>) => {
         state.plans = action.payload;
         state.loading[PricingApiEndpoint.FETCH_PLANS] = false;
       }
