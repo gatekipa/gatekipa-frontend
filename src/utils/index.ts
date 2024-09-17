@@ -16,7 +16,7 @@ function getCompany(): string {
 function getCompanyId(): string {
   const company = JSON.parse(localStorage.getItem("userInfo")!);
   if (!company) return "";
-  return company?.companyId ?? "";
+  return company?.companyId?.id ?? "";
 }
 
 function getCompanyInfo(): any {
