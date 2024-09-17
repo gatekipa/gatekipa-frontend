@@ -2,6 +2,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { isMultiFactorAuthEnabled } from "@/utils";
 import { X } from "lucide-react";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const MFAWarningDialog: React.FC = () => {
   const shouldShowWarningDialog = isMultiFactorAuthEnabled();
@@ -15,7 +16,14 @@ const MFAWarningDialog: React.FC = () => {
       <AlertTitle>Heads up!</AlertTitle>
       <AlertDescription>
         Your account is not secure. Please enable multi-factor authentication.
-        Visit Settings Page.
+        Visit{" "}
+        <Link
+          to="settings"
+          className="underline underline-offset-2 transition-opacity hover:opacity-80"
+        >
+          Settings
+        </Link>{" "}
+        Page.
       </AlertDescription>
     </Alert>
   );
