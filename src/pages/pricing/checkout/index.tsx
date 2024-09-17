@@ -7,7 +7,10 @@ import {
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { Button } from "@/components/ui/button";
-import { confirmPayment } from "@/app/features/pricing/thunk";
+import {
+  applyCouponDiscount,
+  confirmPayment,
+} from "@/app/features/pricing/thunk";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -22,9 +25,12 @@ const CheckoutPage: React.FC = () => {
   const [coupon, setCoupon] = useState<string | undefined>(undefined);
   const [isFormComplete, setIsFormComplete] = useState<boolean>(false);
 
-  const { paymentIntent, selectedPlan } = useAppSelector(
-    (state) => state.pricing
-  );
+  const {
+    paymentIntent,
+    selectedPlan,
+    loading: { APPLY_COUPON_DISCOUNT },
+    couponResponse,
+  } = useAppSelector((state) => state.pricing);
 
   const onSubmitHandler = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
@@ -55,6 +61,8 @@ const CheckoutPage: React.FC = () => {
             payableAmount: selectedPlan?.price!,
             planId: selectedPlan?.id!,
             stripePayment: paymentInfo,
+            appliedDiscountId: couponResponse?.appliedDiscountId ?? "",
+            discountedAmount: couponResponse?.discountedAmount ?? 0,
           })
         ).unwrap();
 
@@ -63,8 +71,28 @@ const CheckoutPage: React.FC = () => {
         navigate("/dashboard");
       }
     },
-    [paymentIntent, elements, paymentIntent?.clientSecret, selectedPlan]
+    [
+      paymentIntent,
+      elements,
+      paymentIntent?.clientSecret,
+      selectedPlan,
+      couponResponse,
+    ]
   );
+
+  const onApplyCoupon = useCallback(async () => {
+    try {
+      await dispatch(
+        applyCouponDiscount({
+          code: coupon!,
+          payableAmount: selectedPlan?.price!,
+        })
+      ).unwrap();
+      toast.success("Coupon Applied Successfully");
+    } catch (error) {
+      setError(error as string);
+    }
+  }, [coupon]);
 
   return (
     <div className="h-1/2 my-auto">
@@ -97,10 +125,23 @@ const CheckoutPage: React.FC = () => {
                   onChange={(e) => setCoupon(e.target.value)}
                 />
               </div>
-              <Button type="button" className="mt-6" disabled={!coupon}>
+              <Button
+                type="button"
+                className="mt-6"
+                disabled={!coupon || APPLY_COUPON_DISCOUNT}
+                onClick={onApplyCoupon}
+              >
                 Apply
               </Button>
             </div>
+            {couponResponse?.discountedAmount && (
+              <div className="flex items-center justify-between">
+                <div className="text-sm">Discounted Amount</div>
+                <div className="text-sm">
+                  -${couponResponse?.discountedAmount}
+                </div>
+              </div>
+            )}
             <div className="w-full">
               <Button
                 type="submit"

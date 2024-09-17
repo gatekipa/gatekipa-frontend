@@ -27,6 +27,8 @@ export interface IConfirmPaymentRequest {
   actualAmount: number;
   payableAmount: number;
   planId: string;
+  discountedAmount?: number;
+  appliedDiscountId?: string;
   stripePayment: any;
 }
 
@@ -124,6 +126,16 @@ export interface ISuperAdminPricingPlan {
   createdBy: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ICouponDiscountRequest {
+  code: string;
+  payableAmount: number;
+}
+export interface ICouponDiscount {
+  appliedDiscountId: string;
+  discountedAmount: number | null;
+  payableAmount: number | null;
 }
 
 const fetchPricingPlans: AsyncThunk<IPricingPlanModel[], void, {}> =
@@ -556,6 +568,35 @@ const fetchSuperAdminPricingPlans: AsyncThunk<
   }
 });
 
+const applyCouponDiscount: AsyncThunk<
+  ICouponDiscount,
+  ICouponDiscountRequest,
+  {}
+> = createAsyncThunk("pricing/discount/coupon", async (request, thunkAPI) => {
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_API_URL}/discount/apply-code`,
+      request,
+      {
+        withCredentials: true,
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    if (
+      axiosError.response &&
+      axiosError.response.data &&
+      axiosError.response.data.message
+    ) {
+      return thunkAPI.rejectWithValue(axiosError.response.data.message);
+    } else {
+      return thunkAPI.rejectWithValue("An unexpected error occurred");
+    }
+  }
+});
+
 export {
   fetchPricingPlans,
   createPaymentIntent,
@@ -573,4 +614,5 @@ export {
   fetchActiveDiscounts,
   sendDiscountMail,
   fetchSuperAdminPricingPlans,
+  applyCouponDiscount,
 };

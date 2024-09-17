@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import {
+  applyCouponDiscount,
   confirmPayment,
   createDiscount,
   createPaymentIntent,
@@ -15,6 +16,7 @@ import {
   fetchPricingPlans,
   fetchSuperAdminPricingPlans,
   IActiveDiscount,
+  ICouponDiscount,
   IDiscountedCompany,
   IDiscountModel,
   IFeature,
@@ -45,6 +47,7 @@ enum PricingApiEndpoint {
   FETCH_ACTIVE_DISCOUNTS = "FETCH_ACTIVE_DISCOUNTS",
   SEND_DISCOUNT_MAIL = "SEND_DISCOUNT_MAIL",
   FETCH_SUPER_ADMIN_PRICING_PLANS = "FETCH_SUPER_ADMIN_PRICING_PLANS",
+  APPLY_COUPON_DISCOUNT = "APPLY_COUPON_DISCOUNT",
 }
 
 export interface PricingState {
@@ -61,6 +64,7 @@ export interface PricingState {
   discountedCompanies: IDiscountedCompany[];
   activeDiscounts: IActiveDiscount[];
   superAdminPricingPlans: ISuperAdminPricingPlan[];
+  couponResponse: ICouponDiscount | null;
 }
 
 const initialState: PricingState = {
@@ -69,6 +73,7 @@ const initialState: PricingState = {
   selectedPlan: null,
   paymentIntent: null,
   paymentSuccessResponse: null,
+  couponResponse: null,
   loading: {
     [PricingApiEndpoint.FETCH_PLANS]: false,
     [PricingApiEndpoint.FETCH_PLAN]: false,
@@ -82,6 +87,7 @@ const initialState: PricingState = {
     [PricingApiEndpoint.EDIT_DISCOUNT]: false,
     [PricingApiEndpoint.SEND_DISCOUNT_MAIL]: false,
     [PricingApiEndpoint.FETCH_SUPER_ADMIN_PRICING_PLANS]: false,
+    [PricingApiEndpoint.APPLY_COUPON_DISCOUNT]: false,
   },
   invoices: [],
   modules: [],
@@ -310,6 +316,19 @@ export const pricingSlice = createSlice({
     });
     builder.addCase(fetchSuperAdminPricingPlans.rejected, (state) => {
       state.loading[PricingApiEndpoint.FETCH_SUPER_ADMIN_PRICING_PLANS] = false;
+    });
+    builder.addCase(
+      applyCouponDiscount.fulfilled,
+      (state, action: PayloadAction<ICouponDiscount>) => {
+        state.couponResponse = action.payload;
+        state.loading[PricingApiEndpoint.APPLY_COUPON_DISCOUNT] = false;
+      }
+    );
+    builder.addCase(applyCouponDiscount.pending, (state) => {
+      state.loading[PricingApiEndpoint.APPLY_COUPON_DISCOUNT] = true;
+    });
+    builder.addCase(applyCouponDiscount.rejected, (state) => {
+      state.loading[PricingApiEndpoint.APPLY_COUPON_DISCOUNT] = false;
     });
   },
 });

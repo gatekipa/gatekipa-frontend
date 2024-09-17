@@ -5,6 +5,7 @@ import {
   IPlan,
 } from "@/app/features/pricing/thunk";
 import { useAppDispatch } from "@/app/hooks";
+import { Badge } from "@/components/ui/badge";
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { useCallback, useState } from "react";
@@ -45,8 +46,11 @@ const PlanCard: React.FC<{
       className={`rounded-2xl shadow-xl overflow-hidden`}
     >
       <div className={`bg-gradient-to-br ${gradientClass} p-6 text-white`}>
-        <h2 className="text-2xl font-bold mb-2">
-          {plan.planName.toUpperCase()}
+        <h2 className="text-2xl font-bold mb-2 flex justify-between items-center">
+          {plan.planName.toUpperCase()}{" "}
+          {plan.isPromotionalPlan && (
+            <Badge className="opacity-70">LIMITED OFFER</Badge>
+          )}
         </h2>
         <p className="opacity-90 mb-4">{plan.description}</p>
         <div className="text-4xl font-bold mb-1">
@@ -80,7 +84,8 @@ const PlanCard: React.FC<{
               </h3>
               <ul className="mb-4">
                 {plan.promotionalPricing.map((promo, index) => (
-                  <li key={index} className="mb-1 text-gray-700">
+                  <li key={index} className="mb-1 text-gray-700 flex ">
+                    <CheckIcon className="w-4 h-4 text-red-500 mr-2 flex-shrink-0" />
                     {promo.noOfMonths} months: ${promo.discountedPrice}
                   </li>
                 ))}
