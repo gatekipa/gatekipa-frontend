@@ -75,7 +75,7 @@ const PlanCard: React.FC<{
               transition={{ duration: 0.3 }}
             >
               <h3 className="font-semibold mb-2 text-gray-950">
-                Promotional Pricing:
+                Promotional Pricing
               </h3>
               <ul className="mb-4">
                 {plan.promotionalPricing.map((promo, index) => (
