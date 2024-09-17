@@ -78,6 +78,7 @@ interface IVerifySMSWithTokenRequest {
 
 interface IVerifyEmailRequest {
   emailAddress: string;
+  forSignUp?: boolean;
 }
 
 interface IVerifySMSTokenRequest {
