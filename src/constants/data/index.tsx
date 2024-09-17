@@ -136,7 +136,7 @@ const navLinks: NavLink[] = [
   },
   {
     name: "Pricing",
-    href: "/pricing-plan",
+    href: "/pricing-landing",
   },
   {
     name: "Contact Us",
