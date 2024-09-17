@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { confirmPayment } from "@/app/features/pricing/thunk";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const CheckoutPage: React.FC = () => {
   const stripe = useStripe();
@@ -17,6 +19,8 @@ const CheckoutPage: React.FC = () => {
   const [error, setError] = useState<string | undefined>(undefined);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [coupon, setCoupon] = useState<string | undefined>(undefined);
+  const [isFormComplete, setIsFormComplete] = useState<boolean>(false);
 
   const { paymentIntent, selectedPlan } = useAppSelector(
     (state) => state.pricing
@@ -64,18 +68,50 @@ const CheckoutPage: React.FC = () => {
 
   return (
     <div className="h-1/2 my-auto">
-      <Card className="container mx-auto max-w-3xl">
+      <Card className="container mx-auto max-w-3xl relative">
+        <div
+          className={`absolute top-0 right-0 text-white bg-red-600 py-1 px-4 rounded-bl-lg rounded-tr-lg font-semibold shadow-md`}
+        >
+          {selectedPlan?.planName?.toUpperCase() ?? "STANDARD"}
+        </div>
         <CardHeader title="Payment">
           <h2 className="text-3xl font-semibold">Checkout</h2>
         </CardHeader>
         <CardContent>
           <form onClick={onSubmitHandler} className="space-y-3">
-            <PaymentElement />
-            <div className="text-end">
-              <Button type="submit">Pay Now</Button>
+            <PaymentElement
+              onChange={(event) => {
+                event.complete
+                  ? setIsFormComplete(true)
+                  : setIsFormComplete(false);
+              }}
+            />
+            <div className="flex items-center gap-x-2">
+              <div className="w-full space-y-1">
+                <Label className="text-sm">Coupon Code</Label>
+                <Input
+                  placeholder="Please Enter The Coupon Code"
+                  className="placeholder:text-xs"
+                  value={coupon}
+                  disabled={!isFormComplete}
+                  onChange={(e) => setCoupon(e.target.value)}
+                />
+              </div>
+              <Button type="button" className="mt-6" disabled={!coupon}>
+                Apply
+              </Button>
+            </div>
+            <div className="w-full">
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={!stripe || !elements}
+              >
+                Pay Now
+              </Button>
             </div>
           </form>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {error && <p className="text-red-500 text-sm my-4">{error}</p>}
         </CardContent>
       </Card>
     </div>
