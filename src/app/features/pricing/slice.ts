@@ -13,6 +13,7 @@ import {
   fetchInvoices,
   fetchPricingPlanById,
   fetchPricingPlans,
+  fetchSuperAdminPricingPlans,
   IActiveDiscount,
   IDiscountedCompany,
   IDiscountModel,
@@ -22,6 +23,7 @@ import {
   IPlan,
   IPlanDetail,
   IPricingPlanModel,
+  ISuperAdminPricingPlan,
   sendDiscountMail,
   TransformedFeatureResponse,
 } from "./thunk";
@@ -42,6 +44,7 @@ enum PricingApiEndpoint {
   FETCH_DISCOUNTED_COMPANIES = "FETCH_DISCOUNTED_COMPANIES",
   FETCH_ACTIVE_DISCOUNTS = "FETCH_ACTIVE_DISCOUNTS",
   SEND_DISCOUNT_MAIL = "SEND_DISCOUNT_MAIL",
+  FETCH_SUPER_ADMIN_PRICING_PLANS = "FETCH_SUPER_ADMIN_PRICING_PLANS",
 }
 
 export interface PricingState {
@@ -57,6 +60,7 @@ export interface PricingState {
   discounts: IDiscountModel[];
   discountedCompanies: IDiscountedCompany[];
   activeDiscounts: IActiveDiscount[];
+  superAdminPricingPlans: ISuperAdminPricingPlan[];
 }
 
 const initialState: PricingState = {
@@ -77,6 +81,7 @@ const initialState: PricingState = {
     [PricingApiEndpoint.CREATE_DISCOUNT]: false,
     [PricingApiEndpoint.EDIT_DISCOUNT]: false,
     [PricingApiEndpoint.SEND_DISCOUNT_MAIL]: false,
+    [PricingApiEndpoint.FETCH_SUPER_ADMIN_PRICING_PLANS]: false,
   },
   invoices: [],
   modules: [],
@@ -84,6 +89,7 @@ const initialState: PricingState = {
   discounts: [],
   activeDiscounts: [],
   discountedCompanies: [],
+  superAdminPricingPlans: [],
 };
 
 export const pricingSlice = createSlice({
@@ -290,6 +296,20 @@ export const pricingSlice = createSlice({
     });
     builder.addCase(sendDiscountMail.rejected, (state) => {
       state.loading[PricingApiEndpoint.SEND_DISCOUNT_MAIL] = false;
+    });
+    builder.addCase(
+      fetchSuperAdminPricingPlans.fulfilled,
+      (state, action: PayloadAction<ISuperAdminPricingPlan[]>) => {
+        state.superAdminPricingPlans = action.payload;
+        state.loading[PricingApiEndpoint.FETCH_SUPER_ADMIN_PRICING_PLANS] =
+          false;
+      }
+    );
+    builder.addCase(fetchSuperAdminPricingPlans.pending, (state) => {
+      state.loading[PricingApiEndpoint.FETCH_SUPER_ADMIN_PRICING_PLANS] = true;
+    });
+    builder.addCase(fetchSuperAdminPricingPlans.rejected, (state) => {
+      state.loading[PricingApiEndpoint.FETCH_SUPER_ADMIN_PRICING_PLANS] = false;
     });
   },
 });

@@ -112,17 +112,23 @@ export interface IPricingPlanModel {
   assignedFeatures: IAssignFeature[];
 }
 
+export interface ISuperAdminPricingPlan {
+  id: string;
+  planName: string;
+  price: number;
+  subscriptionType: string;
+  description: string;
+  isActive: boolean;
+  promotionalPricing: { discountedPrice: number; noOfMonths: number }[];
+  isPromotionalPlan: boolean;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const fetchPricingPlans: AsyncThunk<IPricingPlanModel[], void, {}> =
   createAsyncThunk("pricing/plans", async (_, thunkAPI) => {
     try {
-      // TODO: Confirm Endpoint
-
-      // const response = await axios.get(
-      //   `${import.meta.env.VITE_BASE_API_URL}/plan`,
-      //   {
-      //     withCredentials: true,
-      //   }
-      // );
       const response = await axios.get(
         `${import.meta.env.VITE_BASE_API_URL}/pricing-plans`,
         {
@@ -522,6 +528,34 @@ const sendDiscountMail: AsyncThunk<any, ISendDiscountedMailForm, {}> =
     }
   });
 
+const fetchSuperAdminPricingPlans: AsyncThunk<
+  ISuperAdminPricingPlan[],
+  void,
+  {}
+> = createAsyncThunk("pricing/plans/super-admin", async (_, thunkAPI) => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_API_URL}/plan`,
+      {
+        withCredentials: true,
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    if (
+      axiosError.response &&
+      axiosError.response.data &&
+      axiosError.response.data.message
+    ) {
+      return thunkAPI.rejectWithValue(axiosError.response.data.message);
+    } else {
+      return thunkAPI.rejectWithValue("An unexpected error occurred");
+    }
+  }
+});
+
 export {
   fetchPricingPlans,
   createPaymentIntent,
@@ -538,4 +572,5 @@ export {
   fetchDiscountedCompanies,
   fetchActiveDiscounts,
   sendDiscountMail,
+  fetchSuperAdminPricingPlans,
 };

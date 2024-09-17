@@ -4,12 +4,12 @@ import PaginatedTable from "@/components/shared/paginatedTable";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import usePricingPlans from "@/hooks/pricing";
 import { ColumnDef } from "@tanstack/react-table";
 import { ExternalLink, Trash2Icon } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import DeletePricingModal from "../deleteModal";
+import useSuperAdminPricingPlans from "@/hooks/pricing/superAdmin";
 
 const columns: ColumnDef<IPlan>[] = [
   {
@@ -147,13 +147,11 @@ const columns: ColumnDef<IPlan>[] = [
 ];
 
 const ListPricingPage: React.FC = () => {
-  const { plans, loading } = usePricingPlans();
+  const { loading, plans } = useSuperAdminPricingPlans();
 
   if (loading) {
     return <div>Loading...</div>;
   }
-
-  console.log("plans :>> ", plans);
 
   return (
     <Card>
