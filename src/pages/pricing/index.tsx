@@ -2,7 +2,7 @@ import React from "react";
 import PlanCard from "@/components/features/pricing/planCards";
 import usePricingPlans from "@/hooks/pricing";
 
-const gradients: readonly string[] = [
+export const gradients: readonly string[] = [
   "from-gray-700 to-gray-900",
   "from-gray-600 to-gray-800",
   "from-gray-500 to-gray-700",

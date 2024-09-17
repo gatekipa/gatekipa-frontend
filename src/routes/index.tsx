@@ -31,6 +31,7 @@ import ListPricingPage from "@/pages/pricing/list";
 import EditPricingPage from "@/pages/pricing/edit";
 import ContactPage from "@/pages/contact";
 import DiscountedCompaniesPage from "@/pages/discountedCompanies";
+import PricingLandingPage from "@/pages/pricing-landing";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
   {
     path: "/terms-conditions",
     element: <TermsAndConditionsPage />,
+  },
+  {
+    path: "/pricing-landing",
+    element: <PricingLandingPage />,
   },
   {
     path: "dashboard",
