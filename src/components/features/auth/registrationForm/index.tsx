@@ -41,7 +41,10 @@ const registrationFormSchema = z.object({
   lastName: z.string().min(3),
   companyId: z.string().min(3),
   password: z.string().min(8),
-  mobileNo: z.string().min(10),
+  mobileNo: z.string().regex(/^\+1\d{10}$/, {
+    message:
+      "Invalid phone number. It should be in the format +1XXXXXXXXXX (11 digits)",
+  }),
   userType: z.nativeEnum(UserType),
 });
 
