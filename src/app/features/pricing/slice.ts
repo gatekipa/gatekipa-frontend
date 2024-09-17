@@ -21,6 +21,7 @@ import {
   IPaymentIntent,
   IPlan,
   IPlanDetail,
+  sendDiscountMail,
   TransformedFeatureResponse,
 } from "./thunk";
 import { ICompanyResponse } from "../company/thunk";
@@ -39,6 +40,7 @@ enum PricingApiEndpoint {
   DELETE_DISCOUNT = "DELETE_DISCOUNT",
   FETCH_DISCOUNTED_COMPANIES = "FETCH_DISCOUNTED_COMPANIES",
   FETCH_ACTIVE_DISCOUNTS = "FETCH_ACTIVE_DISCOUNTS",
+  SEND_DISCOUNT_MAIL = "SEND_DISCOUNT_MAIL",
 }
 
 export interface PricingState {
@@ -73,6 +75,7 @@ const initialState: PricingState = {
     [PricingApiEndpoint.FETCH_DISCOUNTS]: false,
     [PricingApiEndpoint.CREATE_DISCOUNT]: false,
     [PricingApiEndpoint.EDIT_DISCOUNT]: false,
+    [PricingApiEndpoint.SEND_DISCOUNT_MAIL]: false,
   },
   invoices: [],
   modules: [],
@@ -277,6 +280,15 @@ export const pricingSlice = createSlice({
     });
     builder.addCase(fetchActiveDiscounts.rejected, (state) => {
       state.loading[PricingApiEndpoint.FETCH_ACTIVE_DISCOUNTS] = false;
+    });
+    builder.addCase(sendDiscountMail.fulfilled, (state) => {
+      state.loading[PricingApiEndpoint.SEND_DISCOUNT_MAIL] = false;
+    });
+    builder.addCase(sendDiscountMail.pending, (state) => {
+      state.loading[PricingApiEndpoint.SEND_DISCOUNT_MAIL] = true;
+    });
+    builder.addCase(sendDiscountMail.rejected, (state) => {
+      state.loading[PricingApiEndpoint.SEND_DISCOUNT_MAIL] = false;
     });
   },
 });

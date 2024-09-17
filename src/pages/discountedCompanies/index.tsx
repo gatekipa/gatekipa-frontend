@@ -77,7 +77,6 @@ export const columns: ColumnDef<IDiscountedCompany>[] = [
     header: ({ column }) => <ColumnHeader column={column} label="Actions" />,
     cell: ({ row }) => {
       const discountedCompany = row.original;
-      console.log("discountedCompany :>> ", discountedCompany);
       const [open, setOpen] = useState(false);
 
       return (

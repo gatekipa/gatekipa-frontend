@@ -1,5 +1,9 @@
-import { IDiscountedCompany } from "@/app/features/pricing/thunk";
-import { useAppSelector } from "@/app/hooks";
+import {
+  IDiscountedCompany,
+  sendDiscountMail,
+} from "@/app/features/pricing/thunk";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -22,10 +26,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 type SendDiscountMailModalProps = {
@@ -35,8 +39,7 @@ type SendDiscountMailModalProps = {
 };
 
 const sendDiscountedMailSchema = z.object({
-  subject: z.string(),
-  message: z.string(),
+  email: z.string(),
   discountId: z.string(),
 });
 
@@ -50,14 +53,27 @@ const SendDiscountMailModal: React.FC<SendDiscountMailModalProps> = ({
   const form = useForm<ISendDiscountedMailForm>({
     resolver: zodResolver(sendDiscountedMailSchema),
     defaultValues: {
-      subject: "",
-      message: "",
+      email: discountedCompany.emailAddress ?? "",
+      discountId: "",
     },
   });
+  const dispatch = useAppDispatch();
 
   const { activeDiscounts } = useAppSelector((state) => state.pricing);
 
-  const onSubmitHandler = useCallback(() => {}, [discountedCompany]);
+  const onSubmitHandler = useCallback(
+    async (values: ISendDiscountedMailForm) => {
+      try {
+        await dispatch(sendDiscountMail(values)).unwrap();
+        toast.success("Discount mail sent successfully");
+        form.reset();
+        onClose();
+      } catch (error) {
+        toast.error(error as string);
+      }
+    },
+    [discountedCompany]
+  );
 
   return (
     <Dialog
@@ -80,17 +96,18 @@ const SendDiscountMailModal: React.FC<SendDiscountMailModalProps> = ({
               <div className="flex flex-col space-y-1.5">
                 <FormField
                   control={form.control}
-                  name="subject"
+                  name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <Label id="subject" className="text-xs">
-                        Subject
+                      <Label id="email" className="text-xs">
+                        Email
                       </Label>
                       <FormControl>
                         <Input
-                          id="subject"
+                          id="email"
                           type="text"
-                          placeholder="Please enter subject of the mail"
+                          disabled
+                          placeholder="Please enter email address"
                           autoComplete="off"
                           className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
                           {...field}
@@ -130,29 +147,7 @@ const SendDiscountMailModal: React.FC<SendDiscountMailModalProps> = ({
                   )}
                 />
               </div>
-              <div className="flex flex-col space-y-1.5">
-                <FormField
-                  control={form.control}
-                  name="message"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Label id="message" className="text-xs">
-                        Message
-                      </Label>
-                      <FormControl>
-                        <Textarea
-                          id="message"
-                          placeholder="Please enter message of the mail"
-                          autoComplete="off"
-                          className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage className="text-xs" />
-                    </FormItem>
-                  )}
-                />
-              </div>
+              <Button type="submit">Send</Button>
             </div>
           </form>
         </Form>

@@ -1,4 +1,5 @@
 import { IDiscount } from "@/components/features/discount/create";
+import { ISendDiscountedMailForm } from "@/components/features/discount/sendDiscountMailModal";
 import { SubscriptionType } from "@/pages/pricing/create";
 import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
@@ -473,6 +474,32 @@ const fetchActiveDiscounts: AsyncThunk<IActiveDiscount[], void, {}> =
     }
   });
 
+const sendDiscountMail: AsyncThunk<any, ISendDiscountedMailForm, {}> =
+  createAsyncThunk("pricing/discount/mail", async (request, thunkAPI) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL}/discount/send-emails`,
+        { ...request, emailAddress: [request.email] },
+        {
+          withCredentials: true,
+        }
+      );
+
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  });
+
 export {
   fetchPricingPlans,
   createPaymentIntent,
@@ -488,4 +515,5 @@ export {
   deleteDiscount,
   fetchDiscountedCompanies,
   fetchActiveDiscounts,
+  sendDiscountMail,
 };
