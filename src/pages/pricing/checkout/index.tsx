@@ -15,6 +15,13 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const CheckoutPage: React.FC = () => {
   const stripe = useStripe();
@@ -23,6 +30,9 @@ const CheckoutPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [coupon, setCoupon] = useState<string | undefined>(undefined);
+  const [promotionalPrices, setPromotionalPrices] = useState<
+    string | undefined
+  >(undefined);
   const [isFormComplete, setIsFormComplete] = useState<boolean>(false);
 
   const {
@@ -55,16 +65,43 @@ const CheckoutPage: React.FC = () => {
       if (paymentInfo?.error) {
         setError(paymentInfo?.error.message);
       } else {
-        await dispatch(
-          confirmPayment({
-            actualAmount: selectedPlan?.price!,
-            payableAmount: selectedPlan?.price!,
-            planId: selectedPlan?.id!,
-            stripePayment: paymentInfo,
-            appliedDiscountId: couponResponse?.appliedDiscountId ?? "",
-            discountedAmount: couponResponse?.discountedAmount ?? 0,
-          })
-        ).unwrap();
+        if (!selectedPlan?.isPromotionalPlan) {
+          console.log("INSDIE FIRS :>> ");
+          await dispatch(
+            confirmPayment({
+              actualAmount: selectedPlan?.price!,
+              payableAmount: selectedPlan?.price!,
+              planId: selectedPlan?.id!,
+              stripePayment: paymentInfo,
+              appliedDiscountId: couponResponse?.appliedDiscountId ?? "",
+              discountedAmount: couponResponse?.discountedAmount ?? 0,
+            })
+          ).unwrap();
+        } else {
+          console.log("INSDIE SECDAS :>> ");
+          console.log("promotionalPrices :>> ", promotionalPrices);
+
+          const months = promotionalPrices?.split("-")[0];
+          const discount = promotionalPrices?.split("-")[1];
+
+          console.log("months :>> ", months);
+          console.log("discount :>> ", discount);
+
+          await dispatch(
+            confirmPayment({
+              actualAmount: selectedPlan?.price!,
+              payableAmount: selectedPlan?.price!,
+              planId: selectedPlan?.id!,
+              stripePayment: paymentInfo,
+              appliedDiscountId: couponResponse?.appliedDiscountId ?? "",
+              discountedAmount: couponResponse?.discountedAmount ?? 0,
+              promotionalPlan: {
+                noOfMonths: parseInt(months!),
+                discountedPrice: parseInt(discount!),
+              },
+            })
+          ).unwrap();
+        }
 
         toast.success("Payment successful");
 
@@ -77,6 +114,7 @@ const CheckoutPage: React.FC = () => {
       paymentIntent?.clientSecret,
       selectedPlan,
       couponResponse,
+      promotionalPrices,
     ]
   );
 
@@ -114,26 +152,55 @@ const CheckoutPage: React.FC = () => {
                   : setIsFormComplete(false);
               }}
             />
-            <div className="flex items-center gap-x-2">
-              <div className="w-full space-y-1">
-                <Label className="text-sm">Coupon Code</Label>
-                <Input
-                  placeholder="Please Enter The Coupon Code"
-                  className="placeholder:text-xs"
-                  value={coupon}
-                  disabled={!isFormComplete}
-                  onChange={(e) => setCoupon(e.target.value)}
-                />
+            {!selectedPlan?.isPromotionalPlan ? (
+              <div className="flex items-center gap-x-2">
+                <div className="w-full space-y-1">
+                  <Label className="text-sm">Coupon Code</Label>
+                  <Input
+                    placeholder="Please Enter The Coupon Code"
+                    className="placeholder:text-xs"
+                    value={coupon}
+                    disabled={!isFormComplete}
+                    onChange={(e) => setCoupon(e.target.value)}
+                  />
+                </div>
+                <Button
+                  type="button"
+                  className="mt-6"
+                  disabled={!coupon || APPLY_COUPON_DISCOUNT}
+                  onClick={onApplyCoupon}
+                >
+                  Apply
+                </Button>
               </div>
-              <Button
-                type="button"
-                className="mt-6"
-                disabled={!coupon || APPLY_COUPON_DISCOUNT}
-                onClick={onApplyCoupon}
-              >
-                Apply
-              </Button>
-            </div>
+            ) : (
+              <div className="flex items-center gap-x-2">
+                <div className="w-full space-y-1">
+                  <Label className="text-sm">Promotional Plan</Label>
+                  <Select
+                    onValueChange={(value) => setPromotionalPrices(value)}
+                    defaultValue={promotionalPrices?.toString()}
+                    disabled={!isFormComplete}
+                  >
+                    <SelectTrigger className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0">
+                      <SelectValue placeholder="Please select the promotional pricing" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {selectedPlan?.promotionalPricing.map((pricing) => (
+                        <SelectItem
+                          key={pricing.discountedPrice}
+                          value={`${pricing.noOfMonths?.toString()}-${pricing.discountedPrice?.toString()}`}
+                        >
+                          {pricing.noOfMonths} Months - $
+                          {pricing.discountedPrice}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            )}
+
             {couponResponse?.discountedAmount && (
               <div className="flex items-center justify-between">
                 <div className="text-sm">Discounted Amount</div>

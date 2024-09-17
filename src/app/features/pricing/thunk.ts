@@ -29,6 +29,10 @@ export interface IConfirmPaymentRequest {
   planId: string;
   discountedAmount?: number;
   appliedDiscountId?: string;
+  promotionalPlan?: {
+    discountedPrice: number;
+    noOfMonths: number;
+  };
   stripePayment: any;
 }
 
