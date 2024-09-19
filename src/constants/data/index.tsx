@@ -132,7 +132,7 @@ const navLinks: NavLink[] = [
   },
   {
     name: "Features",
-    href: "#features",
+    href: "/#features",
   },
   {
     name: "Pricing",
