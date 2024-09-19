@@ -132,7 +132,7 @@ const CreateDiscountModal: React.FC<CreateDiscountModalProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <Label id="code" className="text-xs">
-                          Code
+                          Code <span className="text-red-600 font-bold">*</span>
                         </Label>
                         <FormControl>
                           <Input
@@ -156,7 +156,8 @@ const CreateDiscountModal: React.FC<CreateDiscountModalProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <Label id="discountValue" className="text-xs">
-                          Discount Value
+                          Discount Value{" "}
+                          <span className="text-red-600 font-bold">*</span>
                         </Label>
                         <FormControl>
                           <Input
@@ -183,7 +184,8 @@ const CreateDiscountModal: React.FC<CreateDiscountModalProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <Label id="maxNoUsage" className="text-xs">
-                          Max No Usage
+                          Max No Usage{" "}
+                          <span className="text-red-600 font-bold">*</span>
                         </Label>
                         <FormControl>
                           <Input
@@ -208,7 +210,8 @@ const CreateDiscountModal: React.FC<CreateDiscountModalProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <Label id="discountType" className="text-xs">
-                          Discount Type
+                          Discount Type{" "}
+                          <span className="text-red-600 font-bold">*</span>
                         </Label>
                         <FormControl>
                           <Select
