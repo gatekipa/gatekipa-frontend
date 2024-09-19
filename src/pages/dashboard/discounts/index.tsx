@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import useDiscounts from "@/hooks/discounts";
+import { formatDate } from "@/utils";
 import { Pencil2Icon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
 import React, { useState } from "react";
@@ -102,7 +103,7 @@ export const columns: ColumnDef<IDiscountModel>[] = [
     enableSorting: true,
     cell: ({ cell }) => {
       const value = cell.getValue() as string;
-      return <div className="text-center">{value}</div>;
+      return <div className="text-center">{formatDate(new Date(value))}</div>;
     },
   },
   {
