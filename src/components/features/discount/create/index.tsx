@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { formatDate } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
@@ -245,7 +246,10 @@ const CreateDiscountModal: React.FC<CreateDiscountModalProps> = ({
                   render={({ field }) => (
                     <FormItem>
                       <Label id="expiryDate" className="text-xs">
-                        Expiry Date
+                        Expiry Date{" "}
+                        <span className="italic">
+                          {formatDate(new Date(field.value))}
+                        </span>
                       </Label>
                       <FormControl>
                         <Input
