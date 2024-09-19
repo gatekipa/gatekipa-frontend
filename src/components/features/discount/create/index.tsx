@@ -161,7 +161,8 @@ const CreateDiscountModal: React.FC<CreateDiscountModalProps> = ({
                         <FormControl>
                           <Input
                             id="discountValue"
-                            type="text"
+                            type="number"
+                            min={0}
                             placeholder="Please Enter Discount Value"
                             autoComplete="off"
                             className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
