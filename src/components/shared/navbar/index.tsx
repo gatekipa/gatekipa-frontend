@@ -13,8 +13,9 @@ import { getCompany, getUsername } from "@/utils";
 import { ModeToggle } from "../themeToggle";
 import { Badge } from "@/components/ui/badge";
 import logo from "../../../assets/logo.svg";
-import { logout } from "@/app/features/auth/slice";
 import { useAppDispatch } from "@/app/hooks";
+import { toast } from "sonner";
+import { logoutThunk } from "@/app/features/auth/thunk";
 
 const Navbar: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -22,9 +23,13 @@ const Navbar: React.FC = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>();
 
-  const handleLogout = useCallback(() => {
-    dispatch(logout());
-    navigate("/auth/login");
+  const handleLogout = useCallback(async () => {
+    try {
+      await dispatch(logoutThunk({})).unwrap();
+      navigate("/auth/login");
+    } catch (error) {
+      toast.error(error as string);
+    }
   }, []);
 
   const company = getCompany();

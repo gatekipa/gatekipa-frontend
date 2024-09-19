@@ -5,6 +5,7 @@ import {
   changePasswordThunk,
   forgotPasswordThunk,
   loginThunk,
+  logoutThunk,
   registerUserThunk,
   updatePasswordThunk,
   verifyEmailThunk,
@@ -173,6 +174,17 @@ export const authSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(updatePasswordThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(logoutThunk.fulfilled, (state) => {
+      state.user = null;
+      localStorage.removeItem("userInfo");
+      state.loading = false;
+    });
+    builder.addCase(logoutThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(logoutThunk.rejected, (state) => {
       state.loading = false;
     });
   },
