@@ -128,7 +128,7 @@ const testimonialList: Testimonial[] = [
 const navLinks: NavLink[] = [
   {
     name: "Home",
-    href: "#",
+    href: "/",
   },
   {
     name: "Features",
