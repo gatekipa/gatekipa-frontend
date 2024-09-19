@@ -1,6 +1,5 @@
 import { IDiscountModel } from "@/app/features/pricing/thunk";
 import CreateDiscountModal from "@/components/features/discount/create";
-import DeleteDiscountModal from "@/components/features/discount/delete";
 import ColumnHeader from "@/components/shared/columnHeader";
 import PaginatedTable from "@/components/shared/paginatedTable";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +8,6 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import useDiscounts from "@/hooks/discounts";
 import { Pencil2Icon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
-import { Trash2Icon } from "lucide-react";
 import React, { useState } from "react";
 
 export const columns: ColumnDef<IDiscountModel>[] = [
@@ -119,10 +117,9 @@ export const columns: ColumnDef<IDiscountModel>[] = [
     cell: ({ row }) => {
       const discount = row.original;
       const [open, setOpen] = useState(false);
-      const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
       return (
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex items-center justify-center gap-2">
           <Button
             onClick={() => setOpen(true)}
             variant="link"
@@ -131,24 +128,24 @@ export const columns: ColumnDef<IDiscountModel>[] = [
             <Pencil2Icon className="size-5 mr-1" />
             Edit
           </Button>
-          <Button
+          {/* <Button
             onClick={() => setIsDeleteModalOpen(true)}
             variant="link"
             className="text-sm text-red-700 hover:text-red-900 transition-colors"
           >
             <Trash2Icon className="size-5 mr-1" />
             Delete
-          </Button>
+          </Button> */}
           <CreateDiscountModal
             open={open}
             onClose={() => setOpen(false)}
             discount={discount}
           />
-          <DeleteDiscountModal
+          {/* <DeleteDiscountModal
             id={discount.id}
             isOpen={isDeleteModalOpen}
             onClose={() => setIsDeleteModalOpen(false)}
-          />
+          /> */}
         </div>
       );
     },
