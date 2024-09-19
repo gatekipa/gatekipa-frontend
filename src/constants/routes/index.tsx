@@ -99,17 +99,17 @@ const superAdminRoutes: Route[] = [
     icon: <LayoutDashboardIcon size={18} />,
   },
   {
-    label: "Discounts",
-    href: "/dashboard/discounts",
-    icon: <BadgeDollarSign size={18} />,
-  },
-  {
     label: "Pricing",
     href: "/dashboard/pricing",
     icon: <DollarSignIcon size={18} />,
   },
   {
-    label: "Companies",
+    label: "Discounts",
+    href: "/dashboard/discounts",
+    icon: <BadgeDollarSign size={18} />,
+  },
+  {
+    label: "Discount Emails",
     href: "/dashboard/discounted-companies",
     icon: <GemIcon size={18} />,
   },
