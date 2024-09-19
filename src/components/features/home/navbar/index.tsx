@@ -38,7 +38,7 @@ const Navbar: React.FC<{ isAuth?: boolean }> = ({ isAuth = false }) => {
             {link.name}
           </Link>
         ))}
-        <NavbarActionButton />
+        {!isAuth && <NavbarActionButton />}
       </nav>
 
       <div
@@ -61,7 +61,7 @@ const Navbar: React.FC<{ isAuth?: boolean }> = ({ isAuth = false }) => {
               {link.name}
             </Link>
           ))}
-          <NavbarActionButton />
+          {!isAuth && <NavbarActionButton />}
         </nav>
       </div>
     </header>
