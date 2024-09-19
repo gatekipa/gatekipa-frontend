@@ -67,6 +67,13 @@ function getCompanyPlan(): IUserPlan | null {
   return user.planInfo;
 }
 
+function getUserEmail(): string {
+  const user = JSON.parse(localStorage.getItem("userInfo")!);
+  if (!user) return ``;
+
+  return user.emailAddress;
+}
+
 function formatDate(date: Date): string {
   return new Intl.DateTimeFormat("en-US", {
     day: "2-digit",
@@ -106,4 +113,5 @@ export {
   getCompanyInfo,
   getCompanyId,
   isMultiFactorAuthEnabled,
+  getUserEmail,
 };

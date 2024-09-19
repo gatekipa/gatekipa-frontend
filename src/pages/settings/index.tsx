@@ -44,6 +44,7 @@ import {
   verifySMSWithTokenThunk,
 } from "@/app/features/auth/thunk";
 import { Button } from "@/components/ui/button";
+import { getUserEmail } from "@/utils";
 
 const multiFactorAuthenticationFormSchema = z.object({
   isMultiFactorAuthEnabled: z.boolean(),
@@ -127,6 +128,8 @@ const SettingsPage: React.FC = () => {
     try {
       // CASE 1: User has disabled multi factor authentication
 
+      const email = getUserEmail();
+
       if (!values.isMultiFactorAuthEnabled) {
         await dispatch(
           changeUserSettingsThunk({
@@ -148,9 +151,7 @@ const SettingsPage: React.FC = () => {
         values.multiFactorAuthMediums.includes(MultiFactorAuthMedium.EMAIL)
       ) {
         // 1. HIT VERIFY EMAIL API
-        await dispatch(
-          verifyEmailThunk({ emailAddress: `ukn.umer@gmail.com` })
-        ).unwrap();
+        await dispatch(verifyEmailThunk({ emailAddress: email })).unwrap();
 
         setBoth(true);
         setStep(Step.EMAIL);
@@ -163,9 +164,7 @@ const SettingsPage: React.FC = () => {
         values.multiFactorAuthMediums.includes(MultiFactorAuthMedium.EMAIL)
       ) {
         // 1. HIT VERIFY EMAIL API
-        await dispatch(
-          verifyEmailThunk({ emailAddress: `ukn.umer@gmail.com` })
-        ).unwrap();
+        await dispatch(verifyEmailThunk({ emailAddress: email })).unwrap();
 
         setStep(Step.EMAIL);
 
@@ -325,10 +324,11 @@ const VerifyEmail2FA: React.FC<{
   });
 
   const onSubmit = async (values: IMultiFactorAuthEmail) => {
+    const email = getUserEmail();
     try {
       await dispatch(
         verifyEmailWithTokenThunk({
-          emailAddress: `ukn.umer@gmail.com`,
+          emailAddress: email,
           token: values.token,
         })
       ).unwrap();
