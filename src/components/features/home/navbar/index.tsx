@@ -14,7 +14,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="px-4 lg:px-6 h-16 flex items-center bg-primary text-white">
+    <header className="px-4 lg:px-6 h-16 flex items-center bg-primary text-white fixed w-full z-50">
       <CompanyLogo />
       <button
         className="ml-auto block lg:hidden"
