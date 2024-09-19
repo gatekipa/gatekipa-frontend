@@ -6,7 +6,7 @@ import { MenuIcon, X } from "lucide-react";
 import CompanyLogo from "../companyLogo";
 import { getUsername } from "@/utils";
 
-const Navbar: React.FC = () => {
+const Navbar: React.FC<{ isAuth?: boolean }> = ({ isAuth = false }) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   const toggleMenu = () => {
@@ -14,7 +14,11 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="px-4 lg:px-6 h-16 flex items-center bg-primary text-white fixed w-full z-50">
+    <header
+      className={`px-4 lg:px-6 h-16 flex items-center text-white fixed w-full z-50 ${
+        isAuth ? "bg-gradient-to-r from-primary to-slate-700" : "bg-primary"
+      }`}
+    >
       <CompanyLogo />
       <button
         className="ml-auto block lg:hidden"
