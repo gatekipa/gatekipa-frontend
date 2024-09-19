@@ -11,6 +11,7 @@ import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import PromotionalPricingModal from "../promotionalPricingModal";
 
 const PlanCard: React.FC<{
   plan: IPlan;
@@ -21,14 +22,21 @@ const PlanCard: React.FC<{
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [showMore, setShowMore] = useState(true);
+  const [showPromotionalPricingModal, setShowPromotionalPricingModal] =
+    useState<boolean>(false);
 
   const onPlanClickHandler = useCallback(async () => {
     try {
+      if (plan.isPromotionalPlan) {
+        setShowPromotionalPricingModal(true);
+        return;
+      }
       dispatch(setSelectedPlan(plan));
       await dispatch(
         createPaymentIntent({
           actualAmount: plan.price,
           payableAmount: plan.price,
+          noOfMonths: 0,
         })
       ).unwrap();
 
@@ -43,6 +51,7 @@ const PlanCard: React.FC<{
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
+      key={plan.id}
       className={`rounded-2xl shadow-xl overflow-hidden`}
     >
       <div className={`bg-gradient-to-br ${gradientClass} p-6 text-white`}>
@@ -126,6 +135,13 @@ const PlanCard: React.FC<{
           Choose Plan
         </motion.button>
       </div>
+      {showPromotionalPricingModal && (
+        <PromotionalPricingModal
+          open={showPromotionalPricingModal}
+          onClose={() => setShowPromotionalPricingModal(false)}
+          pricingPlan={plan}
+        />
+      )}
     </motion.div>
   );
 };

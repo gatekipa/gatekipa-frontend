@@ -15,13 +15,6 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 const CheckoutPage: React.FC = () => {
   const stripe = useStripe();
@@ -30,17 +23,24 @@ const CheckoutPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [coupon, setCoupon] = useState<string | undefined>(undefined);
-  const [promotionalPrices, setPromotionalPrices] = useState<
-    string | undefined
-  >(undefined);
   const [isFormComplete, setIsFormComplete] = useState<boolean>(false);
 
-  const {
+  let {
     paymentIntent,
     selectedPlan,
     loading: { APPLY_COUPON_DISCOUNT },
     couponResponse,
   } = useAppSelector((state) => state.pricing);
+
+  const getSelectedPlan = () => {
+    return selectedPlan ?? JSON.parse(localStorage.getItem("selectedPlan")!);
+  };
+
+  selectedPlan = getSelectedPlan();
+
+  const selectedPricing = JSON.parse(
+    localStorage.getItem("selectedPromotionalPricing")!
+  ) as { noOfMonths: string; discountedPrice: string };
 
   const onSubmitHandler = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
@@ -66,7 +66,6 @@ const CheckoutPage: React.FC = () => {
         setError(paymentInfo?.error.message);
       } else {
         if (!selectedPlan?.isPromotionalPlan) {
-          console.log("INSDIE FIRS :>> ");
           await dispatch(
             confirmPayment({
               actualAmount: selectedPlan?.price!,
@@ -75,18 +74,10 @@ const CheckoutPage: React.FC = () => {
               stripePayment: paymentInfo,
               appliedDiscountId: couponResponse?.appliedDiscountId ?? "",
               discountedAmount: couponResponse?.discountedAmount ?? 0,
+              noOfMonths: 0,
             })
           ).unwrap();
         } else {
-          console.log("INSDIE SECDAS :>> ");
-          console.log("promotionalPrices :>> ", promotionalPrices);
-
-          const months = promotionalPrices?.split("-")[0];
-          const discount = promotionalPrices?.split("-")[1];
-
-          console.log("months :>> ", months);
-          console.log("discount :>> ", discount);
-
           await dispatch(
             confirmPayment({
               actualAmount: selectedPlan?.price!,
@@ -95,10 +86,7 @@ const CheckoutPage: React.FC = () => {
               stripePayment: paymentInfo,
               appliedDiscountId: couponResponse?.appliedDiscountId ?? "",
               discountedAmount: couponResponse?.discountedAmount ?? 0,
-              promotionalPlan: {
-                noOfMonths: parseInt(months!),
-                discountedPrice: parseInt(discount!),
-              },
+              noOfMonths: parseInt(selectedPricing.noOfMonths),
             })
           ).unwrap();
         }
@@ -114,7 +102,7 @@ const CheckoutPage: React.FC = () => {
       paymentIntent?.clientSecret,
       selectedPlan,
       couponResponse,
-      promotionalPrices,
+      selectedPricing,
     ]
   );
 
@@ -152,7 +140,7 @@ const CheckoutPage: React.FC = () => {
                   : setIsFormComplete(false);
               }}
             />
-            {!selectedPlan?.isPromotionalPlan ? (
+            {!selectedPlan?.isPromotionalPlan && (
               <div className="flex items-center gap-x-2">
                 <div className="w-full space-y-1">
                   <Label className="text-sm">Coupon Code</Label>
@@ -173,39 +161,22 @@ const CheckoutPage: React.FC = () => {
                   Apply
                 </Button>
               </div>
-            ) : (
-              <div className="flex items-center gap-x-2">
-                <div className="w-full space-y-1">
-                  <Label className="text-sm">Promotional Plan</Label>
-                  <Select
-                    onValueChange={(value) => setPromotionalPrices(value)}
-                    defaultValue={promotionalPrices?.toString()}
-                    disabled={!isFormComplete}
-                  >
-                    <SelectTrigger className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0">
-                      <SelectValue placeholder="Please select the promotional pricing" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {selectedPlan?.promotionalPricing.map((pricing) => (
-                        <SelectItem
-                          key={pricing.discountedPrice}
-                          value={`${pricing.noOfMonths?.toString()}-${pricing.discountedPrice?.toString()}`}
-                        >
-                          {pricing.noOfMonths} Months - $
-                          {pricing.discountedPrice}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
             )}
 
-            {couponResponse?.discountedAmount && (
+            {couponResponse?.discountedAmount ? (
               <div className="flex items-center justify-between">
                 <div className="text-sm">Discounted Amount</div>
                 <div className="text-sm">
                   -${couponResponse?.discountedAmount}
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between">
+                <div className="text-sm">
+                  Your payable amount for {selectedPricing?.noOfMonths} Months
+                </div>
+                <div className="text-base">
+                  ${selectedPricing?.discountedPrice}
                 </div>
               </div>
             )}

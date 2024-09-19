@@ -21,6 +21,7 @@ export interface IPlan {
 export interface IPaymentIntentRequest {
   actualAmount: number;
   payableAmount: number;
+  noOfMonths: number;
 }
 
 export interface IConfirmPaymentRequest {
@@ -29,10 +30,7 @@ export interface IConfirmPaymentRequest {
   planId: string;
   discountedAmount?: number;
   appliedDiscountId?: string;
-  promotionalPlan?: {
-    discountedPrice: number;
-    noOfMonths: number;
-  };
+  noOfMonths: number;
   stripePayment: any;
 }
 
