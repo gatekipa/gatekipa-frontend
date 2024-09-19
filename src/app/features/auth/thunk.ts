@@ -124,10 +124,6 @@ const loginThunk: AsyncThunk<IUser, ILoginRequest, {}> = createAsyncThunk(
   "users/login",
   async (loginDetails: ILoginRequest, thunkAPI) => {
     try {
-      // const response = await AuthNetworkManager.post<IUser, ILoginRequest>(
-      //   `/users/signin`,
-      //   loginDetails
-      // );
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_API_URL}/users/signin`,
         loginDetails,

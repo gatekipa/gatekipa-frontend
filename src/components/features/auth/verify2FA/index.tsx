@@ -1,7 +1,5 @@
 import {
-  verifyEmailThunk,
   verifyEmailWithTokenThunk,
-  verifySMSThunk,
   verifySMSWithTokenThunk,
 } from "@/app/features/auth/thunk";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
@@ -20,7 +18,6 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -37,20 +34,6 @@ const Verify2FAForm = () => {
 
   const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (
-      user?.isMultiFactorAuthEnabled &&
-      user?.multiFactorAuthMediums?.includes("EMAIL")
-    ) {
-      dispatch(verifyEmailThunk({ emailAddress: user.emailAddress }));
-    } else if (
-      user?.isMultiFactorAuthEnabled &&
-      user?.multiFactorAuthMediums?.includes("SMS")
-    ) {
-      dispatch(verifySMSThunk({ mobileNo: "+13014335857" }));
-    }
-  }, [user]);
 
   const form = useForm({
     resolver: zodResolver(verify2FAFormSchema),

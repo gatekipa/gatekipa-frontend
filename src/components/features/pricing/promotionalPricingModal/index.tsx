@@ -83,7 +83,6 @@ const PromotionalPricingModal: React.FC<{
               </Label>
               <Select
                 onValueChange={(value) => {
-                  console.log(value);
                   setSelectedPricing(value);
                 }}
               >
