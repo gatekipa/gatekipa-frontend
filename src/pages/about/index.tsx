@@ -20,7 +20,7 @@ export default function AboutPage() {
         transition={{ duration: 0.8 }}
       >
         <motion.h1
-          className="text-4xl font-bold text-center text-primary mb-8"
+          className="text-4xl font-bold text-center text-primary mb-8 mt-20"
           {...fadeInUp}
         >
           About Us

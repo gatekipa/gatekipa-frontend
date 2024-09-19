@@ -11,7 +11,7 @@ const PrivacyPage: React.FC = () => {
     <div className="min-h-screen bg-gray-100">
       <Navbar />
       <div className="max-w-4xl mx-auto  py-12 px-4 sm:px-6 lg:px-8">
-        <Card className="mb-8">
+        <Card className="mb-8 mt-20">
           <CardHeader className="text-center">
             <div className="mx-auto bg-primary rounded-full p-3 w-16 h-16 flex items-center justify-center mb-4">
               <Shield className="h-8 w-8 text-primary-foreground" />

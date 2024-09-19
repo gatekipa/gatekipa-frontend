@@ -42,7 +42,7 @@ const TermsAndConditionsPage: React.FC = () => {
         variants={containerVariants}
       >
         <motion.h1
-          className="mb-8 text-center text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl"
+          className="mb-8 text-center text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl mt-20"
           variants={itemVariants}
         >
           Terms and Conditions
