@@ -1,5 +1,6 @@
 import {
   AlertCircleIcon,
+  BadgeDollarSign,
   Clipboard,
   DollarSignIcon,
   FileIcon,
@@ -98,9 +99,9 @@ const superAdminRoutes: Route[] = [
     icon: <LayoutDashboardIcon size={18} />,
   },
   {
-    label: "Settings",
-    href: "/dashboard/settings",
-    icon: <Settings size={18} />,
+    label: "Discounts",
+    href: "/dashboard/discounts",
+    icon: <BadgeDollarSign size={18} />,
   },
   {
     label: "Pricing",
@@ -111,6 +112,11 @@ const superAdminRoutes: Route[] = [
     label: "Companies",
     href: "/dashboard/discounted-companies",
     icon: <GemIcon size={18} />,
+  },
+  {
+    label: "Settings",
+    href: "/dashboard/settings",
+    icon: <Settings size={18} />,
   },
 ];
 

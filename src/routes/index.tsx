@@ -32,6 +32,7 @@ import EditPricingPage from "@/pages/pricing/edit";
 import ContactPage from "@/pages/contact";
 import DiscountedCompaniesPage from "@/pages/discountedCompanies";
 import PricingLandingPage from "@/pages/pricing-landing";
+import DiscountsPage from "@/pages/dashboard/discounts";
 
 const router = createBrowserRouter([
   {
@@ -125,6 +126,10 @@ const router = createBrowserRouter([
       {
         path: "discounted-companies",
         element: <DiscountedCompaniesPage />,
+      },
+      {
+        path: "discounts",
+        element: <DiscountsPage />,
       },
     ],
   },
