@@ -4,6 +4,7 @@ import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import { IVisitor } from "../company/thunk";
 import { EmergencyTab } from "@/pages/dashboard/emergency";
+import { IShiftRequest } from "@/components/features/shifts/create";
 // import { IBaseResponse } from "../auth/thunk";
 
 export interface IShift {
@@ -157,6 +158,31 @@ const createEmployeeThunk: AsyncThunk<IEmployee, ICreateEmployeeForm, {}> =
 
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_API_URL}/employee`,
+        body,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  });
+
+const createShiftThunk: AsyncThunk<IShift, IShiftRequest, {}> =
+  createAsyncThunk("employee/shift/create/", async (body, thunkAPI) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL}/shift`,
         body,
         {
           withCredentials: true,
@@ -512,4 +538,5 @@ export {
   fetchVisitorReports,
   fetchEmergencyListByType,
   sendEmergencyEmail,
+  createShiftThunk,
 };

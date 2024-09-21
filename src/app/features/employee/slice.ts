@@ -1,7 +1,8 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import {
   changeEmployeeStatusThunk,
   createEmployeeThunk,
+  createShiftThunk,
   editEmployeeThunk,
   employeeCheckInThunk,
   employeeCheckOutThunk,
@@ -18,8 +19,8 @@ import {
   IEmployeeVisit,
   IShift,
   IVisitorReport,
-} from './thunk';
-import { EmergencyTab } from '@/pages/dashboard/emergency';
+} from "./thunk";
+import { EmergencyTab } from "@/pages/dashboard/emergency";
 
 export interface EmployeeState {
   employees: IEmployee[];
@@ -47,7 +48,7 @@ const initialState: EmployeeState = {
 };
 
 export const employeeSlice = createSlice({
-  name: 'employee',
+  name: "employee",
   initialState,
   reducers: {},
   extraReducers(builder) {
@@ -219,6 +220,19 @@ export const employeeSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(employeeCheckOutThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      createShiftThunk.fulfilled,
+      (state, action: PayloadAction<IShift>) => {
+        state.shifts = [action.payload, ...state.shifts];
+        state.loading = false;
+      }
+    );
+    builder.addCase(createShiftThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(createShiftThunk.rejected, (state) => {
       state.loading = false;
     });
   },
