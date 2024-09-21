@@ -102,7 +102,7 @@ function isMultiFactorAuthEnabled() {
 function getUserPlanId(): string {
   const user = JSON.parse(localStorage.getItem("userInfo")!);
   if (!user) return "";
-  return user.companyId?.plan.id ?? "";
+  return user.companyId?.plan?.id ?? "";
 }
 
 export {
