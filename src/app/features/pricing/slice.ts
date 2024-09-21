@@ -198,6 +198,8 @@ export const pricingSlice = createSlice({
           "userInfo",
           JSON.stringify({ data: action.payload })
         );
+        localStorage.removeItem("selectedPlan");
+        localStorage.removeItem("selectedPromotionalPricing");
         state.loading[PricingApiEndpoint.CONFIRM_PAYMENT] = false;
       }
     );
