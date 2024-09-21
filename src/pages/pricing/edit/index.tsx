@@ -100,6 +100,18 @@ const EditPricingPage: React.FC = () => {
         id: id!,
       };
 
+      if (_values.isPromotionalPlan && promotionalPrices.length === 0) {
+        return toast.error("Please add promotional pricing");
+      }
+
+      if (_values.assignedFeatures.length === 0) {
+        return toast.error("Please select features");
+      }
+
+      if (!_values.isPromotionalPlan) {
+        _values.promotionalPricing = [];
+      }
+
       try {
         // @ts-ignore
         await dispatch(editPricingPlan(_values)).unwrap();
