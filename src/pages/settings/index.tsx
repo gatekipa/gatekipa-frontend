@@ -295,12 +295,18 @@ const SettingsPage: React.FC = () => {
 
         {step === Step.COMPLETE && (
           <div>
-            <p>Two factor authentication has been enabled successfully. </p>
-            <span>
-              <Button variant="link" onClick={() => setStep(Step.CONFIGURE)}>
+            <p className="mt-4 text-center">
+              Two factor authentication has been enabled successfully.{" "}
+            </p>
+            <div className="text-center">
+              <Button
+                variant="link"
+                onClick={() => setStep(Step.CONFIGURE)}
+                className="underline mt-5"
+              >
                 Click here to revisit configuration.
               </Button>
-            </span>
+            </div>
           </div>
         )}
       </CardContent>
@@ -326,12 +332,25 @@ const VerifyEmail2FA: React.FC<{
   const onSubmit = async (values: IMultiFactorAuthEmail) => {
     const email = getUserEmail();
     try {
-      await dispatch(
-        verifyEmailWithTokenThunk({
-          emailAddress: email,
-          token: values.token,
-        })
-      ).unwrap();
+      if (step === Step.EMAIL && !both) {
+        await dispatch(
+          verifyEmailWithTokenThunk({
+            emailAddress: email,
+            token: values.token,
+          })
+        ).unwrap();
+
+        await dispatch(
+          changeUserSettingsThunk({
+            isMultiFactorAuthEnabled: true,
+            multiFactorAuthMediums: [MultiFactorAuthMedium.EMAIL],
+          })
+        ).unwrap();
+
+        setStep(Step.COMPLETE);
+
+        toast.success("Email setup successfully for 2FA.");
+      }
 
       if (step === Step.EMAIL && both) {
         await dispatch(verifySMSThunk({ mobileNo: `+13014335857` })).unwrap();
@@ -357,7 +376,7 @@ const VerifyEmail2FA: React.FC<{
   return (
     <Form {...emailTokenform}>
       <form onSubmit={emailTokenform.handleSubmit(onSubmit)} className="my-4">
-        <h3 className="text-sm">Verify Email</h3>
+        <h3 className="text-lg font-semibold mb-3">Verify Email</h3>
         <div className="grid w-full items-center gap-4">
           <div className="flex flex-col space-y-1.5">
             <FormField
