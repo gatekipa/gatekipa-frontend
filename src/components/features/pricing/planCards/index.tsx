@@ -8,10 +8,11 @@ import { useAppDispatch } from "@/app/hooks";
 import { Badge } from "@/components/ui/badge";
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import PromotionalPricingModal from "../promotionalPricingModal";
+import { getUserPlanId } from "@/utils";
 
 const PlanCard: React.FC<{
   plan: IPlan;
@@ -46,6 +47,11 @@ const PlanCard: React.FC<{
       toast.error(error as string);
     }
   }, [plan, dispatch]);
+
+  const hasSamePlan = useMemo(() => {
+    const userPlanId = getUserPlanId();
+    return userPlanId === plan.id;
+  }, [plan]);
 
   return (
     <motion.div
@@ -125,16 +131,19 @@ const PlanCard: React.FC<{
             <ChevronDownIcon className="w-5 h-5 ml-1" />
           )}
         </button>
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className={`mt-6 w-full bg-gradient-to-r ${gradientClass} text-white py-2 px-4 rounded-full transition-all duration-200 hover:shadow-lg`}
-          onClick={() => {
-            onPlanStartedClick ? onPlanStartedClick() : onPlanClickHandler();
-          }}
-        >
-          Choose Plan
-        </motion.button>
+
+        {!hasSamePlan && (
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className={`mt-6 w-full bg-gradient-to-r ${gradientClass} text-white py-2 px-4 rounded-full transition-all duration-200 hover:shadow-lg`}
+            onClick={() => {
+              onPlanStartedClick ? onPlanStartedClick() : onPlanClickHandler();
+            }}
+          >
+            Choose Plan
+          </motion.button>
+        )}
       </div>
       {showPromotionalPricingModal && (
         <PromotionalPricingModal
