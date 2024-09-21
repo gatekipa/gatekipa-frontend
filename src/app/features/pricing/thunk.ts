@@ -67,6 +67,20 @@ export interface IPlanDetail {
   id: string;
 }
 
+export interface IPlanDetailModel {
+  plan: IPlan & {
+    promotionalPricing: { discountedPrice: number; noOfMonths: number }[];
+  };
+  assignedFeatures: {
+    feature: { featureId: string; name: string; code: string };
+    subFeature: { featureId: string; name: string; code: string }[];
+  }[];
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+}
+
 export interface IFeature {
   id: string;
   type: "MODULE" | "PERMISSION";
@@ -164,7 +178,7 @@ const fetchPricingPlans: AsyncThunk<IPricingPlanModel[], void, {}> =
     }
   });
 
-const fetchPricingPlanById: AsyncThunk<IPlanDetail, { id: string }, {}> =
+const fetchPricingPlanById: AsyncThunk<IPlanDetailModel, { id: string }, {}> =
   createAsyncThunk("pricing/plans/id", async ({ id }, thunkAPI) => {
     try {
       const response = await axios.get(

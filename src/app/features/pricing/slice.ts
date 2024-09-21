@@ -23,7 +23,7 @@ import {
   IInvoice,
   IPaymentIntent,
   IPlan,
-  IPlanDetail,
+  IPlanDetailModel,
   IPricingPlanModel,
   ISuperAdminPricingPlan,
   sendDiscountMail,
@@ -56,7 +56,7 @@ export interface PricingState {
   paymentIntent: IPaymentIntent | null;
   loading: { [key in PricingApiEndpoint]?: boolean };
   plans: IPricingPlanModel[];
-  plan: IPlanDetail | null;
+  plan: IPlanDetailModel | null;
   invoices: IInvoice[];
   modules: IFeature[];
   permissions: IFeature[];
@@ -152,7 +152,7 @@ export const pricingSlice = createSlice({
     });
     builder.addCase(
       fetchPricingPlanById.fulfilled,
-      (state, action: PayloadAction<IPlanDetail>) => {
+      (state, action: PayloadAction<IPlanDetailModel>) => {
         state.plan = action.payload;
         state.loading[PricingApiEndpoint.FETCH_PLAN] = false;
       }

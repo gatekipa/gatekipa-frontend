@@ -77,7 +77,14 @@ const EditPricingPage: React.FC = () => {
         isPromotionalPlan: plan.plan.isPromotionalPlan,
         isActive: plan.plan.isActive,
       });
-      setAssignedFeatures(plan.assignedFeatures);
+
+      setAssignedFeatures(
+        plan.assignedFeatures.map((item) => ({
+          feature: item.feature.featureId,
+          subFeature: item.subFeature.map((sub) => sub.featureId),
+        }))
+      );
+
       setPromotionalPrices(plan.plan.promotionalPricing);
     }
   }, [plan, loading]);
@@ -410,9 +417,14 @@ const EditPricingPage: React.FC = () => {
                     >
                       <h5 className="text-lg font-semibold mb-2">
                         <Checkbox
-                          checked={assignedFeatures.some(
-                            (item) => item.feature === module.id
-                          )}
+                          checked={
+                            // !!plan?.assignedFeatures.find(
+                            //   (af) => af.feature.featureId === module.id
+                            // ) ||
+                            assignedFeatures.some(
+                              (item) => item.feature === module.id
+                            )
+                          }
                           onCheckedChange={() => handleModuleChange(module.id)}
                         />
                         <span className="ml-2">{module.name}</span>
