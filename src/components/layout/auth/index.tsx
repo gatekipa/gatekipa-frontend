@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import logo from "../../../assets/logo.svg";
 import Navbar from "@/components/features/home/navbar";
+import Footer from "@/components/shared/footer";
 
 const AuthLayout: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const AuthLayout: React.FC = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   );
 };
