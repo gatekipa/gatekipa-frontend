@@ -56,7 +56,7 @@ const VerifyEmailForm: React.FC = () => {
   return (
     <Card className="w-[350px] md:w-[700px]">
       <CardHeader className="space-y-2">
-        <CardTitle>Email Verification</CardTitle>
+        <CardTitle>Sign Up - Register to Gate Kipa</CardTitle>
         <CardDescription className="text-xs">
           Get started by verifying your email address.
         </CardDescription>
@@ -98,7 +98,7 @@ const VerifyEmailForm: React.FC = () => {
                   loading={false}
                   type="submit"
                   className="w-full"
-                  label="Verify"
+                  label="Next"
                 />
               </div>
               <p>
