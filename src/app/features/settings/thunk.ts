@@ -47,6 +47,13 @@ const changeUserSettingsThunk: AsyncThunk<
       }
     );
 
+    const userInfo = JSON.parse(localStorage.getItem("userInfo")!);
+
+    userInfo.isMultiFactorAuthEnabled = body.isMultiFactorAuthEnabled;
+    userInfo.multiFactorAuthMediums = body.multiFactorAuthMediums;
+
+    localStorage.setItem("userInfo", JSON.stringify(userInfo));
+
     return response.data.data;
   } catch (error) {
     const axiosError = error as AxiosError<{ message: string }>;
