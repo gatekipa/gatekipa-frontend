@@ -132,7 +132,7 @@ const CheckoutPage: React.FC = () => {
           <h2 className="text-3xl font-semibold">Checkout</h2>
         </CardHeader>
         <CardContent>
-          <form onClick={onSubmitHandler} className="space-y-3">
+          <form onSubmit={onSubmitHandler} className="space-y-3">
             <PaymentElement
               onChange={(event) => {
                 event.complete
