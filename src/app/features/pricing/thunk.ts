@@ -337,7 +337,7 @@ const editPricingPlan: AsyncThunk<IPlan, IPlan, {}> = createAsyncThunk(
   "pricing/plan/edit",
   async (plan, thunkAPI) => {
     try {
-      const response = await axios.post(
+      const response = await axios.put(
         `${import.meta.env.VITE_BASE_API_URL}/plan/${plan.id}`,
         plan,
         {
