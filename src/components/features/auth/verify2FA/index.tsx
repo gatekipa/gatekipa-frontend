@@ -1,8 +1,5 @@
-import {
-  verifyEmailWithTokenThunk,
-  verifySMSWithTokenThunk,
-} from "@/app/features/auth/thunk";
-import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { verifyMfaThunk } from "@/app/features/auth/thunk";
+import { useAppDispatch } from "@/app/hooks";
 import LoadingButton from "@/components/shared/loadingButton";
 import {
   Form,
@@ -32,7 +29,6 @@ export type IVerify2FAForm = z.infer<typeof verify2FAFormSchema>;
 const Verify2FAForm = () => {
   const navigate = useNavigate();
 
-  const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const form = useForm({
@@ -45,28 +41,7 @@ const Verify2FAForm = () => {
 
   const onSubmit = async (values: IVerify2FAForm) => {
     try {
-      if (
-        user?.isMultiFactorAuthEnabled &&
-        user?.multiFactorAuthMediums?.includes("EMAIL")
-      ) {
-        await dispatch(
-          verifyEmailWithTokenThunk({
-            token: values.token,
-            emailAddress: user.emailAddress,
-          })
-        ).unwrap();
-      } else if (
-        user?.isMultiFactorAuthEnabled &&
-        user?.multiFactorAuthMediums?.includes("SMS")
-      ) {
-        await dispatch(
-          verifySMSWithTokenThunk({
-            token: values.token,
-            mobileNo: "+13014335857",
-          })
-        ).unwrap();
-      }
-
+      await dispatch(verifyMfaThunk(values)).unwrap();
       navigate("/dashboard");
     } catch (error) {
       toast.error(error as string);

@@ -10,6 +10,7 @@ import {
   updatePasswordThunk,
   verifyEmailThunk,
   verifyEmailWithTokenThunk,
+  verifyMfaThunk,
   verifySMSThunk,
   verifySMSWithTokenThunk,
   verifyTokenThunk,
@@ -179,12 +180,23 @@ export const authSlice = createSlice({
     builder.addCase(logoutThunk.fulfilled, (state) => {
       state.user = null;
       localStorage.removeItem("userInfo");
+      localStorage.removeItem("otp");
       state.loading = false;
     });
     builder.addCase(logoutThunk.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(logoutThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(verifyMfaThunk.fulfilled, (state) => {
+      state.loading = false;
+      localStorage.setItem("otp", JSON.stringify({ isVerified: true }));
+    });
+    builder.addCase(verifyMfaThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(verifyMfaThunk.rejected, (state) => {
       state.loading = false;
     });
   },

@@ -372,6 +372,33 @@ const updatePasswordThunk: AsyncThunk<any, IUpdatePasswordRequest, {}> =
       }
     }
   );
+
+const verifyMfaThunk: AsyncThunk<any, { token: string }, {}> = createAsyncThunk(
+  "users/verify/mfa",
+  async ({ token }, thunkAPI) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL}/users/verify-mfa-token`,
+        { token },
+        { withCredentials: true }
+      );
+
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
+
 export {
   registerUserThunk,
   loginThunk,
@@ -384,4 +411,5 @@ export {
   verifySMSThunk,
   verifySMSWithTokenThunk,
   logoutThunk,
+  verifyMfaThunk,
 };

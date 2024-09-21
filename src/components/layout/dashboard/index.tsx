@@ -15,12 +15,29 @@ const DashboardLayout: React.FC = () => {
   const role = getUserRole() as UserRole;
 
   useEffect(() => {
+    const role = getUserRole() as UserRole;
+    if (!role) {
+      navigate("/auth/login");
+    }
+  }, []);
+
+  useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
 
     if (!user && !userInfo) {
       navigate("/auth/login");
     }
   }, [user]);
+
+  useEffect(() => {
+    const otp = JSON.parse(localStorage.getItem("otp")!) as {
+      isVerified: boolean;
+    };
+
+    if (!otp.isVerified) {
+      navigate("/auth/login");
+    }
+  }, []);
 
   const routes = useMemo(() => {
     return mappedRoutes[role];
@@ -34,7 +51,7 @@ const DashboardLayout: React.FC = () => {
           <Card className="col-span-1 py-4 rounded-none">
             <CardContent>
               <aside>
-                {routes.map((route) => (
+                {routes?.map((route) => (
                   <NavLink
                     key={route.href}
                     to={route.href}

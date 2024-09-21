@@ -7,6 +7,8 @@ import router from "./routes";
 import "./index.css";
 import { Toaster } from "./components/ui/sonner";
 
+localStorage.setItem("otp", JSON.stringify({ isVerified: false }));
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>

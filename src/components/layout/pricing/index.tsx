@@ -2,8 +2,8 @@ import { ThemeProvider } from "@/components/providers/theme";
 import Navbar from "@/components/shared/navbar";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
-import React from "react";
-import { Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const stripe = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -20,6 +20,17 @@ const stripeOptions: StripeElementsOptions = {
 };
 
 const PricingLayout: React.FC = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const otp = JSON.parse(localStorage.getItem("otp")!) as {
+      isVerified: boolean;
+    };
+
+    if (!otp.isVerified) {
+      navigate("/auth/login");
+    }
+  }, []);
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Elements stripe={stripe} options={stripeOptions}>
