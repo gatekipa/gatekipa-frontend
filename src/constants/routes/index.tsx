@@ -7,6 +7,7 @@ import {
   GemIcon,
   LayoutDashboardIcon,
   Settings,
+  TimerIcon,
   User2Icon,
   UsersIcon,
 } from "lucide-react";
@@ -63,6 +64,11 @@ const adminRoutes: Route[] = [
     label: "Settings",
     href: "/dashboard/settings",
     icon: <Settings size={18} />,
+  },
+  {
+    label: "Shifts",
+    href: "/dashboard/shifts",
+    icon: <TimerIcon size={18} />,
   },
 ];
 

@@ -33,6 +33,7 @@ import ContactPage from "@/pages/contact";
 import DiscountedCompaniesPage from "@/pages/discountedCompanies";
 import PricingLandingPage from "@/pages/pricing-landing";
 import DiscountsPage from "@/pages/dashboard/discounts";
+import ShiftsPage from "@/pages/shifts";
 
 const router = createBrowserRouter([
   {
@@ -130,6 +131,10 @@ const router = createBrowserRouter([
       {
         path: "discounts",
         element: <DiscountsPage />,
+      },
+      {
+        path: "shifts",
+        element: <ShiftsPage />,
       },
     ],
   },
