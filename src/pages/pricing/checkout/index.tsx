@@ -1,4 +1,4 @@
-import React, { FormEvent, useCallback, useState } from "react";
+import React, { FormEvent, useCallback, useEffect, useState } from "react";
 import {
   PaymentElement,
   useElements,
@@ -12,9 +12,10 @@ import {
   confirmPayment,
 } from "@/app/features/pricing/thunk";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { usePricingPlanById } from "@/hooks/pricing";
 
 const CheckoutPage: React.FC = () => {
   const stripe = useStripe();
@@ -25,19 +26,20 @@ const CheckoutPage: React.FC = () => {
   const [coupon, setCoupon] = useState<string | undefined>(undefined);
   const [isFormComplete, setIsFormComplete] = useState<boolean>(false);
   const [discountedAmount, setDiscountedAmount] = useState<number | null>(null);
+  const [couponPayable, setCouponPayable] = useState<{
+    discountedAmount: number;
+    payableAmount: number;
+  }>({ discountedAmount: 0, payableAmount: 0 });
+
+  const { id } = useParams();
+
+  const { plan: receivedPlan } = usePricingPlanById(id!);
 
   let {
     paymentIntent,
-    selectedPlan,
     loading: { APPLY_COUPON_DISCOUNT },
     couponResponse,
   } = useAppSelector((state) => state.pricing);
-
-  const getSelectedPlan = () => {
-    return selectedPlan ?? JSON.parse(localStorage.getItem("selectedPlan")!);
-  };
-
-  selectedPlan = getSelectedPlan();
 
   const selectedPricing = JSON.parse(
     localStorage.getItem("selectedPromotionalPricing")!
@@ -66,28 +68,32 @@ const CheckoutPage: React.FC = () => {
       if (paymentInfo?.error) {
         setError(paymentInfo?.error.message);
       } else {
-        if (!selectedPlan?.isPromotionalPlan) {
+        if (!receivedPlan?.plan?.isPromotionalPlan) {
           await dispatch(
             confirmPayment({
-              actualAmount: selectedPlan?.price!,
-              payableAmount: selectedPlan?.price!,
-              planId: selectedPlan?.id!,
+              actualAmount: receivedPlan?.plan?.price!,
+              payableAmount: couponPayable?.payableAmount!,
+              planId: receivedPlan?.plan?.id!,
               stripePayment: paymentInfo,
               appliedDiscountId: couponResponse?.appliedDiscountId ?? "",
-              discountedAmount: couponResponse?.discountedAmount ?? 0,
-              noOfMonths: 0,
+              discountedAmount: couponPayable?.discountedAmount ?? 0,
+              noOfMonths:
+                receivedPlan?.plan?.subscriptionType === "YEARLY" ? 12 : 0,
             })
           ).unwrap();
         } else {
           await dispatch(
             confirmPayment({
-              actualAmount: selectedPlan?.price!,
-              payableAmount: selectedPlan?.price!,
-              planId: selectedPlan?.id!,
+              actualAmount: receivedPlan?.plan?.price!,
+              payableAmount: receivedPlan?.plan?.price!,
+              planId: receivedPlan?.plan?.id!,
               stripePayment: paymentInfo,
-              appliedDiscountId: couponResponse?.appliedDiscountId ?? "",
-              discountedAmount: parseInt(selectedPricing.discountedPrice) ?? 0,
-              noOfMonths: parseInt(selectedPricing.noOfMonths) ?? 0,
+              appliedDiscountId: "",
+              discountedAmount: 0,
+              noOfMonths:
+                receivedPlan?.plan?.subscriptionType === "YEARLY"
+                  ? 12
+                  : parseInt(selectedPricing.noOfMonths) ?? 0,
             })
           ).unwrap();
         }
@@ -101,9 +107,10 @@ const CheckoutPage: React.FC = () => {
       paymentIntent,
       elements,
       paymentIntent?.clientSecret,
-      selectedPlan,
+      receivedPlan,
       couponResponse,
       selectedPricing,
+      couponPayable,
     ]
   );
 
@@ -112,16 +119,43 @@ const CheckoutPage: React.FC = () => {
       const response = await dispatch(
         applyCouponDiscount({
           code: coupon!,
-          payableAmount: selectedPlan?.price!,
+          payableAmount: receivedPlan?.plan.price!,
         })
       ).unwrap();
-      console.log("response :>> ", response);
       setDiscountedAmount(response.discountedAmount);
+
+      setCouponPayable({
+        discountedAmount: response.discountedAmount!,
+        payableAmount: response.payableAmount!,
+      });
+
       toast.success("Coupon Applied Successfully");
     } catch (error) {
       setError(error as string);
     }
-  }, [coupon]);
+  }, [coupon, receivedPlan]);
+
+  useEffect(() => {
+    if (!receivedPlan) return;
+
+    if (!receivedPlan?.plan?.isPromotionalPlan) {
+      setCouponPayable({
+        discountedAmount: 0,
+        payableAmount: receivedPlan.plan.price,
+      });
+    } else {
+      const selectedPromotionalPricing = JSON.parse(
+        localStorage.getItem("selectedPromotionalPricing")!
+      ) as { noOfMonths: string; discountedPrice: string };
+
+      if (!selectedPromotionalPricing) return;
+      setCouponPayable({
+        discountedAmount: 0,
+        payableAmount:
+          parseInt(selectedPromotionalPricing?.discountedPrice!) ?? 0,
+      });
+    }
+  }, [receivedPlan]);
 
   return (
     <div className="h-1/2 my-auto">
@@ -129,7 +163,7 @@ const CheckoutPage: React.FC = () => {
         <div
           className={`absolute top-0 right-0 text-white bg-red-600 py-1 px-4 rounded-bl-lg rounded-tr-lg font-semibold shadow-md`}
         >
-          {selectedPlan?.planName?.toUpperCase() ?? "STANDARD"}
+          {receivedPlan?.plan?.planName?.toUpperCase()}
         </div>
         <CardHeader title="Payment">
           <h2 className="text-3xl font-semibold">Checkout</h2>
@@ -143,7 +177,7 @@ const CheckoutPage: React.FC = () => {
                   : setIsFormComplete(false);
               }}
             />
-            {!selectedPlan?.isPromotionalPlan && (
+            {!receivedPlan?.plan?.isPromotionalPlan && (
               <div className="flex items-center gap-x-2">
                 <div className="w-full space-y-1">
                   <Label className="text-sm">Coupon Code</Label>
@@ -151,7 +185,7 @@ const CheckoutPage: React.FC = () => {
                     placeholder="Please Enter The Coupon Code"
                     className="placeholder:text-xs"
                     value={coupon}
-                    disabled={!isFormComplete}
+                    disabled={!isFormComplete || !!discountedAmount}
                     onChange={(e) => setCoupon(e.target.value)}
                   />
                 </div>
@@ -167,23 +201,28 @@ const CheckoutPage: React.FC = () => {
                 ) : (
                   <Button
                     type="button"
+                    variant="destructive"
                     className="mt-6"
                     onClick={() => {
-                      setDiscountedAmount(null);
                       setCoupon("");
+                      setDiscountedAmount(null);
+                      setCouponPayable({
+                        discountedAmount: 0,
+                        payableAmount: receivedPlan?.plan?.price ?? 0,
+                      });
                     }}
                   >
-                    Clear Coupon
+                    Clear
                   </Button>
                 )}
               </div>
             )}
 
-            {couponResponse?.discountedAmount ? (
+            {!receivedPlan?.plan?.isPromotionalPlan ? (
               <div className="flex items-center justify-between">
-                <div className="text-sm">Discounted Amount</div>
+                <div className="text-sm">Discount Amount</div>
                 <div className="text-sm">
-                  -${couponResponse?.discountedAmount}
+                  ${couponPayable?.discountedAmount}
                 </div>
               </div>
             ) : (
@@ -191,18 +230,17 @@ const CheckoutPage: React.FC = () => {
                 <div className="text-sm">
                   Your payable amount for {selectedPricing?.noOfMonths} Months
                 </div>
-                <div className="text-base">
-                  ${selectedPricing?.discountedPrice}
-                </div>
+                <div className="text-base">${couponPayable?.payableAmount}</div>
               </div>
             )}
+
             <div className="w-full">
               <Button
                 type="submit"
                 className="w-full"
                 disabled={!stripe || !elements}
               >
-                Pay Now
+                Pay ${couponPayable.payableAmount}
               </Button>
             </div>
           </form>

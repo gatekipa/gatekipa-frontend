@@ -31,6 +31,7 @@ const PlanCard: React.FC<{
         setShowPromotionalPricingModal(true);
         return;
       }
+
       dispatch(setSelectedPlan(plan));
       await dispatch(
         createPaymentIntent({
@@ -40,7 +41,7 @@ const PlanCard: React.FC<{
         })
       ).unwrap();
 
-      navigate("checkout");
+      navigate(`checkout/${plan.id}`);
     } catch (error) {
       toast.error(error as string);
     }

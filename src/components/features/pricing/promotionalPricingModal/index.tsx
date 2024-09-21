@@ -42,13 +42,12 @@ const PromotionalPricingModal: React.FC<{
         })
       ).unwrap();
 
-      localStorage.setItem("selectedPlan", JSON.stringify(pricingPlan));
       localStorage.setItem(
         "selectedPromotionalPricing",
         JSON.stringify({ noOfMonths, discountedPrice })
       );
 
-      navigate("checkout");
+      navigate(`checkout/${pricingPlan.id}`);
     } catch (error) {
       toast.error(error as string);
     }
