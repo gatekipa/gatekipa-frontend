@@ -27,11 +27,11 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 const companyDetailsSchema = z.object({
-  name: z.string(),
-  address: z.string(),
-  companyCode: z.string(),
-  mobileNo: z.string(),
-  ownerFirstName: z.string(),
+  name: z.string().min(3),
+  address: z.string().min(3),
+  companyCode: z.string().min(3),
+  mobileNo: z.string().min(3),
+  ownerFirstName: z.string().min(3),
   ownerLastName: z.string(),
 });
 
