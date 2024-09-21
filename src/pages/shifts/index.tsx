@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import CreateShiftModal from "@/components/features/shifts/create";
 import { Pencil2Icon } from "@radix-ui/react-icons";
 import { Trash2Icon } from "lucide-react";
+import DeleteShiftModal from "@/components/features/shifts/delete";
 
 export const columns: ColumnDef<IShift>[] = [
   {
@@ -77,6 +78,7 @@ export const columns: ColumnDef<IShift>[] = [
     enableSorting: true,
     cell: ({ row }) => {
       const [open, setOpen] = useState<boolean>(false);
+      const [openDelete, setOpenDelete] = useState<boolean>(false);
 
       return (
         <div className="flex justify-center items-center gap-x-2">
@@ -84,7 +86,11 @@ export const columns: ColumnDef<IShift>[] = [
             <Pencil2Icon className="mr-2" />
             Edit
           </Button>
-          <Button variant="link" className="text-red-700">
+          <Button
+            variant="link"
+            className="text-red-700"
+            onClick={() => setOpenDelete(true)}
+          >
             <Trash2Icon size={16} className="mr-2" />
             Delete
           </Button>
@@ -93,6 +99,13 @@ export const columns: ColumnDef<IShift>[] = [
               onClose={() => setOpen(false)}
               open={open}
               shift={row.original}
+            />
+          )}
+          {openDelete && (
+            <DeleteShiftModal
+              onClose={() => setOpenDelete(false)}
+              open={openDelete}
+              id={row.original.id}
             />
           )}
         </div>

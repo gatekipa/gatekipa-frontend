@@ -3,6 +3,7 @@ import {
   changeEmployeeStatusThunk,
   createEmployeeThunk,
   createShiftThunk,
+  deleteShiftThunk,
   editEmployeeThunk,
   editShiftThunk,
   employeeCheckInThunk,
@@ -249,6 +250,21 @@ export const employeeSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(editShiftThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      deleteShiftThunk.fulfilled,
+      (state, action: PayloadAction<string>) => {
+        state.shifts = state.shifts.filter(
+          (shift) => shift.id !== action.payload
+        );
+        state.loading = false;
+      }
+    );
+    builder.addCase(deleteShiftThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteShiftThunk.rejected, (state) => {
       state.loading = false;
     });
   },

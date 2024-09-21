@@ -552,6 +552,27 @@ const editShiftThunk: AsyncThunk<IShift, IShift, {}> = createAsyncThunk(
   }
 );
 
+const deleteShiftThunk: AsyncThunk<string, { id: string }, {}> =
+  createAsyncThunk("employee/shift/delete/", async ({ id }, thunkAPI) => {
+    try {
+      await axios.delete(`${import.meta.env.VITE_BASE_API_URL}/shift/${id}`, {
+        withCredentials: true,
+      });
+      return id;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  });
+
 export {
   fetchEmployeesThunk,
   createEmployeeThunk,
@@ -567,4 +588,5 @@ export {
   sendEmergencyEmail,
   createShiftThunk,
   editShiftThunk,
+  deleteShiftThunk,
 };
