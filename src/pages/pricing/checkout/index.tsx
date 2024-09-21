@@ -86,7 +86,7 @@ const CheckoutPage: React.FC = () => {
               stripePayment: paymentInfo,
               appliedDiscountId: couponResponse?.appliedDiscountId ?? "",
               discountedAmount: parseInt(selectedPricing.discountedPrice) ?? 0,
-              noOfMonths: parseInt(selectedPricing.noOfMonths),
+              noOfMonths: parseInt(selectedPricing.noOfMonths) ?? 0,
             })
           ).unwrap();
         }
