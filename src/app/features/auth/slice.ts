@@ -64,6 +64,7 @@ export const authSlice = createSlice({
       (state, action: PayloadAction<IUser>) => {
         state.user = action.payload;
         localStorage.setItem("userInfo", JSON.stringify(action.payload));
+        localStorage.setItem("otp", JSON.stringify({ isVerified: true }));
         state.loading = false;
       }
     );
