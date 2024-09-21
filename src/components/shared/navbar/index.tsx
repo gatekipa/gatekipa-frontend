@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   Menubar,
   MenubarContent,
@@ -13,7 +13,7 @@ import { getCompany, getUsername } from "@/utils";
 import { ModeToggle } from "../themeToggle";
 import { Badge } from "@/components/ui/badge";
 import logo from "../../../assets/logo.svg";
-import { useAppDispatch } from "@/app/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { toast } from "sonner";
 import { logoutThunk } from "@/app/features/auth/thunk";
 
@@ -22,6 +22,7 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>();
+  const { company } = useAppSelector((state) => state.company);
 
   const handleLogout = useCallback(async () => {
     try {
@@ -32,7 +33,9 @@ const Navbar: React.FC = () => {
     }
   }, []);
 
-  const company = getCompany();
+  const companyName = useMemo(() => {
+    return company?.name ?? getCompany();
+  }, [company]);
 
   return (
     <Menubar className="flex items-center py-7 px-3 rounded-none md:justify-between">
@@ -46,7 +49,7 @@ const Navbar: React.FC = () => {
           </Link>
           {company && (
             <Badge variant="destructive" className="hidden uppercase md:block">
-              {company}
+              {companyName}
             </Badge>
           )}
         </div>

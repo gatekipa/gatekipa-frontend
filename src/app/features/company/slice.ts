@@ -97,7 +97,13 @@ export const companySlice = createSlice({
       editCompanyByIdThunk.fulfilled,
       (state, action: PayloadAction<ICompanyResponse>) => {
         state.company = action.payload;
+        console.log("company", action.payload);
         state.isLoading[CompanyApiEndpoint.EDIT_COMPANY] = false;
+        const user = JSON.parse(localStorage.getItem("userInfo")!);
+        if (user?.planInfo) {
+          user.planInfo.name = action.payload.name;
+          localStorage.setItem("userInfo", JSON.stringify(user));
+        }
       }
     );
     builder.addCase(editCompanyByIdThunk.pending, (state) => {
