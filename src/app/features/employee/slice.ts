@@ -4,6 +4,7 @@ import {
   createEmployeeThunk,
   createShiftThunk,
   editEmployeeThunk,
+  editShiftThunk,
   employeeCheckInThunk,
   employeeCheckOutThunk,
   fetchAllEmployeesVisits,
@@ -233,6 +234,21 @@ export const employeeSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(createShiftThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      editShiftThunk.fulfilled,
+      (state, action: PayloadAction<IShift>) => {
+        state.shifts = state.shifts.map((shift) =>
+          shift.id === action.payload.id ? action.payload : shift
+        );
+        state.loading = false;
+      }
+    );
+    builder.addCase(editShiftThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(editShiftThunk.rejected, (state) => {
       state.loading = false;
     });
   },

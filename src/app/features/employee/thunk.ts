@@ -525,6 +525,33 @@ const fetchEmployeeVisitsThunk: AsyncThunk<
   }
 });
 
+const editShiftThunk: AsyncThunk<IShift, IShift, {}> = createAsyncThunk(
+  "employee/shift/edit/",
+  async (body, thunkAPI) => {
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_BASE_API_URL}/shift/${body.id}`,
+        body,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
+
 export {
   fetchEmployeesThunk,
   createEmployeeThunk,
@@ -539,4 +566,5 @@ export {
   fetchEmergencyListByType,
   sendEmergencyEmail,
   createShiftThunk,
+  editShiftThunk,
 };

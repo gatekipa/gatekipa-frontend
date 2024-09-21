@@ -1,4 +1,8 @@
-import { createShiftThunk } from "@/app/features/employee/thunk";
+import {
+  createShiftThunk,
+  editShiftThunk,
+  IShift,
+} from "@/app/features/employee/thunk";
 import { useAppDispatch } from "@/app/hooks";
 import LoadingButton from "@/components/shared/loadingButton";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -52,30 +56,37 @@ export type IShiftRequest = z.infer<typeof shiftSchema>;
 const CreateShiftModal: React.FC<{
   open: boolean;
   onClose: () => void;
-}> = ({ open, onClose }) => {
+  shift?: IShift;
+}> = ({ open, onClose, shift }) => {
   const dispatch = useAppDispatch();
 
   const form = useForm<IShiftRequest>({
     resolver: zodResolver(shiftSchema),
     defaultValues: {
-      name: "",
-      startTime: "",
-      endTime: "",
-      isActive: true,
+      name: shift?.name ?? "",
+      startTime: shift?.startTime ?? "",
+      endTime: shift?.endTime ?? "",
+      isActive: shift?.isActive ?? true,
     },
   });
 
   const onSubmitHandler = useCallback(
     async (values: IShiftRequest) => {
       try {
-        await dispatch(createShiftThunk(values)).unwrap();
-        toast.success("Shift created successfully");
+        if (!shift) {
+          await dispatch(createShiftThunk(values)).unwrap();
+          toast.success("Shift created successfully");
+        } else {
+          const _values = { ...shift, ...values };
+          await dispatch(editShiftThunk(_values)).unwrap();
+          toast.success("Shift edited successfully");
+        }
         onClose();
       } catch (e) {
         toast.error(e as string);
       }
     },
-    [onClose]
+    [shift, onClose]
   );
 
   return (
@@ -89,9 +100,9 @@ const CreateShiftModal: React.FC<{
     >
       <DialogContent className="md:max-w-4xl">
         <DialogHeader>
-          <DialogTitle>Create New Shift</DialogTitle>
+          <DialogTitle>{!shift ? "Create New" : "Edit"} Shift</DialogTitle>
           <DialogDescription>
-            Fill out the form below to create a new shift
+            Fill out the form below to {!shift ? "create a new " : "edit"} shift
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

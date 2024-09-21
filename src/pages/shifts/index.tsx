@@ -7,6 +7,8 @@ import { IShift } from "@/app/features/employee/thunk";
 import ColumnHeader from "@/components/shared/columnHeader";
 import { Button } from "@/components/ui/button";
 import CreateShiftModal from "@/components/features/shifts/create";
+import { Pencil2Icon } from "@radix-ui/react-icons";
+import { Trash2Icon } from "lucide-react";
 
 export const columns: ColumnDef<IShift>[] = [
   {
@@ -15,7 +17,7 @@ export const columns: ColumnDef<IShift>[] = [
       <ColumnHeader
         column={column}
         label="Name"
-        className="flex justify-center items-center"
+        className="flex justify-center gap-x-2 items-center"
       />
     ),
     enableSorting: true,
@@ -27,7 +29,7 @@ export const columns: ColumnDef<IShift>[] = [
       <ColumnHeader
         column={column}
         label="Start Time"
-        className="flex justify-center items-center"
+        className="flex justify-center gap-x-2 items-center"
       />
     ),
     enableSorting: true,
@@ -41,7 +43,7 @@ export const columns: ColumnDef<IShift>[] = [
       <ColumnHeader
         column={column}
         label="End Time"
-        className="flex justify-center items-center"
+        className="flex justify-center gap-x-2 items-center"
       />
     ),
     enableSorting: true,
@@ -55,13 +57,47 @@ export const columns: ColumnDef<IShift>[] = [
       <ColumnHeader
         column={column}
         label="Active"
-        className="flex justify-center items-center"
+        className="flex justify-center gap-x-2 items-center"
       />
     ),
     enableSorting: true,
     cell: ({ row }) => (
       <div className="text-center">{row.original.isActive ? "Yes" : "No"}</div>
     ),
+  },
+  {
+    accessorKey: "Actions",
+    header: ({ column }) => (
+      <ColumnHeader
+        column={column}
+        label="Active"
+        className="flex justify-center gap-x-2 items-center"
+      />
+    ),
+    enableSorting: true,
+    cell: ({ row }) => {
+      const [open, setOpen] = useState<boolean>(false);
+
+      return (
+        <div className="flex justify-center items-center gap-x-2">
+          <Button variant="link" onClick={() => setOpen(true)}>
+            <Pencil2Icon className="mr-2" />
+            Edit
+          </Button>
+          <Button variant="link" className="text-red-700">
+            <Trash2Icon size={16} className="mr-2" />
+            Delete
+          </Button>
+          {open && (
+            <CreateShiftModal
+              onClose={() => setOpen(false)}
+              open={open}
+              shift={row.original}
+            />
+          )}
+        </div>
+      );
+    },
   },
 ];
 const ShiftsPage: React.FC = () => {
