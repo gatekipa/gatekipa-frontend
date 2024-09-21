@@ -11,8 +11,8 @@ const useSuperAdminPricingPlans = () => {
   } = useAppSelector((state) => state.pricing);
 
   useEffect(() => {
-    if (!plans.length) dispatch(fetchSuperAdminPricingPlans());
-  }, [plans.length]);
+    dispatch(fetchSuperAdminPricingPlans());
+  }, [dispatch]);
 
   return { plans, loading: FETCH_SUPER_ADMIN_PRICING_PLANS };
 };
