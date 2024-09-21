@@ -24,6 +24,7 @@ const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const [coupon, setCoupon] = useState<string | undefined>(undefined);
   const [isFormComplete, setIsFormComplete] = useState<boolean>(false);
+  const [discountedAmount, setDiscountedAmount] = useState<number | null>(null);
 
   let {
     paymentIntent,
@@ -108,12 +109,14 @@ const CheckoutPage: React.FC = () => {
 
   const onApplyCoupon = useCallback(async () => {
     try {
-      await dispatch(
+      const response = await dispatch(
         applyCouponDiscount({
           code: coupon!,
           payableAmount: selectedPlan?.price!,
         })
       ).unwrap();
+      console.log("response :>> ", response);
+      setDiscountedAmount(response.discountedAmount);
       toast.success("Coupon Applied Successfully");
     } catch (error) {
       setError(error as string);
@@ -152,14 +155,27 @@ const CheckoutPage: React.FC = () => {
                     onChange={(e) => setCoupon(e.target.value)}
                   />
                 </div>
-                <Button
-                  type="button"
-                  className="mt-6"
-                  disabled={!coupon || APPLY_COUPON_DISCOUNT}
-                  onClick={onApplyCoupon}
-                >
-                  Apply
-                </Button>
+                {!discountedAmount ? (
+                  <Button
+                    type="button"
+                    className="mt-6"
+                    disabled={!coupon || APPLY_COUPON_DISCOUNT}
+                    onClick={onApplyCoupon}
+                  >
+                    Apply
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    className="mt-6"
+                    onClick={() => {
+                      setDiscountedAmount(null);
+                      setCoupon("");
+                    }}
+                  >
+                    Clear Coupon
+                  </Button>
+                )}
               </div>
             )}
 
