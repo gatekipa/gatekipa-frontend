@@ -145,10 +145,10 @@ const LoginForm: React.FC = () => {
                   className="w-full"
                   label="Login"
                 />
-                <div className="flex justify-between items-center mt-3">
+                <div className="flex justify-end items-center mt-3">
                   <Link
                     to="/auth/forgot-password"
-                    className="text-sm underline transition-opacity hover:opacity-75"
+                    className="text-sm text-blue-600 underline transition-opacity hover:opacity-75"
                   >
                     Forgot Password
                   </Link>
