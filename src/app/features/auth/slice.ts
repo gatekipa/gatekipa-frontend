@@ -197,6 +197,15 @@ export const authSlice = createSlice({
     });
     builder.addCase(logoutThunk.rejected, (state) => {
       state.loading = false;
+      localStorage.removeItem("userInfo");
+      localStorage.removeItem("otp");
+      state.registerUser = {
+        isVerificationEmailSent: false,
+        isEmailVerified: false,
+        emailAddress: "",
+      };
+      state.forgotPasswordUserEmail = null;
+      state.resetPasswordCredentials = { token: "", email: "" };
     });
     builder.addCase(verifyMfaThunk.fulfilled, (state) => {
       state.loading = false;
