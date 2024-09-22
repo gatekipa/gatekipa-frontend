@@ -17,8 +17,9 @@ const DashboardPage: React.FC = () => {
 
   useEffect(() => {
     const isSubscriptionActive = getCompanySubscriptionStatus();
+    const userRole = getUserRole();
     if (paymentSuccessResponse) return;
-    if (!isSubscriptionActive) navigate("/pricing");
+    if (userRole === "ADMIN" && !isSubscriptionActive) navigate("/pricing");
   }, [paymentSuccessResponse]);
 
   return (
