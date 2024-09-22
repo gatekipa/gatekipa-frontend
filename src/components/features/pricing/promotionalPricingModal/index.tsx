@@ -89,6 +89,9 @@ const PromotionalPricingModal: React.FC<{
                   <SelectValue placeholder="Please select your company" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value={`1-${pricingPlan.price}`}>
+                    1 Month - ${pricingPlan.price}
+                  </SelectItem>
                   {pricingPlan?.promotionalPricing?.map(
                     (record: any, index: number) => (
                       <SelectItem

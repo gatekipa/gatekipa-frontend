@@ -85,7 +85,7 @@ const CheckoutPage: React.FC = () => {
           await dispatch(
             confirmPayment({
               actualAmount: receivedPlan?.plan?.price!,
-              payableAmount: receivedPlan?.plan?.price!,
+              payableAmount: parseInt(selectedPricing?.discountedPrice!) ?? 0,
               planId: receivedPlan?.plan?.id!,
               stripePayment: paymentInfo,
               appliedDiscountId: "",
