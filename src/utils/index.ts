@@ -60,6 +60,13 @@ function getUserPlan(): IUserPlan | null {
   return user.planInfo;
 }
 
+function getCompanySubscriptionStatus(): boolean {
+  const user = JSON.parse(localStorage.getItem("userInfo")!);
+  if (!user) return false;
+
+  return user?.companyId?.isSubscriptionActive || false;
+}
+
 function getCompanyPlan(): IUserPlan | null {
   const user = JSON.parse(localStorage.getItem("userInfo")!);
   if (!user) return null;
@@ -105,6 +112,18 @@ function getUserPlanId(): string {
   return user.companyId?.plan?.id ?? "";
 }
 
+function getNextPaymentDate(): string {
+  const user = JSON.parse(localStorage.getItem("userInfo")!);
+  if (!user) return "";
+  return user?.companyId?.nextPaymentDate ?? "";
+}
+
+function getLastPaymentDate(): string {
+  const user = JSON.parse(localStorage.getItem("userInfo")!);
+  if (!user) return "";
+  return user?.companyId?.lastPaymentDate ?? "";
+}
+
 export {
   getUserInitials,
   getUsername,
@@ -121,4 +140,7 @@ export {
   isMultiFactorAuthEnabled,
   getUserEmail,
   getUserPlanId,
+  getCompanySubscriptionStatus,
+  getNextPaymentDate,
+  getLastPaymentDate,
 };
