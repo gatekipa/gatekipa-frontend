@@ -61,14 +61,14 @@ const adminRoutes: Route[] = [
     icon: <Clipboard size={18} />,
   },
   {
-    label: "Settings",
-    href: "/dashboard/settings",
-    icon: <Settings size={18} />,
-  },
-  {
     label: "Shifts",
     href: "/dashboard/shifts",
     icon: <TimerIcon size={18} />,
+  },
+  {
+    label: "Settings",
+    href: "/dashboard/settings",
+    icon: <Settings size={18} />,
   },
 ];
 

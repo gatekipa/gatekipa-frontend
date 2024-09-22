@@ -38,6 +38,7 @@ export interface IInvoice {
   invoiceNo: string;
   amount: number;
   invoiceStatus: string;
+  discountedAmount: number;
   createdAt: string;
 }
 

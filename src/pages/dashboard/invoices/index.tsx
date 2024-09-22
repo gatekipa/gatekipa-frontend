@@ -28,6 +28,21 @@ export const columns: ColumnDef<IInvoice>[] = [
     enableSorting: true,
   },
   {
+    accessorKey: "discountedAmount",
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Discounted Amount" />
+    ),
+    cell: ({ row }) => (
+      <div>
+        {row.original.discountedAmount.toLocaleString("en-US", {
+          style: "currency",
+          currency: "USD",
+        })}
+      </div>
+    ),
+    enableSorting: true,
+  },
+  {
     accessorKey: "invoiceStatus",
     header: ({ column }) => <ColumnHeader column={column} label="Status" />,
     cell: ({ row }) => (
