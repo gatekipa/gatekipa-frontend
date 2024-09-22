@@ -211,6 +211,7 @@ const CheckoutPage: React.FC = () => {
                         discountedAmount: 0,
                         payableAmount: receivedPlan?.plan?.price ?? 0,
                       });
+                      setError("");
                     }}
                   >
                     Clear
