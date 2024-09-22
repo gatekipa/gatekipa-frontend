@@ -1,9 +1,15 @@
 import { Badge } from "@/components/ui/badge";
-import { getCompanyPlan } from "@/utils";
+import {
+  getCompanyPlan,
+  getLastPaymentDate,
+  getNextPaymentDate,
+} from "@/utils";
 import React from "react";
 
 const Tiles: React.FC = () => {
   const data = getCompanyPlan();
+  const nextPaymentDate = getNextPaymentDate();
+  const lastPaymentDate = getLastPaymentDate();
 
   return (
     <section>
@@ -28,7 +34,7 @@ const Tiles: React.FC = () => {
             variant="secondary"
             className="opacity-70 uppercase w-fit dark:opacity-100 dark:bg-white dark:text-green-700"
           >
-            {new Date(data?.lastPaymentDate!).toLocaleDateString()}
+            {new Date(lastPaymentDate).toLocaleDateString()}
           </Badge>
         </div>
         <div className="flex flex-col gap-y-4 bg-green-700 rounded-md shadow-lg text-white w-full p-5 cursor-pointer transition-opacity dark:bg-green-950 hover:opacity-80 md:w-1/3">
@@ -37,7 +43,7 @@ const Tiles: React.FC = () => {
             variant="secondary"
             className="opacity-70 uppercase w-fit dark:opacity-100 dark:bg-white dark:text-green-700"
           >
-            {new Date(data?.nextPaymentDate!).toLocaleDateString()}
+            {new Date(nextPaymentDate).toLocaleDateString()}
           </Badge>
         </div>
       </div>
