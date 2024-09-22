@@ -182,6 +182,14 @@ export const authSlice = createSlice({
       state.user = null;
       localStorage.removeItem("userInfo");
       localStorage.removeItem("otp");
+      state.registerUser = {
+        isVerificationEmailSent: false,
+        isEmailVerified: false,
+        emailAddress: "",
+      };
+      state.forgotPasswordUserEmail = null;
+      state.resetPasswordCredentials = { token: "", email: "" };
+
       state.loading = false;
     });
     builder.addCase(logoutThunk.pending, (state) => {
