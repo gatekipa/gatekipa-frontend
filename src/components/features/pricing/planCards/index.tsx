@@ -95,17 +95,21 @@ const PlanCard: React.FC<{
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <h3 className="font-semibold mb-2 text-gray-950">
-                Promotional Pricing
-              </h3>
-              <ul className="mb-4">
-                {plan.promotionalPricing.map((promo, index) => (
-                  <li key={index} className="mb-1 text-gray-700 flex ">
-                    <CheckIcon className="w-4 h-4 text-red-500 mr-2 flex-shrink-0" />
-                    {promo.noOfMonths} months: ${promo.discountedPrice}
-                  </li>
-                ))}
-              </ul>
+              {plan?.isPromotionalPlan && (
+                <>
+                  <h3 className="font-semibold mb-2 text-gray-950">
+                    Promotional Pricing
+                  </h3>
+                  <ul className="mb-4">
+                    {plan.promotionalPricing.map((promo, index) => (
+                      <li key={index} className="mb-1 text-gray-700 flex ">
+                        <CheckIcon className="w-4 h-4 text-red-500 mr-2 flex-shrink-0" />
+                        {promo.noOfMonths} months: ${promo.discountedPrice}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
               <h3 className="font-semibold mb-2 text-gray-950">Sub Features</h3>
               <ul>
                 {assignedFeatures.flatMap((feature) =>
