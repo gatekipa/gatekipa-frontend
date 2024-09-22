@@ -79,8 +79,6 @@ export type IMultiFactorAuthEmail = z.infer<
 const SettingsPage: React.FC = () => {
   const { userSettings, loading } = useSettings();
 
-  console.log("userSettings :>> ", userSettings);
-
   const [step, setStep] = useState<Step>(Step.CONFIGURE);
   const [both, setBoth] = useState<boolean>(false);
 
