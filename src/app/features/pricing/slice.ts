@@ -194,11 +194,13 @@ export const pricingSlice = createSlice({
       confirmPayment.fulfilled,
       (state, action: PayloadAction<ICompanyResponse>) => {
         state.paymentSuccessResponse = action.payload;
+
         localStorage.removeItem("selectedPromotionalPricing");
         const userInfo = JSON.parse(localStorage.getItem("userInfo")!);
 
         if (userInfo) {
           userInfo.companyId = action.payload;
+          localStorage.setItem("userInfo", JSON.stringify(userInfo));
         }
 
         state.loading[PricingApiEndpoint.CONFIRM_PAYMENT] = false;
