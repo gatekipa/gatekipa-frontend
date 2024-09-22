@@ -116,6 +116,7 @@ const CheckoutPage: React.FC = () => {
 
   const onApplyCoupon = useCallback(async () => {
     try {
+      setError("");
       const response = await dispatch(
         applyCouponDiscount({
           code: coupon!,
