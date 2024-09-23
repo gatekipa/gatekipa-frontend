@@ -389,6 +389,7 @@ const EditPricingPage: React.FC = () => {
                   </div>
                   <Button
                     className="mt-7"
+                    type="button"
                     onClick={addPromotionalPricing}
                     disabled={!form.watch("isPromotionalPlan")}
                   >
