@@ -211,6 +211,11 @@ const RegistrationForm: React.FC = () => {
                           {...field}
                         />
                       </FormControl>
+                      <div className="text-xs my-5 text-gray-800">
+                        Consent: By providing your mobile number, you consent to
+                        receive an SMS with a one-time password or verification
+                        code.
+                      </div>
                       <FormMessage className="text-xs" />
                     </FormItem>
                   )}
