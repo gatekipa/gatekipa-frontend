@@ -157,6 +157,10 @@ const EditPricingPage: React.FC = () => {
   const addPromotionalPricing = useCallback(() => {
     let { noOfMonths, discountedPrice } = form.getValues().promotionalPricing;
 
+    if (noOfMonths === 0 || discountedPrice === 0) {
+      return toast.error("Please enter valid promotional pricing");
+    }
+
     // @ts-ignore
     noOfMonths = parseInt(noOfMonths);
 

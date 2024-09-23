@@ -80,6 +80,10 @@ const CreatePricingPage: React.FC = () => {
   const addPromotionalPricing = useCallback(() => {
     let { noOfMonths, discountedPrice } = form.getValues().promotionalPricing;
 
+    if (noOfMonths === 0 || discountedPrice === 0) {
+      return toast.error("Please enter valid promotional pricing");
+    }
+
     // @ts-ignore
     noOfMonths = parseInt(noOfMonths);
 
@@ -365,6 +369,7 @@ const CreatePricingPage: React.FC = () => {
                   </div>
                   <Button
                     className="mt-7"
+                    type="button"
                     onClick={addPromotionalPricing}
                     disabled={!form.watch("isPromotionalPlan")}
                   >
