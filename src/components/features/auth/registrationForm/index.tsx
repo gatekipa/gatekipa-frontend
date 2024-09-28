@@ -37,10 +37,16 @@ enum UserType {
 }
 
 const registrationFormSchema = z.object({
-  firstName: z.string().min(3),
-  lastName: z.string().min(3),
-  companyId: z.string().min(3),
-  password: z.string().min(8),
+  firstName: z
+    .string()
+    .min(3, { message: "First Name must be at least 3 characters long" }),
+  lastName: z
+    .string()
+    .min(3, { message: "Last Name must be at least 3 characters long" }),
+  companyId: z.string({ message: `Please select a company` }).min(3),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters long" }),
   mobileNo: z.string().regex(/^\+1\d{10}$/, {
     message:
       "Invalid phone number. It should be in the format +1XXXXXXXXXX (11 digits)",
