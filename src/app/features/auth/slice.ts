@@ -115,8 +115,8 @@ export const authSlice = createSlice({
       verifyTokenThunk.fulfilled,
       (state, action: PayloadAction<any>) => {
         state.loading = false;
-        state.resetPasswordCredentials.email = action.payload.data.domain ?? "";
-        state.resetPasswordCredentials.token = action.payload.data.token ?? "";
+        state.resetPasswordCredentials.email = action.payload.email ?? "";
+        state.resetPasswordCredentials.token = action.payload.token ?? "";
       }
     );
     builder.addCase(verifyTokenThunk.pending, (state) => {

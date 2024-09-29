@@ -145,6 +145,7 @@ const VerifyTokenForm: React.FC = () => {
                   loading={loading}
                   type="submit"
                   className="w-full"
+                  label="Next"
                   disabled={!form.formState.isValid}
                 />
                 <div className="flex justify-between items-center">

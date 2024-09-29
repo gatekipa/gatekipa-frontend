@@ -81,7 +81,7 @@ const ForgotPasswordForm: React.FC = () => {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <Label id="email">Email</Label>
+                        <Label id="email">Email Address</Label>
                         <FormControl>
                           <Input
                             id="email"
@@ -105,12 +105,14 @@ const ForgotPasswordForm: React.FC = () => {
                   loading={loading}
                   type="submit"
                   className="w-full"
+                  label="Next"
+                  disabled={!form.formState.isValid}
                 />
-                <p className="text-xs">
+                <p className="text-xs text-right">
                   Back to{" "}
                   <Link
                     to="/auth/login"
-                    className="underline underline-offset-4 font-semibold transition-opacity hover:opacity-75"
+                    className="underline underline-offset-4 font-semibold text-blue-500 transition-opacity hover:opacity-75"
                   >
                     Login
                   </Link>

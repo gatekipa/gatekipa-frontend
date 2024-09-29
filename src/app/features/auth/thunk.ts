@@ -217,11 +217,11 @@ const verifyTokenThunk: AsyncThunk<any, IVerifyTokenRequest, {}> =
     "users/verify-forgot-pass-token",
     async (verifyTokenRequest: IVerifyTokenRequest, thunkAPI) => {
       try {
-        const response = await NetworkManager.post<any, IVerifyTokenRequest>(
+        await NetworkManager.post<any, IVerifyTokenRequest>(
           `/users/verify-forgot-pass-token`,
           verifyTokenRequest
         );
-        return response.data;
+        return verifyTokenRequest;
       } catch (error) {
         const axiosError = error as AxiosError<{ message: string }>;
         if (
