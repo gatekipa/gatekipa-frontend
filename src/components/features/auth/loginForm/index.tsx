@@ -26,8 +26,8 @@ import LoadingButton from "@/components/shared/loadingButton";
 import Verify2FAForm from "../verify2FA";
 
 const loginFormSchema = z.object({
-  emailAddress: z.string().email(),
-  password: z.string().min(8),
+  emailAddress: z.string({ message: `Please enter email address` }).email(),
+  password: z.string().min(8, { message: `Please enter your password` }),
 });
 
 type ILoginForm = z.infer<typeof loginFormSchema>;
