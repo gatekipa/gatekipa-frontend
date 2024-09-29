@@ -43,6 +43,7 @@ const registrationFormSchema = z.object({
   lastName: z
     .string()
     .min(3, { message: "Last Name must be at least 3 characters long" }),
+  emailAddress: z.string().email({ message: "Invalid email address" }),
   companyId: z.string({ message: `Please select a company` }).min(3),
   password: z
     .string()
@@ -71,6 +72,7 @@ const RegistrationForm: React.FC = () => {
     defaultValues: {
       firstName: "",
       lastName: "",
+      emailAddress: emailAddress ?? "",
       companyId: "",
       password: "",
       mobileNo: "",
@@ -78,18 +80,21 @@ const RegistrationForm: React.FC = () => {
     },
   });
 
-  const onSubmit = useCallback(async (values: IRegistrationForm) => {
-    try {
-      await dispatch(
-        registerUserThunk({ ...values, emailAddress, isEmailVerified: true })
-      ).unwrap();
-      toast.success("Registration Successfull");
-      form.reset();
-      navigate("/auth/login");
-    } catch (err) {
-      toast.error(err as string);
-    }
-  }, []);
+  const onSubmit = useCallback(
+    async (values: IRegistrationForm) => {
+      try {
+        await dispatch(
+          registerUserThunk({ ...values, emailAddress, isEmailVerified: true })
+        ).unwrap();
+        toast.success("Registration Successfull");
+        form.reset();
+        navigate("/auth/login");
+      } catch (err) {
+        toast.error(err as string);
+      }
+    },
+    [emailAddress]
+  );
 
   return (
     <Card className="w-[350px] md:w-[600px]">
@@ -135,6 +140,29 @@ const RegistrationForm: React.FC = () => {
                           id="lastName"
                           type="text"
                           placeholder="Please enter your last name"
+                          autoComplete="off"
+                          className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <FormField
+                  control={form.control}
+                  name="emailAddress"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel id="emailAddress">Email Address</FormLabel>
+                      <FormControl>
+                        <Input
+                          id="emailAddress"
+                          type="email"
+                          disabled
+                          placeholder="Please enter your email address"
                           autoComplete="off"
                           className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
                           {...field}

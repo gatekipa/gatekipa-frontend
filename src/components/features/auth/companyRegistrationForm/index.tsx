@@ -33,6 +33,7 @@ const companyRegistrationFormSchema = z.object({
   companyCode: z.string().min(3),
   address: z.string().min(8),
   mobileNo: z.string().min(10),
+  emailAddress: z.string().email(),
 });
 
 export type ICompanyRegistration = z.infer<
@@ -59,6 +60,7 @@ const CompanyRegistrationForm: React.FC = () => {
       companyCode: "",
       address: "",
       mobileNo: "",
+      emailAddress: emailAddress,
     },
   });
 
@@ -128,6 +130,31 @@ const CompanyRegistrationForm: React.FC = () => {
                         <Input
                           id="companyCode"
                           placeholder="Please enter company code"
+                          autoComplete="off"
+                          className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <FormField
+                  control={form.control}
+                  name="emailAddress"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel id="emailAddress" className="text-xs">
+                        Email Address
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          id="emailAddress"
+                          type="email"
+                          disabled
+                          placeholder="Please enter your email address"
                           autoComplete="off"
                           className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
                           {...field}
