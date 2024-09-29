@@ -47,7 +47,7 @@ const VerifyEmailForm: React.FC = () => {
     try {
       await dispatch(verifyEmailThunk({ ...data, forSignUp: true })).unwrap();
       form.reset();
-      toast.success("Successfully Verified Email Address");
+      // toast.success("Successfully Verified Email Address");
     } catch (error) {
       toast.error(error as string);
     }
