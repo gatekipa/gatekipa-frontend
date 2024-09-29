@@ -211,7 +211,7 @@ const RegistrationForm: React.FC = () => {
                         <Input
                           id="mobileNo"
                           type="text"
-                          placeholder="Please enter your mobile number"
+                          placeholder="Please enter your mobile number e.g. +1XXXXXXXXXX"
                           autoComplete="off"
                           className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
                           {...field}
@@ -267,6 +267,7 @@ const RegistrationForm: React.FC = () => {
                 type="submit"
                 className="w-full"
                 label="Register"
+                disabled={!form.formState.isValid}
               />
               <div className="flex justify-between items-center mt-3">
                 <Link
