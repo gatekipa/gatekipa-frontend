@@ -56,7 +56,10 @@ const createEmployeeFormSchema = z.object({
   firstName: z.string().min(3),
   lastName: z.string().min(3),
   emailAddress: z.string().email(),
-  mobileNo: z.string().min(11),
+  mobileNo: z.string().regex(/^\+1\d{10}$/, {
+    message:
+      "Invalid phone number. It should be in the format +1XXXXXXXXXX (11 digits)",
+  }),
   designation: z.string().min(3),
   dateOfBirth: z.date(),
   timesheetDueDate: z.date(),

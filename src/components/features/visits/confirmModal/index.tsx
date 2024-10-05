@@ -40,7 +40,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ label, type, visit }) => {
       else {
         await dispatch(markVisitCheckoutThunk({ visitId: visit.id })).unwrap();
       }
-      toast.success("Visit marked successfully");
+      toast.success(`Visit ${type} successfully`);
     } catch (error) {
       toast.error(error as string);
     }
