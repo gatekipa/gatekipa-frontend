@@ -90,7 +90,7 @@ const stepCardList: StepCard[] = [
   {
     title: "Sign Up and Set Up",
     description:
-      "Create an account and configure Gatekipa to suit your business.",
+      "Create an account and configure Gatekipas to suit your business.",
   },
   {
     title: "Check-In Visitors",
@@ -104,17 +104,17 @@ const stepCardList: StepCard[] = [
 
 const testimonialList: Testimonial[] = [
   {
-    text: "Gatekipa helped us streamline visitor check-ins and made shift management a breeze.",
+    text: "Gatekipas helped us streamline visitor check-ins and made shift management a breeze.",
     reviewer: "Company Name",
     logo: "https://www.vectorlogo.zone/logos/google/google-icon.svg",
   },
   {
-    text: "Gatekipa has been a game-changer for our business. We can now manage visitors and staff with ease.",
+    text: "Gatekipas has been a game-changer for our business. We can now manage visitors and staff with ease.",
     reviewer: "Company Name",
     logo: "https://www.vectorlogo.zone/logos/google/google-icon.svg",
   },
   {
-    text: "We have been using Gatekipa for a few months now and it has made a huge difference in our operations.",
+    text: "We have been using Gatekipas for a few months now and it has made a huge difference in our operations.",
     reviewer: "Company Name",
     logo: "https://www.vectorlogo.zone/logos/google/google-icon.svg",
   },
@@ -164,7 +164,7 @@ const privacyPolicies = [
     title: "Information We Collect",
     icon: <Users className="h-6 w-6" />,
     content: [
-      "Personal Information: When you sign up for Gatekipa, we collect personal information such as your name, email address, phone number, and billing details.",
+      "Personal Information: When you sign up for Gatekipas, we collect personal information such as your name, email address, phone number, and billing details.",
       "Visitor and Employee Data: We collect data on visitors and employees when they check in or out using our platform, including names, phone numbers, and photos.",
       "Usage Data: We collect data about how you interact with our website and application to improve our services.",
     ],
@@ -223,7 +223,7 @@ const sellingPoints: SellingPoint[] = [
   },
   {
     icon: Mail,
-    text: "Dedicated Support: Our team is always here to help you make the most out of Gatekipa.",
+    text: "Dedicated Support: Our team is always here to help you make the most out of Gatekipas.",
   },
 ];
 
@@ -231,7 +231,7 @@ const conditions: Condition[] = [
   {
     title: "Use of Services",
     content:
-      "Gatekipa provides visitor and employee management software for businesses. You agree to use our services in accordance with applicable laws and these terms.",
+      "Gatekipas provides visitor and employee management software for businesses. You agree to use our services in accordance with applicable laws and these terms.",
   },
   {
     title: "User Accounts",
@@ -241,7 +241,7 @@ const conditions: Condition[] = [
   {
     title: "Subscription and Billing",
     content:
-      "Gatekipa operates on a subscription model. By subscribing, you agree to provide accurate billing information and pay the fees associated with your chosen plan.",
+      "Gatekipas operates on a subscription model. By subscribing, you agree to provide accurate billing information and pay the fees associated with your chosen plan.",
   },
   {
     title: "Termination",
@@ -251,7 +251,7 @@ const conditions: Condition[] = [
   {
     title: "Limitation of Liability",
     content:
-      "Gatekipa is not liable for any direct, indirect, incidental, or consequential damages that arise from your use of the platform.",
+      "Gatekipas is not liable for any direct, indirect, incidental, or consequential damages that arise from your use of the platform.",
   },
   {
     title: "Governing Law",

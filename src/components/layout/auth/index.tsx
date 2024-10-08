@@ -17,7 +17,7 @@ const AuthLayout: React.FC = () => {
             <div className="flex items-center gap-x-3">
               <img src={logo} alt="logo" className="w-32" />
               <p className="text-2xl font-bold font-cursive__pacifico">
-                GATEKIPA
+                GATEKIPAS
               </p>
             </div>
             <p className="text-sm shadow-sm">

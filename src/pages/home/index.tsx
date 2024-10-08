@@ -22,7 +22,7 @@ const HomePage = () => {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <main className="flex-1 bg-gradient-to-r from-primary to-slate-950 text-white">
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
+        <section className="w-full py-24 md:py-24 lg:py-32 xl:py-48">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center space-y-7 text-center">
               <div className="space-y-4">
@@ -30,8 +30,8 @@ const HomePage = () => {
                   Seamless Visitor & Employee Management, Anytime, Anywhere
                 </h1>
                 <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                  Gatekipa makes it easy to manage visitors and staff, enhancing
-                  security and streamlining your operations.
+                  Gatekipas makes it easy to manage visitors and staff,
+                  enhancing security and streamlining your operations.
                 </p>
               </div>
               <Button

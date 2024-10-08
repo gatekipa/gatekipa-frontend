@@ -9,7 +9,7 @@ const ContactPage: React.FC = () => {
     <div className="min-h-screen bg-gray-100">
       <Navbar />
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden mt-32 md:mt-0">
           <div className="flex flex-col md:flex-row">
             <div className="md:w-1/2 bg-gradient-to-br from-slate-700 to-black p-12 text-white">
               <h1 className="text-4xl font-bold mb-6">Contact Us</h1>

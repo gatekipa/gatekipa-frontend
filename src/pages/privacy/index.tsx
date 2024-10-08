@@ -20,7 +20,7 @@ const PrivacyPage: React.FC = () => {
           </CardHeader>
           <CardContent>
             <p className="text-center text-muted-foreground mb-6">
-              At Gatekipa, we value your privacy. This policy outlines how we
+              At Gatekipas, we value your privacy. This policy outlines how we
               collect, use, and protect your personal information when you use
               our services.
             </p>

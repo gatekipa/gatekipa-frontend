@@ -55,9 +55,9 @@ const TermsAndConditionsPage: React.FC = () => {
             </CardHeader>
             <CardContent>
               <p>
-                Welcome to Gatekipa. These Terms and Conditions govern your use
-                of our website and services. By accessing or using Gatekipa, you
-                agree to be bound by these Terms.
+                Welcome to Gatekipas. These Terms and Conditions govern your use
+                of our website and services. By accessing or using Gatekipas,
+                you agree to be bound by these Terms.
               </p>
             </CardContent>
           </Card>

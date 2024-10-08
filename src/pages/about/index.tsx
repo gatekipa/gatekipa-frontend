@@ -34,10 +34,10 @@ export default function AboutPage() {
             Our Mission
           </h2>
           <p className="text-muted-foreground">
-            At Gatekipa, our mission is to revolutionize the way businesses
+            At Gatekipas, our mission is to revolutionize the way businesses
             manage their visitors and employees. We believe that efficient,
             secure, and user-friendly tools are the backbone of a smooth
-            operation, no matter the industry. With Gatekipa, we strive to
+            operation, no matter the industry. With Gatekipas, we strive to
             provide solutions that enhance security, improve productivity, and
             give businesses more control over their day-to-day activities.
           </p>
@@ -51,7 +51,7 @@ export default function AboutPage() {
             Our Story
           </h2>
           <p className="text-muted-foreground mb-4">
-            Founded in 2024, Gatekipa started with a vision to simplify visitor
+            Founded in 2024, Gatekipas started with a vision to simplify visitor
             and employee management for businesses of all sizes. We noticed that
             many organizations were still relying on outdated methods to manage
             visitors and track employee attendance, which led to inefficiencies
@@ -71,7 +71,7 @@ export default function AboutPage() {
         >
           <h2 className="text-2xl font-semibold text-primary mb-4">Our Team</h2>
           <p className="text-muted-foreground">
-            Gatekipa is driven by a diverse team of innovators, developers, and
+            Gatekipas is driven by a diverse team of innovators, developers, and
             business professionals with a shared goal of improving workplace
             efficiency. Our passion for technology and customer satisfaction is
             at the heart of everything we do.
@@ -83,7 +83,7 @@ export default function AboutPage() {
           {...fadeInUp}
         >
           <h2 className="text-2xl font-semibold text-primary mb-4">
-            Why Gatekipa?
+            Why Gatekipas?
           </h2>
           <ul className="space-y-4">
             {sellingPoints.map((item, index) => (
@@ -107,7 +107,7 @@ export default function AboutPage() {
         >
           <h2 className="text-2xl font-semibold text-primary mb-4">Join Us</h2>
           <p className="text-muted-foreground mb-4">
-            Join the growing number of businesses that trust Gatekipa to manage
+            Join the growing number of businesses that trust Gatekipas to manage
             their visitors and employees.
           </p>
           <a

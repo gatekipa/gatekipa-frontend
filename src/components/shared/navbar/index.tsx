@@ -44,7 +44,7 @@ const Navbar: React.FC = () => {
           <Link to="/dashboard" className="flex items-center space-x-2 px-4">
             <img src={logo} alt="logo" className="w-8 h-8" />
             <span className="text-xl font-extrabold tracking-wide">
-              GateKipa
+              GateKipas
             </span>
           </Link>
           {company && (
