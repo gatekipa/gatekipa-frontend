@@ -44,7 +44,7 @@ const ContactPage: React.FC = () => {
               <Button
                 className="group bg-gradient-to-r from-slate-700 to-black text-white font-semibold py-3 px-6 rounded-full text-lg transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg"
                 onClick={() =>
-                  (window.location.href = "mailto:support@gatekipa.com")
+                  (window.location.href = "mailto:support@gatekipas.com")
                 }
               >
                 Email Us

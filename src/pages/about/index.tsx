@@ -111,7 +111,7 @@ export default function AboutPage() {
             their visitors and employees.
           </p>
           <a
-            href="mailto:Support@gatekipas.com"
+            href="mailto:support@gatekipas.com"
             className="inline-block bg-primary text-white font-semibold py-2 px-4 rounded hover:bg-primary-dark transition duration-300"
           >
             Contact Us for a Demo
