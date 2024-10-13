@@ -2,7 +2,6 @@ import { addNewVisitThunk } from "@/app/features/company/thunk";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import LoadingButton from "@/components/shared/loadingButton";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
 import Select from "react-select";
 
@@ -21,17 +20,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 import { getUserRole } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarIcon } from "@radix-ui/react-icons";
 import { Label } from "@radix-ui/react-label";
-import { format } from "date-fns";
 import { Plus } from "lucide-react";
 import React, { useCallback, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -42,7 +33,7 @@ const visitFormSchema = z.object({
   purposeOfVisit: z.string().min(3),
   checkInWithVisitCreation: z.boolean().default(false),
   employeeId: z.string().nullable(),
-  visitDate: z.date(),
+  visitDate: z.string(),
 });
 
 export type IVisitForm = z.infer<typeof visitFormSchema>;
@@ -72,7 +63,7 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({
       purposeOfVisit: "",
       checkInWithVisitCreation: false,
       employeeId: null,
-      visitDate: new Date(),
+      visitDate: new Date().toString(),
     },
   });
 
@@ -100,6 +91,7 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({
       })),
     [employees]
   );
+
   return (
     <div>
       <Dialog
@@ -219,47 +211,20 @@ const VisitsToolbar: React.FC<IVisitsToolbarProps> = ({
                             <Label id="visitDate" className="text-sm">
                               Visit Date
                             </Label>
-                            <Popover>
-                              <PopoverTrigger asChild>
-                                <FormControl>
-                                  <Button
-                                    variant={"outline"}
-                                    className={cn(
-                                      "w-full pl-3 text-left font-normal",
-                                      !field.value && "text-muted-foreground"
-                                    )}
-                                  >
-                                    {field.value ? (
-                                      format(field.value, "PPP")
-                                    ) : (
-                                      <span>Pick a date</span>
-                                    )}
-                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                  </Button>
-                                </FormControl>
-                              </PopoverTrigger>
-                              <PopoverContent
-                                className="w-auto p-0"
-                                align="start"
-                              >
-                                <Calendar
-                                  mode="single"
-                                  selected={field.value}
-                                  onSelect={field.onChange}
-                                  disabled={(date) => date < new Date()}
-                                  className="text-xs"
-                                  initialFocus
-                                />
-                              </PopoverContent>
-                            </Popover>
-
+                            <FormControl>
+                              <Input
+                                id="visitDate"
+                                type="date"
+                                className="w-full pl-3 text-left font-normal"
+                                {...field}
+                              />
+                            </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
                     </div>
                   )}
-
                   {getUserRole() !== "VISITOR" && (
                     <div className="flex items-center">
                       <FormField
