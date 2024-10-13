@@ -10,7 +10,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import ColumnHeader from "@/components/shared/columnHeader";
 import ConfirmModal, { ModalType } from "../../visits/confirmModal";
 import { Button } from "@/components/ui/button";
-import { LockClosedIcon, LockOpen2Icon } from "@radix-ui/react-icons";
+import { EnterIcon, ExitIcon, InfoCircledIcon } from "@radix-ui/react-icons";
+import { MailIcon, PhoneIcon, User2Icon } from "lucide-react";
+import ToolTip from "@/components/shared/tooltip";
 
 export const visitColumns: ColumnDef<IVisit>[] = [
   {
@@ -21,8 +23,24 @@ export const visitColumns: ColumnDef<IVisit>[] = [
     enableSorting: true,
     cell: ({ row }) => {
       if (row.original.employee && row.original.employee !== null) {
-        const { firstName, lastName } = row.original.employee;
-        return `${firstName} ${lastName} - ${row.original.employee.emailAddress} - ${row.original.employee.mobileNo}`;
+        const { firstName, lastName, emailAddress, mobileNo } =
+          row.original.employee;
+        return (
+          <div className="space-y-3">
+            <div className="flex gap-x-2 items-center">
+              <User2Icon className="w-6 h-6" />
+              {`${firstName} ${lastName}`}
+            </div>
+            <div className="flex gap-x-2">
+              <MailIcon className="w-4 h-4" />
+              {emailAddress}
+            </div>
+            <div className="flex gap-x-2">
+              <PhoneIcon className="w-4 h-4" />
+              {mobileNo}
+            </div>
+          </div>
+        );
       } else {
         return "N/A";
       }
@@ -80,11 +98,14 @@ export const visitColumns: ColumnDef<IVisit>[] = [
       visitCheckInDate.setHours(0, 0, 0, 0);
       return (
         <div className="flex items-center gap-2">
+          <ToolTip title={row.original.purposeOfVisit}>
+            <InfoCircledIcon className="text-gray-500 cursor-pointer hover:text-gray-900" />
+          </ToolTip>
           {!visit.checkInTime && !visit.checkoutTime && (
             <ConfirmModal
               label={
-                <Button variant="outline" className="text-xs gap-x-2">
-                  <LockOpen2Icon />
+                <Button variant="link" className="text-xs gap-x-2 text-sky-700">
+                  <EnterIcon />
                   Check In
                 </Button>
               }
@@ -96,8 +117,8 @@ export const visitColumns: ColumnDef<IVisit>[] = [
           {visit.checkInTime && !visit.checkoutTime && (
             <ConfirmModal
               label={
-                <Button variant="outline" className="text-xs gap-x-2">
-                  <LockClosedIcon />
+                <Button variant="link" className="text-xs gap-x-2 text-sky-700">
+                  <ExitIcon />
                   Check Out
                 </Button>
               }
@@ -109,8 +130,8 @@ export const visitColumns: ColumnDef<IVisit>[] = [
           {!visit.checkInTime && visit.checkoutTime && (
             <ConfirmModal
               label={
-                <Button variant="outline" className="text-xs gap-x-2">
-                  <LockOpen2Icon />
+                <Button variant="link" className="text-xs gap-x-2 text-sky-700">
+                  <EnterIcon />
                   Check In
                 </Button>
               }
