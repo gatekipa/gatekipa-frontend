@@ -1,3 +1,4 @@
+import { useAppSelector } from "@/app/hooks";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -10,10 +11,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useCallback, useMemo, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import Select from "react-select";
 
 enum VisitorAuthState {
   EXISTING = "EXISTING",
@@ -22,8 +24,10 @@ enum VisitorAuthState {
 }
 
 const visitorSignInFormSchema = z.object({
-  email: z.string(),
-  mobile: z.string(),
+  email: z.string().optional(),
+  mobile: z.string().optional(),
+  employeeId: z.string(),
+  purposeOfVisit: z.string(),
 });
 
 const visitorSignUpFormSchema = z.object({
@@ -31,6 +35,8 @@ const visitorSignUpFormSchema = z.object({
   lastName: z.string(),
   email: z.string(),
   mobile: z.string(),
+  purposeOfVisit: z.string(),
+  employeeId: z.string(),
 });
 
 export type VisitorSignInForm = z.infer<typeof visitorSignInFormSchema>;
@@ -40,6 +46,8 @@ const VisitorAuth: React.FC = () => {
   const [userType, setUserType] = useState<VisitorAuthState>(
     VisitorAuthState.DEFAULT
   );
+
+  const { employees } = useAppSelector((state) => state.employee);
 
   const signInForm = useForm<VisitorSignInForm>({
     resolver: zodResolver(visitorSignInFormSchema),
@@ -75,6 +83,10 @@ const VisitorAuth: React.FC = () => {
 
   const visitorSigninHandler = useCallback((values: VisitorSignInForm) => {
     try {
+      if (!values.email && !values.mobile) {
+        toast.error("Please provide either email or mobile number");
+        return;
+      }
       console.log("values :>> ", values);
 
       signInForm.reset();
@@ -103,6 +115,15 @@ const VisitorAuth: React.FC = () => {
         </Button>
       </div>
     </div>
+  );
+
+  const transformedEmployees = useMemo(
+    () =>
+      employees.map((employee) => ({
+        label: `${employee.firstName} ${employee.lastName}`,
+        value: employee.id,
+      })),
+    [employees]
   );
 
   const existingContent = (
@@ -158,8 +179,80 @@ const VisitorAuth: React.FC = () => {
             )}
           />
         </div>
+        <div className="space-y-2">
+          <FormField
+            control={signInForm.control}
+            name="employeeId"
+            render={() => (
+              <FormItem className="flex flex-col">
+                <FormLabel className="text-xs">Employee</FormLabel>
+                <Controller
+                  control={signInForm.control}
+                  name="employeeId"
+                  render={({ field }) => (
+                    <Select
+                      isClearable={true}
+                      isSearchable={true}
+                      placeholder="Please select an employee"
+                      className="text-xs"
+                      // @ts-ignore
+                      options={transformedEmployees}
+                      onChange={(selectedOption) =>
+                        field.onChange(
+                          selectedOption ? selectedOption.value : ""
+                        )
+                      }
+                      value={
+                        transformedEmployees.find(
+                          (option: any) => option.value === field.value
+                        ) || null
+                      }
+                      styles={{
+                        control: (provided, state) => ({
+                          ...provided,
+                          borderColor: state.isFocused
+                            ? "transparent"
+                            : provided.borderColor,
+                          "&:hover": {
+                            borderColor: state.isFocused
+                              ? "transparent"
+                              : provided.borderColor,
+                          },
+                        }),
+                      }}
+                    />
+                  )}
+                />
+                <FormMessage className="text-xs" />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="space-y-2">
+          <FormField
+            control={signInForm.control}
+            name="purposeOfVisit"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel id="purposeOfVisit" className="text-xs">
+                  Purpose of Visit
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    id="purposeOfVisit"
+                    placeholder="Please enter your purpose of visit"
+                    autoComplete="off"
+                    className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className="text-xs" />
+              </FormItem>
+            )}
+          />
+        </div>
         <Button type="submit" className="w-full">
-          Sign In
+          Check In
         </Button>
         <Button
           variant="outline"
@@ -271,8 +364,80 @@ const VisitorAuth: React.FC = () => {
             )}
           />
         </div>
+        <div className="space-y-2">
+          <FormField
+            control={signUpForm.control}
+            name="employeeId"
+            render={() => (
+              <FormItem className="flex flex-col">
+                <FormLabel className="text-xs">Employee</FormLabel>
+                <Controller
+                  control={signInForm.control}
+                  name="employeeId"
+                  render={({ field }) => (
+                    <Select
+                      isClearable={true}
+                      isSearchable={true}
+                      placeholder="Please select an employee"
+                      className="text-xs"
+                      // @ts-ignore
+                      options={transformedEmployees}
+                      onChange={(selectedOption) =>
+                        field.onChange(
+                          selectedOption ? selectedOption.value : ""
+                        )
+                      }
+                      value={
+                        transformedEmployees.find(
+                          (option: any) => option.value === field.value
+                        ) || null
+                      }
+                      styles={{
+                        control: (provided, state) => ({
+                          ...provided,
+                          borderColor: state.isFocused
+                            ? "transparent"
+                            : provided.borderColor,
+                          "&:hover": {
+                            borderColor: state.isFocused
+                              ? "transparent"
+                              : provided.borderColor,
+                          },
+                        }),
+                      }}
+                    />
+                  )}
+                />
+                <FormMessage className="text-xs" />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="space-y-2">
+          <FormField
+            control={signUpForm.control}
+            name="purposeOfVisit"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel id="purposeOfVisit" className="text-xs">
+                  Purpose of Visit
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    id="purposeOfVisit"
+                    placeholder="Please enter your purpose of visit"
+                    autoComplete="off"
+                    className="text-xs focus:outline-none focus-within:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className="text-xs" />
+              </FormItem>
+            )}
+          />
+        </div>
         <Button type="submit" className="w-full">
-          Sign Up
+          Check In
         </Button>
         <Button
           variant="outline"
@@ -285,15 +450,15 @@ const VisitorAuth: React.FC = () => {
     </Form>
   );
 
+  const contentMap = {
+    [VisitorAuthState.DEFAULT]: defaultContent,
+    [VisitorAuthState.EXISTING]: existingContent,
+    [VisitorAuthState.NEW]: newContent,
+  };
+
   return (
     <Card>
-      <CardContent className="p-5">
-        {userType === VisitorAuthState.DEFAULT
-          ? defaultContent
-          : userType === VisitorAuthState.EXISTING
-          ? existingContent
-          : newContent}
-      </CardContent>
+      <CardContent className="p-5">{contentMap[userType]}</CardContent>
     </Card>
   );
 };
