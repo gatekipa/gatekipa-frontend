@@ -34,6 +34,7 @@ import DiscountedCompaniesPage from "@/pages/discountedCompanies";
 import PricingLandingPage from "@/pages/pricing-landing";
 import DiscountsPage from "@/pages/dashboard/discounts";
 import ShiftsPage from "@/pages/shifts";
+import ReceptionPage from "@/pages/reception";
 
 const router = createBrowserRouter([
   {
@@ -83,6 +84,10 @@ const router = createBrowserRouter([
       {
         path: "visitors",
         element: <VisitorsPage />,
+      },
+      {
+        path: "reception",
+        element: <ReceptionPage />,
       },
       {
         path: "emergency",
