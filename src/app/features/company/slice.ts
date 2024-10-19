@@ -58,7 +58,16 @@ const initialState: CompanyState = {
 export const companySlice = createSlice({
   name: "company",
   initialState,
-  reducers: {},
+  reducers: {
+    updateReceptionVisitors: (state, action: PayloadAction<{ id: string }>) => {
+      const index = state.receptionVisitors.findIndex(
+        (visitor) => visitor.id === action.payload.id
+      );
+      if (index !== -1) {
+        state.receptionVisitors[index].checkoutTime = new Date().toString();
+      }
+    },
+  },
   extraReducers(builder) {
     builder.addCase(
       fetchCompanyThunk.fulfilled,
@@ -274,5 +283,7 @@ export const companySlice = createSlice({
     });
   },
 });
+
+export const { updateReceptionVisitors } = companySlice.actions;
 
 export default companySlice.reducer;

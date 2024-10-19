@@ -1,5 +1,6 @@
 import { IReceptionVisitor } from "@/app/features/company/thunk";
 import VisitorAuth from "@/components/features/visitors/auth";
+import ReceptionVisitorCheckoutModal from "@/components/features/visitors/receptionCheckoutModal";
 import ColumnHeader from "@/components/shared/columnHeader";
 import PaginatedTable from "@/components/shared/paginatedTable";
 import { Button } from "@/components/ui/button";
@@ -8,7 +9,7 @@ import useReceptionVisitors from "@/hooks/visitors/reception";
 import { formatDate } from "@/utils";
 import { ExitIcon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
-import React from "react";
+import React, { useState } from "react";
 
 export const columns: ColumnDef<IReceptionVisitor>[] = [
   {
@@ -56,13 +57,24 @@ export const columns: ColumnDef<IReceptionVisitor>[] = [
     header: "Actions",
     cell: ({ row }) => {
       const visit = row.original;
-      return !visit.checkoutTime ? (
-        <Button size="sm" className="text-xs">
-          <ExitIcon className="mr-2" />
-          Check Out
-        </Button>
-      ) : (
-        <span>-</span>
+      const [open, setOpen] = useState(false);
+
+      return (
+        <>
+          {!visit.checkoutTime ? (
+            <Button size="sm" className="text-xs" onClick={() => setOpen(true)}>
+              <ExitIcon className="mr-2" />
+              Check Out
+            </Button>
+          ) : (
+            <span>-</span>
+          )}
+          <ReceptionVisitorCheckoutModal
+            isOpen={open}
+            onClose={() => setOpen(false)}
+            visitId={visit.id}
+          />
+        </>
       );
     },
   },

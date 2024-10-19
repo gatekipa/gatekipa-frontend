@@ -544,38 +544,38 @@ const markVisitThunk: AsyncThunk<any, { visitId: string }, {}> =
     }
   });
 
-const markVisitCheckoutThunk: AsyncThunk<any, { visitId: string }, {}> =
-  createAsyncThunk(
-    "company/visits/mark/checkout",
-    async ({ visitId }, thunkAPI) => {
-      try {
-        // const response = await NetworkManager.post<IBaseResponse<any>, any>(
-        //   `/visits/checkout/${visitId}`,
-        //   {}
-        // );
+const markVisitCheckoutThunk: AsyncThunk<
+  any,
+  { visitId: string; comments?: string },
+  {}
+> = createAsyncThunk(
+  "company/visits/mark/checkout",
+  async ({ visitId, comments }, thunkAPI) => {
+    const body = comments ? { comments } : {};
 
-        await axios.post(
-          `${import.meta.env.VITE_BASE_API_URL}/visits/checkout/${visitId}`,
-          {},
-          {
-            withCredentials: true,
-          }
-        );
-        return visitId;
-      } catch (error) {
-        const axiosError = error as AxiosError<{ message: string }>;
-        if (
-          axiosError.response &&
-          axiosError.response.data &&
-          axiosError.response.data.message
-        ) {
-          return thunkAPI.rejectWithValue(axiosError.response.data.message);
-        } else {
-          return thunkAPI.rejectWithValue("An unexpected error occurred");
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL}/visits/checkout/${visitId}`,
+        body,
+        {
+          withCredentials: true,
         }
+      );
+      return visitId;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
-  );
+  }
+);
 
 export {
   fetchCompanyThunk,
