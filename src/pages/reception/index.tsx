@@ -2,9 +2,11 @@ import { IReceptionVisitor } from "@/app/features/company/thunk";
 import VisitorAuth from "@/components/features/visitors/auth";
 import ColumnHeader from "@/components/shared/columnHeader";
 import PaginatedTable from "@/components/shared/paginatedTable";
+import { Button } from "@/components/ui/button";
 import useEmployees from "@/hooks/employees";
 import useReceptionVisitors from "@/hooks/visitors/reception";
 import { formatDate } from "@/utils";
+import { ExitIcon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
 import React from "react";
 
@@ -41,10 +43,28 @@ export const columns: ColumnDef<IReceptionVisitor>[] = [
   {
     accessorKey: "checkoutTime",
     header: ({ column }) => (
-      <ColumnHeader column={column} label="Check In Time" />
+      <ColumnHeader column={column} label="Check Out Time" />
     ),
-    cell: ({ row }) => `${formatDate(new Date(row.original.checkInTime))}`,
+    cell: ({ row }) => {
+      const checkoutTime = row.original.checkoutTime;
+      return checkoutTime ? `${formatDate(new Date(checkoutTime))}` : "-";
+    },
     enableSorting: true,
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      const visit = row.original;
+      return !visit.checkoutTime ? (
+        <Button size="sm" className="text-xs">
+          <ExitIcon className="mr-2" />
+          Check Out
+        </Button>
+      ) : (
+        <span>-</span>
+      );
+    },
   },
 ];
 

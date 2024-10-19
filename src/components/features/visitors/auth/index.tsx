@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/app/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -16,6 +16,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import Select from "react-select";
+import { addExistingReceptionVisitorThunk } from "@/app/features/company/thunk";
 
 enum VisitorAuthState {
   EXISTING = "EXISTING",
@@ -24,8 +25,8 @@ enum VisitorAuthState {
 }
 
 const visitorSignInFormSchema = z.object({
-  email: z.string().optional(),
-  mobile: z.string().optional(),
+  emailAddress: z.string().optional(),
+  mobileNo: z.string().optional(),
   employeeId: z.string(),
   purposeOfVisit: z.string(),
 });
@@ -33,8 +34,8 @@ const visitorSignInFormSchema = z.object({
 const visitorSignUpFormSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
-  email: z.string(),
-  mobile: z.string(),
+  emailAddress: z.string(),
+  mobileNo: z.string(),
   purposeOfVisit: z.string(),
   employeeId: z.string(),
 });
@@ -48,12 +49,13 @@ const VisitorAuth: React.FC = () => {
   );
 
   const { employees } = useAppSelector((state) => state.employee);
+  const dispatch = useAppDispatch();
 
   const signInForm = useForm<VisitorSignInForm>({
     resolver: zodResolver(visitorSignInFormSchema),
     defaultValues: {
-      email: "",
-      mobile: "",
+      emailAddress: "",
+      mobileNo: "",
     },
     mode: "onChange",
   });
@@ -63,8 +65,8 @@ const VisitorAuth: React.FC = () => {
     defaultValues: {
       firstName: "",
       lastName: "",
-      email: "",
-      mobile: "",
+      emailAddress: "",
+      mobileNo: "",
     },
     mode: "onChange",
   });
@@ -81,21 +83,24 @@ const VisitorAuth: React.FC = () => {
     }
   }, []);
 
-  const visitorSigninHandler = useCallback((values: VisitorSignInForm) => {
-    try {
-      if (!values.email && !values.mobile) {
-        toast.error("Please provide either email or mobile number");
-        return;
+  const visitorSigninHandler = useCallback(
+    async (values: VisitorSignInForm) => {
+      try {
+        if (!values.emailAddress && !values.mobileNo) {
+          toast.error("Please provide either email or mobile number");
+          return;
+        }
+        console.log("values :>> ", values);
+        await dispatch(addExistingReceptionVisitorThunk(values)).unwrap();
+        signInForm.reset();
+        toast.success("Sign in successful");
+        setUserType(VisitorAuthState.DEFAULT);
+      } catch (error) {
+        toast.success("Sign in successful");
       }
-      console.log("values :>> ", values);
-
-      signInForm.reset();
-      toast.success("Sign in successful");
-      setUserType(VisitorAuthState.DEFAULT);
-    } catch (error) {
-      toast.success("Sign in successful");
-    }
-  }, []);
+    },
+    []
+  );
 
   const defaultContent = (
     <div className="space-y-6">
@@ -136,7 +141,7 @@ const VisitorAuth: React.FC = () => {
         <div className="space-y-2">
           <FormField
             control={signInForm.control}
-            name="email"
+            name="emailAddress"
             render={({ field }) => (
               <FormItem>
                 <FormLabel id="email" className="text-xs">
@@ -159,7 +164,7 @@ const VisitorAuth: React.FC = () => {
         <div className="space-y-2">
           <FormField
             control={signInForm.control}
-            name="mobile"
+            name="mobileNo"
             render={({ field }) => (
               <FormItem>
                 <FormLabel id="mobile" className="text-xs">
@@ -321,7 +326,7 @@ const VisitorAuth: React.FC = () => {
         <div className="space-y-2">
           <FormField
             control={signUpForm.control}
-            name="email"
+            name="emailAddress"
             render={({ field }) => (
               <FormItem>
                 <FormLabel id="email" className="text-xs">
@@ -344,7 +349,7 @@ const VisitorAuth: React.FC = () => {
         <div className="space-y-2">
           <FormField
             control={signUpForm.control}
-            name="mobile"
+            name="mobileNo"
             render={({ field }) => (
               <FormItem>
                 <FormLabel id="mobile" className="text-xs">

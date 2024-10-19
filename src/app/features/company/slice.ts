@@ -6,6 +6,7 @@ import {
   IReceptionVisitor,
   IVisit,
   IVisitor,
+  addExistingReceptionVisitorThunk,
   addNewVisitThunk,
   addVisitorThunk,
   changeCompanyUserStatusThunk,
@@ -134,6 +135,20 @@ export const companySlice = createSlice({
       (state, action: PayloadAction<ICompanyResponse>) => {
         state.company = action.payload;
         state.isLoading[CompanyApiEndpoint.FETCH_COMPANY] = false;
+      }
+    );
+    builder.addCase(addExistingReceptionVisitorThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(addExistingReceptionVisitorThunk.rejected, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      addExistingReceptionVisitorThunk.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        // state.company = action.payload;
+        console.log("action.payload FROM slice:>> ", action.payload);
+        state.loading = false;
       }
     );
     builder.addCase(fetchCompanyByIdThunk.pending, (state) => {
