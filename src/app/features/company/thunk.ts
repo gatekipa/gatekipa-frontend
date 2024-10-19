@@ -92,6 +92,20 @@ export interface ICompanyResponse {
   updatedAt: string;
 }
 
+export interface IReceptionVisitor {
+  id: string;
+  checkInTime: string;
+  checkoutTime: string;
+  createdAt: string;
+  visitor: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    mobileNo: string;
+    emailAddress: string;
+  };
+}
+
 const fetchCompanyThunk: AsyncThunk<ICompany[], void, {}> = createAsyncThunk(
   "company/",
   async (_, thunkAPI) => {
@@ -211,6 +225,31 @@ const fetchCompanyUsersThunk: AsyncThunk<
     }
   }
 });
+
+const fetchReceptionVisitorsThunk: AsyncThunk<IReceptionVisitor[], void, {}> =
+  createAsyncThunk("company/reception/visitors", async (_, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_API_URL}/visitor/list-checked-in-visitors`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  });
 
 const fetchVisitorsThunk: AsyncThunk<IVisitor[], FetchVisitorsParams, {}> =
   createAsyncThunk("company/visitors", async (params, thunkAPI) => {
@@ -487,4 +526,5 @@ export {
   changeCompanyUserStatusThunk,
   fetchCompanyByIdThunk,
   editCompanyByIdThunk,
+  fetchReceptionVisitorsThunk,
 };

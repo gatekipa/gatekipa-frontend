@@ -3,6 +3,7 @@ import {
   ICompany,
   ICompanyResponse,
   ICompanyUser,
+  IReceptionVisitor,
   IVisit,
   IVisitor,
   addNewVisitThunk,
@@ -12,6 +13,7 @@ import {
   fetchCompanyByIdThunk,
   fetchCompanyThunk,
   fetchCompanyUsersThunk,
+  fetchReceptionVisitorsThunk,
   fetchVisitorsThunk,
   fetchVisitsThunk,
   markVisitCheckoutThunk,
@@ -33,6 +35,7 @@ export interface CompanyState {
   company: ICompanyResponse | null;
   companyUsersLoading: boolean;
   isLoading: { [key in CompanyApiEndpoint]: boolean };
+  receptionVisitors: IReceptionVisitor[];
 }
 
 const initialState: CompanyState = {
@@ -47,6 +50,7 @@ const initialState: CompanyState = {
     [CompanyApiEndpoint.FETCH_COMPANY]: false,
     [CompanyApiEndpoint.EDIT_COMPANY]: false,
   },
+  receptionVisitors: [],
 };
 
 export const companySlice = createSlice({
@@ -65,6 +69,19 @@ export const companySlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchCompanyThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      fetchReceptionVisitorsThunk.fulfilled,
+      (state, action: PayloadAction<IReceptionVisitor[]>) => {
+        state.receptionVisitors = action.payload;
+        state.loading = false;
+      }
+    );
+    builder.addCase(fetchReceptionVisitorsThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchReceptionVisitorsThunk.rejected, (state) => {
       state.loading = false;
     });
     builder.addCase(
