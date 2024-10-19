@@ -9,6 +9,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../../app/hooks";
 import { MenuIcon } from "lucide-react";
 import ToolTip from "@/components/shared/tooltip";
+import { useMedia } from "react-use";
 
 const DashboardLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -16,8 +17,19 @@ const DashboardLayout: React.FC = () => {
   const user = useAppSelector((state) => state.auth.user);
   const role = getUserRole() as UserRole;
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
+
+  const isTablet = useMedia(
+    "(min-width: 600px) and (max-width: 1024px)",
+    false
+  );
+
+  useEffect(() => {
+    if (isTablet) {
+      setIsSidebarOpen(false);
+    }
+  }, [isTablet]);
 
   const toggleSidebar = () =>
     setIsSidebarOpen((isSidebarOpen) => !isSidebarOpen);
