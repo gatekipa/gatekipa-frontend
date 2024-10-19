@@ -7,6 +7,7 @@ import {
   IVisit,
   IVisitor,
   addExistingReceptionVisitorThunk,
+  addNewReceptionVisitorThunk,
   addNewVisitThunk,
   addVisitorThunk,
   changeCompanyUserStatusThunk,
@@ -145,6 +146,20 @@ export const companySlice = createSlice({
     });
     builder.addCase(
       addExistingReceptionVisitorThunk.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        // state.company = action.payload;
+        console.log("action.payload FROM slice:>> ", action.payload);
+        state.loading = false;
+      }
+    );
+    builder.addCase(addNewReceptionVisitorThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(addNewReceptionVisitorThunk.rejected, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      addNewReceptionVisitorThunk.fulfilled,
       (state, action: PayloadAction<any>) => {
         // state.company = action.payload;
         console.log("action.payload FROM slice:>> ", action.payload);

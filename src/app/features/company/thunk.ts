@@ -3,7 +3,10 @@ import axios, { AxiosError } from "axios";
 import { IVisitorForm } from "@/components/features/visitors/toolbar";
 import { IVisitForm } from "@/components/features/visits/toolbar";
 import { ICompanyRegistration } from "@/components/features/auth/companyRegistrationForm";
-import { VisitorSignInForm } from "@/components/features/visitors/auth";
+import {
+  VisitorSignInForm,
+  VisitorSignUpForm,
+} from "@/components/features/visitors/auth";
 
 export interface ICompany {
   id: string;
@@ -353,6 +356,36 @@ const addExistingReceptionVisitorThunk: AsyncThunk<any, VisitorSignInForm, {}> =
     }
   );
 
+const addNewReceptionVisitorThunk: AsyncThunk<any, VisitorSignUpForm, {}> =
+  createAsyncThunk(
+    "company/reception/create-check-in-visitor",
+    async (payload: VisitorSignUpForm, thunkAPI) => {
+      try {
+        const response = await axios.post(
+          `${
+            import.meta.env.VITE_BASE_API_URL
+          }/visitor/create-check-in-visitor`,
+          payload,
+          {
+            withCredentials: true,
+          }
+        );
+        return response.data.data;
+      } catch (error) {
+        const axiosError = error as AxiosError<{ message: string }>;
+        if (
+          axiosError.response &&
+          axiosError.response.data &&
+          axiosError.response.data.message
+        ) {
+          return thunkAPI.rejectWithValue(axiosError.response.data.message);
+        } else {
+          return thunkAPI.rejectWithValue("An unexpected error occurred");
+        }
+      }
+    }
+  );
+
 const changeCompanyUserStatusThunk: AsyncThunk<
   ICompanyUser,
   { isActive: boolean; companyUserId: string },
@@ -559,4 +592,5 @@ export {
   editCompanyByIdThunk,
   fetchReceptionVisitorsThunk,
   addExistingReceptionVisitorThunk,
+  addNewReceptionVisitorThunk,
 };

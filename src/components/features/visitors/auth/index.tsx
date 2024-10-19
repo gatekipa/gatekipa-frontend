@@ -16,7 +16,10 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import Select from "react-select";
-import { addExistingReceptionVisitorThunk } from "@/app/features/company/thunk";
+import {
+  addExistingReceptionVisitorThunk,
+  addNewReceptionVisitorThunk,
+} from "@/app/features/company/thunk";
 
 enum VisitorAuthState {
   EXISTING = "EXISTING",
@@ -56,6 +59,8 @@ const VisitorAuth: React.FC = () => {
     defaultValues: {
       emailAddress: "",
       mobileNo: "",
+      employeeId: "",
+      purposeOfVisit: "",
     },
     mode: "onChange",
   });
@@ -67,21 +72,25 @@ const VisitorAuth: React.FC = () => {
       lastName: "",
       emailAddress: "",
       mobileNo: "",
+      purposeOfVisit: "",
+      employeeId: "",
     },
     mode: "onChange",
   });
 
-  const visitorSignUpHandler = useCallback((values: VisitorSignUpForm) => {
-    try {
-      console.log("values :>> ", values);
-
-      signInForm.reset();
-      toast.success("Sign up successful");
-      setUserType(VisitorAuthState.DEFAULT);
-    } catch (error) {
-      toast.success("Sign up successful");
-    }
-  }, []);
+  const visitorSignUpHandler = useCallback(
+    async (values: VisitorSignUpForm) => {
+      try {
+        await dispatch(addNewReceptionVisitorThunk(values)).unwrap();
+        signUpForm.reset();
+        toast.success("Sign up successful");
+        setUserType(VisitorAuthState.DEFAULT);
+      } catch (error) {
+        toast.success(error as string);
+      }
+    },
+    []
+  );
 
   const visitorSigninHandler = useCallback(
     async (values: VisitorSignInForm) => {
@@ -90,13 +99,12 @@ const VisitorAuth: React.FC = () => {
           toast.error("Please provide either email or mobile number");
           return;
         }
-        console.log("values :>> ", values);
         await dispatch(addExistingReceptionVisitorThunk(values)).unwrap();
         signInForm.reset();
         toast.success("Sign in successful");
         setUserType(VisitorAuthState.DEFAULT);
       } catch (error) {
-        toast.success("Sign in successful");
+        toast.success(error as string);
       }
     },
     []
@@ -256,16 +264,18 @@ const VisitorAuth: React.FC = () => {
             )}
           />
         </div>
-        <Button type="submit" className="w-full">
-          Check In
-        </Button>
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={() => setUserType(VisitorAuthState.DEFAULT)}
-        >
-          Back
-        </Button>
+        <div className="flex gap-2">
+          <Button type="submit" className="w-full">
+            Check In
+          </Button>
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => setUserType(VisitorAuthState.DEFAULT)}
+          >
+            Back
+          </Button>
+        </div>
       </form>
     </Form>
   );
@@ -377,7 +387,7 @@ const VisitorAuth: React.FC = () => {
               <FormItem className="flex flex-col">
                 <FormLabel className="text-xs">Employee</FormLabel>
                 <Controller
-                  control={signInForm.control}
+                  control={signUpForm.control}
                   name="employeeId"
                   render={({ field }) => (
                     <Select
@@ -441,16 +451,18 @@ const VisitorAuth: React.FC = () => {
             )}
           />
         </div>
-        <Button type="submit" className="w-full">
-          Check In
-        </Button>
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={() => setUserType(VisitorAuthState.DEFAULT)}
-        >
-          Back
-        </Button>
+        <div className="flex gap-x-2">
+          <Button type="submit" className="w-full">
+            Check In
+          </Button>
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => setUserType(VisitorAuthState.DEFAULT)}
+          >
+            Back
+          </Button>
+        </div>
       </form>
     </Form>
   );
