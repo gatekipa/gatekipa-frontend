@@ -19,6 +19,7 @@ import Select from "react-select";
 import {
   addExistingReceptionVisitorThunk,
   addNewReceptionVisitorThunk,
+  fetchReceptionVisitorsThunk,
 } from "@/app/features/company/thunk";
 
 enum VisitorAuthState {
@@ -82,6 +83,7 @@ const VisitorAuth: React.FC = () => {
     async (values: VisitorSignUpForm) => {
       try {
         await dispatch(addNewReceptionVisitorThunk(values)).unwrap();
+        await dispatch(fetchReceptionVisitorsThunk()).unwrap();
         signUpForm.reset();
         toast.success("Sign up successful");
         setUserType(VisitorAuthState.DEFAULT);
@@ -100,6 +102,8 @@ const VisitorAuth: React.FC = () => {
           return;
         }
         await dispatch(addExistingReceptionVisitorThunk(values)).unwrap();
+        await dispatch(fetchReceptionVisitorsThunk()).unwrap();
+
         signInForm.reset();
         toast.success("Sign in successful");
         setUserType(VisitorAuthState.DEFAULT);
