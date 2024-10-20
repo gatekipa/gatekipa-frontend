@@ -1,5 +1,8 @@
 import { updateReceptionVisitors } from "@/app/features/company/slice";
-import { markVisitCheckoutThunk } from "@/app/features/company/thunk";
+import {
+  fetchReceptionVisitorsThunk,
+  markVisitCheckoutThunk,
+} from "@/app/features/company/thunk";
 import { useAppDispatch } from "@/app/hooks";
 import {
   AlertDialog,
@@ -31,6 +34,7 @@ const ReceptionVisitorCheckoutModal: React.FC<
     try {
       await dispatch(markVisitCheckoutThunk({ visitId, comments })).unwrap();
       dispatch(updateReceptionVisitors({ id: visitId }));
+      await dispatch(fetchReceptionVisitorsThunk()).unwrap();
       toast.success(
         `You have checked out successfully. Thank you for visiting!`
       );

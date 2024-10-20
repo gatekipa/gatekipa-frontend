@@ -6,7 +6,7 @@ import PaginatedTable from "@/components/shared/paginatedTable";
 import { Button } from "@/components/ui/button";
 import useEmployees from "@/hooks/employees";
 import useReceptionVisitors from "@/hooks/visitors/reception";
-import { formatDate } from "@/utils";
+import { formatDate, getCompany } from "@/utils";
 import { ExitIcon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
 import React, { useState } from "react";
@@ -75,7 +75,7 @@ const ReceptionPage: React.FC = () => {
 
   return (
     <div className="space-y-3 h-screen">
-      <h2 className="text-3xl font-bold mb-7">Welcome To GateKipas</h2>
+      <h2 className="text-3xl font-bold mb-7">Welcome To {getCompany()}</h2>
       <section className="grid grid-cols-1 gap-x-7 gap-y-4">
         <div className="col-span-2">
           <VisitorAuth />

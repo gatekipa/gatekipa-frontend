@@ -120,14 +120,17 @@ const VisitorAuth: React.FC = () => {
       <p className="text-center text-muted-foreground">
         Please let us know if you have visited us before?
       </p>
-      <div className="flex flex-col space-y-4">
+      <div className="flex items-center justify-center gap-3 flex-wrap">
         <Button
           onClick={() => setUserType(VisitorAuthState.EXISTING)}
-          className="bg-slate-600 text-white"
+          className="w-1/2 h-20 text-xl"
         >
           I've visited before
         </Button>
-        <Button onClick={() => setUserType(VisitorAuthState.NEW)}>
+        <Button
+          onClick={() => setUserType(VisitorAuthState.NEW)}
+          className="w-1/2 h-20 text-xl"
+        >
           I'm visting first time
         </Button>
       </div>
