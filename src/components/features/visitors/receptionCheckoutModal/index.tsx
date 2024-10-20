@@ -31,7 +31,9 @@ const ReceptionVisitorCheckoutModal: React.FC<
     try {
       await dispatch(markVisitCheckoutThunk({ visitId, comments })).unwrap();
       dispatch(updateReceptionVisitors({ id: visitId }));
-      toast.success(`Employee Successfully Checked Out`);
+      toast.success(
+        `You have checked out successfully. Thank you for visiting!`
+      );
       onClose();
     } catch (error) {
       toast.error(`${error}`);
@@ -47,20 +49,20 @@ const ReceptionVisitorCheckoutModal: React.FC<
     >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Confirm your Check Out</AlertDialogTitle>
+          <AlertDialogTitle>Visit Feedback</AlertDialogTitle>
           <div className="space-y-2">
-            <Label>Comments</Label>
+            <Label>{`Comments (Optional)`}</Label>
             <Textarea
               value={comments}
               onChange={(e) => setComments(e.target.value!)}
-              placeholder="Please write your comments here"
+              placeholder="Leave a comment here about your visit"
             ></Textarea>
           </div>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel className="text-xs px-3">Cancel</AlertDialogCancel>
           <AlertDialogAction className="text-xs px-3" onClick={handleSubmit}>
-            Save Changes
+            Checkout
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

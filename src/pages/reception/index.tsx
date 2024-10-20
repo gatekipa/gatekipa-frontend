@@ -42,17 +42,6 @@ export const columns: ColumnDef<IReceptionVisitor>[] = [
     enableSorting: true,
   },
   {
-    accessorKey: "checkoutTime",
-    header: ({ column }) => (
-      <ColumnHeader column={column} label="Check Out Time" />
-    ),
-    cell: ({ row }) => {
-      const checkoutTime = row.original.checkoutTime;
-      return checkoutTime ? `${formatDate(new Date(checkoutTime))}` : "-";
-    },
-    enableSorting: true,
-  },
-  {
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
@@ -91,8 +80,8 @@ const ReceptionPage: React.FC = () => {
         <div className="col-span-2">
           <VisitorAuth />
         </div>
-        <div className="col-span-4">
-          <h3 className="text-2xl font-bold">Visitors</h3>
+        <div className="col-span-4 mt-2">
+          <h3 className="text-2xl font-bold">Checked In Visitors</h3>
           <PaginatedTable
             columns={columns}
             data={receptionVisitors}

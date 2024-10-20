@@ -85,7 +85,7 @@ const VisitorAuth: React.FC = () => {
         await dispatch(addNewReceptionVisitorThunk(values)).unwrap();
         await dispatch(fetchReceptionVisitorsThunk()).unwrap();
         signUpForm.reset();
-        toast.success("Sign up successful");
+        toast.success("You have checked in successfully!");
         setUserType(VisitorAuthState.DEFAULT);
       } catch (error) {
         toast.success(error as string);
@@ -105,7 +105,7 @@ const VisitorAuth: React.FC = () => {
         await dispatch(fetchReceptionVisitorsThunk()).unwrap();
 
         signInForm.reset();
-        toast.success("Sign in successful");
+        toast.success("You have checked in successfully!");
         setUserType(VisitorAuthState.DEFAULT);
       } catch (error) {
         toast.success(error as string);
@@ -116,19 +116,19 @@ const VisitorAuth: React.FC = () => {
 
   const defaultContent = (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-center">Visitor</h2>
+      <h2 className="text-2xl font-bold text-center">Visitor Self Check In</h2>
       <p className="text-center text-muted-foreground">
-        Are you an existing or a new visitor?
+        Please let us know if you have visited us before?
       </p>
       <div className="flex flex-col space-y-4">
         <Button
           onClick={() => setUserType(VisitorAuthState.EXISTING)}
           className="bg-slate-600 text-white"
         >
-          I'm an existing user
+          I've visited before
         </Button>
         <Button onClick={() => setUserType(VisitorAuthState.NEW)}>
-          I'm a new visitor
+          I'm visting first time
         </Button>
       </div>
     </div>
