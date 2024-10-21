@@ -5,6 +5,7 @@ import {
   DollarSignIcon,
   FileIcon,
   GemIcon,
+  HeadsetIcon,
   LayoutDashboardIcon,
   Settings,
   TimerIcon,
@@ -34,6 +35,11 @@ const adminRoutes: Route[] = [
     label: "Emergency",
     href: "/dashboard/emergency",
     icon: <AlertCircleIcon size={18} />,
+  },
+  {
+    label: "Reception",
+    href: "/dashboard/reception",
+    icon: <HeadsetIcon size={18} />,
   },
   {
     label: "Visitor Visits",

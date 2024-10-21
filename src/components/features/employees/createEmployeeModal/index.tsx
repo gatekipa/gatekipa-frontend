@@ -5,8 +5,6 @@ import {
 } from "@/app/features/employee/thunk";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import LoadingButton from "@/components/shared/loadingButton";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
   DialogContent,
@@ -25,22 +23,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -61,10 +51,10 @@ const createEmployeeFormSchema = z.object({
       "Invalid phone number. It should be in the format +1XXXXXXXXXX (11 digits)",
   }),
   designation: z.string().min(3),
-  dateOfBirth: z.date(),
-  timesheetDueDate: z.date(),
-  payrollPeriodEndDate: z.date(),
-  payDate: z.date(),
+  dateOfBirth: z.string(),
+  timesheetDueDate: z.string(),
+  payrollPeriodEndDate: z.string(),
+  payDate: z.string(),
   shiftId: z.string(),
   avatar: z.any().optional(),
 });
@@ -89,23 +79,21 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
       mobileNo: employee?.mobileNo ?? "",
       designation: employee?.designation ?? "",
       dateOfBirth: employee?.dateOfBirth
-        ? new Date(employee?.dateOfBirth)
-        : new Date("2004-01-01"),
+        ? new Date(employee?.dateOfBirth).toString()
+        : new Date("2004-01-01").toString(),
       timesheetDueDate: employee?.timesheetDueDate
-        ? new Date(employee?.timesheetDueDate)
-        : new Date("2004-01-01"),
+        ? new Date(employee?.timesheetDueDate).toString()
+        : new Date("2004-01-01").toString(),
       payrollPeriodEndDate: employee?.payrollPeriodEndDate
-        ? new Date(employee?.payrollPeriodEndDate)
-        : new Date("2004-01-01"),
+        ? new Date(employee?.payrollPeriodEndDate).toString()
+        : new Date("2004-01-01").toString(),
       payDate: employee?.payDate
-        ? new Date(employee?.payDate)
-        : new Date("2004-01-01"),
+        ? new Date(employee?.payDate).toString()
+        : new Date("2004-01-01").toString(),
       shiftId: employee?.shift.id ?? "",
       avatar: undefined,
     },
   });
-
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const onSubmit = useCallback(async (values: ICreateEmployeeForm) => {
     try {
@@ -129,7 +117,7 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
         await dispatch(createEmployeeThunk(formData)).unwrap();
       } else {
         const newEmployee = { ...employee!, ...values };
-
+        // @ts-ignore
         await dispatch(editEmployeeThunk(newEmployee!)).unwrap();
       }
       form.reset();
@@ -357,40 +345,15 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
                       <Label className="text-xs">Date of Birth</Label>
-                      <Popover
-                        open={isCalendarOpen}
-                        onOpenChange={(open) => setIsCalendarOpen(open)}
-                      >
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant={"outline"}
-                              className={cn(
-                                "pl-3 text-left font-normal text-xs",
-                                !field.value && "text-muted-foreground"
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, "PPP")
-                              ) : (
-                                <span>Pick a date</span>
-                              )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-full p-0" align="end">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            disabled={(date) =>
-                              date > new Date() || date < new Date("1900-01-01")
-                            }
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
+                      <FormControl>
+                        <Input
+                          id="dateOfBirth"
+                          type="date"
+                          className="pl-3 text-left font-normal text-xs"
+                          {...field}
+                        />
+                      </FormControl>
+
                       <FormMessage />
                     </FormItem>
                   )}
@@ -404,38 +367,14 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
                         <Label className="text-xs">Pay Date</Label>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={"outline"}
-                                className={cn(
-                                  "pl-3 text-left font-normal text-xs",
-                                  !field.value && "text-muted-foreground"
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, "PPP")
-                                ) : (
-                                  <span>Pick a date</span>
-                                )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-full p-0" align="end">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              disabled={(date) =>
-                                date > new Date() ||
-                                date < new Date("1900-01-01")
-                              }
-                              initialFocus
-                            />
-                          </PopoverContent>
-                        </Popover>
+                        <FormControl>
+                          <Input
+                            id="payDate"
+                            type="date"
+                            className="pl-3 text-left font-normal text-xs"
+                            {...field}
+                          />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -450,38 +389,16 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
                         <Label className="text-xs">
                           Payroll Period End Date
                         </Label>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={"outline"}
-                                className={cn(
-                                  "pl-3 text-left font-normal text-xs",
-                                  !field.value && "text-muted-foreground"
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, "PPP")
-                                ) : (
-                                  <span>Pick a date</span>
-                                )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-full p-0" align="end">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              disabled={(date) =>
-                                date > new Date() ||
-                                date < new Date("1900-01-01")
-                              }
-                              initialFocus
-                            />
-                          </PopoverContent>
-                        </Popover>
+
+                        <FormControl>
+                          <Input
+                            id="payrollPeriodEndDate"
+                            type="date"
+                            className="pl-3 text-left font-normal text-xs"
+                            {...field}
+                          />
+                        </FormControl>
+
                         <FormMessage />
                       </FormItem>
                     )}
@@ -496,37 +413,15 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
                       <Label className="text-xs">Timesheet Due Date</Label>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant={"outline"}
-                              className={cn(
-                                "pl-3 text-left font-normal text-xs",
-                                !field.value && "text-muted-foreground"
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, "PPP")
-                              ) : (
-                                <span>Pick a date</span>
-                              )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-full p-0" align="end">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            disabled={(date) =>
-                              date > new Date() || date < new Date("1900-01-01")
-                            }
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
+                      <FormControl>
+                        <Input
+                          id="timesheetDueDate"
+                          type="date"
+                          className="pl-3 text-left font-normal text-xs"
+                          {...field}
+                        />
+                      </FormControl>
+
                       <FormMessage />
                     </FormItem>
                   )}

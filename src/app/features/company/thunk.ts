@@ -3,6 +3,10 @@ import axios, { AxiosError } from "axios";
 import { IVisitorForm } from "@/components/features/visitors/toolbar";
 import { IVisitForm } from "@/components/features/visits/toolbar";
 import { ICompanyRegistration } from "@/components/features/auth/companyRegistrationForm";
+import {
+  VisitorSignInForm,
+  VisitorSignUpForm,
+} from "@/components/features/visitors/auth";
 
 export interface ICompany {
   id: string;
@@ -90,6 +94,20 @@ export interface ICompanyResponse {
   address: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface IReceptionVisitor {
+  id: string;
+  checkInTime: string;
+  checkoutTime: string;
+  createdAt: string;
+  visitor: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    mobileNo: string;
+    emailAddress: string;
+  };
 }
 
 const fetchCompanyThunk: AsyncThunk<ICompany[], void, {}> = createAsyncThunk(
@@ -212,6 +230,31 @@ const fetchCompanyUsersThunk: AsyncThunk<
   }
 });
 
+const fetchReceptionVisitorsThunk: AsyncThunk<IReceptionVisitor[], void, {}> =
+  createAsyncThunk("company/reception/visitors", async (_, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_API_URL}/visitor/list-checked-in-visitors`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return response.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
+      }
+    }
+  });
+
 const fetchVisitorsThunk: AsyncThunk<IVisitor[], FetchVisitorsParams, {}> =
   createAsyncThunk("company/visitors", async (params, thunkAPI) => {
     try {
@@ -262,6 +305,66 @@ const addVisitorThunk: AsyncThunk<IVisitor, IVisitorForm, {}> =
         // >(`/visitor/create`, payload);
         const response = await axios.post(
           `${import.meta.env.VITE_BASE_API_URL}/visitor/create`,
+          payload,
+          {
+            withCredentials: true,
+          }
+        );
+        return response.data.data;
+      } catch (error) {
+        const axiosError = error as AxiosError<{ message: string }>;
+        if (
+          axiosError.response &&
+          axiosError.response.data &&
+          axiosError.response.data.message
+        ) {
+          return thunkAPI.rejectWithValue(axiosError.response.data.message);
+        } else {
+          return thunkAPI.rejectWithValue("An unexpected error occurred");
+        }
+      }
+    }
+  );
+
+const addExistingReceptionVisitorThunk: AsyncThunk<any, VisitorSignInForm, {}> =
+  createAsyncThunk(
+    "company/reception/create-existing",
+    async (payload: VisitorSignInForm, thunkAPI) => {
+      try {
+        const response = await axios.post(
+          `${
+            import.meta.env.VITE_BASE_API_URL
+          }/visitor/check-in-existing-visitor`,
+          payload,
+          {
+            withCredentials: true,
+          }
+        );
+        return response.data.data;
+      } catch (error) {
+        const axiosError = error as AxiosError<{ message: string }>;
+        if (
+          axiosError.response &&
+          axiosError.response.data &&
+          axiosError.response.data.message
+        ) {
+          return thunkAPI.rejectWithValue(axiosError.response.data.message);
+        } else {
+          return thunkAPI.rejectWithValue("An unexpected error occurred");
+        }
+      }
+    }
+  );
+
+const addNewReceptionVisitorThunk: AsyncThunk<any, VisitorSignUpForm, {}> =
+  createAsyncThunk(
+    "company/reception/create-check-in-visitor",
+    async (payload: VisitorSignUpForm, thunkAPI) => {
+      try {
+        const response = await axios.post(
+          `${
+            import.meta.env.VITE_BASE_API_URL
+          }/visitor/create-check-in-visitor`,
           payload,
           {
             withCredentials: true,
@@ -441,38 +544,38 @@ const markVisitThunk: AsyncThunk<any, { visitId: string }, {}> =
     }
   });
 
-const markVisitCheckoutThunk: AsyncThunk<any, { visitId: string }, {}> =
-  createAsyncThunk(
-    "company/visits/mark/checkout",
-    async ({ visitId }, thunkAPI) => {
-      try {
-        // const response = await NetworkManager.post<IBaseResponse<any>, any>(
-        //   `/visits/checkout/${visitId}`,
-        //   {}
-        // );
+const markVisitCheckoutThunk: AsyncThunk<
+  any,
+  { visitId: string; comments?: string },
+  {}
+> = createAsyncThunk(
+  "company/visits/mark/checkout",
+  async ({ visitId, comments }, thunkAPI) => {
+    const body = comments ? { comments } : {};
 
-        await axios.post(
-          `${import.meta.env.VITE_BASE_API_URL}/visits/checkout/${visitId}`,
-          {},
-          {
-            withCredentials: true,
-          }
-        );
-        return visitId;
-      } catch (error) {
-        const axiosError = error as AxiosError<{ message: string }>;
-        if (
-          axiosError.response &&
-          axiosError.response.data &&
-          axiosError.response.data.message
-        ) {
-          return thunkAPI.rejectWithValue(axiosError.response.data.message);
-        } else {
-          return thunkAPI.rejectWithValue("An unexpected error occurred");
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_BASE_API_URL}/visits/checkout/${visitId}`,
+        body,
+        {
+          withCredentials: true,
         }
+      );
+      return visitId;
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.message
+      ) {
+        return thunkAPI.rejectWithValue(axiosError.response.data.message);
+      } else {
+        return thunkAPI.rejectWithValue("An unexpected error occurred");
       }
     }
-  );
+  }
+);
 
 export {
   fetchCompanyThunk,
@@ -487,4 +590,7 @@ export {
   changeCompanyUserStatusThunk,
   fetchCompanyByIdThunk,
   editCompanyByIdThunk,
+  fetchReceptionVisitorsThunk,
+  addExistingReceptionVisitorThunk,
+  addNewReceptionVisitorThunk,
 };

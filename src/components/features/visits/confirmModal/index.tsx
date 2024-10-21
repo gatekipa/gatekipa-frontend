@@ -25,7 +25,7 @@ export enum ModalType {
 }
 
 type ConfirmModalProps = {
-  label: string;
+  label: string | React.ReactNode;
   type: ModalType;
   visit: IVisit;
 };

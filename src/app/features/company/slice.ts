@@ -3,8 +3,11 @@ import {
   ICompany,
   ICompanyResponse,
   ICompanyUser,
+  IReceptionVisitor,
   IVisit,
   IVisitor,
+  addExistingReceptionVisitorThunk,
+  addNewReceptionVisitorThunk,
   addNewVisitThunk,
   addVisitorThunk,
   changeCompanyUserStatusThunk,
@@ -12,6 +15,7 @@ import {
   fetchCompanyByIdThunk,
   fetchCompanyThunk,
   fetchCompanyUsersThunk,
+  fetchReceptionVisitorsThunk,
   fetchVisitorsThunk,
   fetchVisitsThunk,
   markVisitCheckoutThunk,
@@ -33,6 +37,7 @@ export interface CompanyState {
   company: ICompanyResponse | null;
   companyUsersLoading: boolean;
   isLoading: { [key in CompanyApiEndpoint]: boolean };
+  receptionVisitors: IReceptionVisitor[];
 }
 
 const initialState: CompanyState = {
@@ -47,12 +52,22 @@ const initialState: CompanyState = {
     [CompanyApiEndpoint.FETCH_COMPANY]: false,
     [CompanyApiEndpoint.EDIT_COMPANY]: false,
   },
+  receptionVisitors: [],
 };
 
 export const companySlice = createSlice({
   name: "company",
   initialState,
-  reducers: {},
+  reducers: {
+    updateReceptionVisitors: (state, action: PayloadAction<{ id: string }>) => {
+      const index = state.receptionVisitors.findIndex(
+        (visitor) => visitor.id === action.payload.id
+      );
+      if (index !== -1) {
+        state.receptionVisitors[index].checkoutTime = new Date().toString();
+      }
+    },
+  },
   extraReducers(builder) {
     builder.addCase(
       fetchCompanyThunk.fulfilled,
@@ -65,6 +80,19 @@ export const companySlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchCompanyThunk.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(
+      fetchReceptionVisitorsThunk.fulfilled,
+      (state, action: PayloadAction<IReceptionVisitor[]>) => {
+        state.receptionVisitors = action.payload;
+        state.loading = false;
+      }
+    );
+    builder.addCase(fetchReceptionVisitorsThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchReceptionVisitorsThunk.rejected, (state) => {
       state.loading = false;
     });
     builder.addCase(
@@ -117,6 +145,34 @@ export const companySlice = createSlice({
       (state, action: PayloadAction<ICompanyResponse>) => {
         state.company = action.payload;
         state.isLoading[CompanyApiEndpoint.FETCH_COMPANY] = false;
+      }
+    );
+    builder.addCase(addExistingReceptionVisitorThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(addExistingReceptionVisitorThunk.rejected, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      addExistingReceptionVisitorThunk.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        // state.company = action.payload;
+        console.log("action.payload FROM slice:>> ", action.payload);
+        state.loading = false;
+      }
+    );
+    builder.addCase(addNewReceptionVisitorThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(addNewReceptionVisitorThunk.rejected, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      addNewReceptionVisitorThunk.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        // state.company = action.payload;
+        console.log("action.payload FROM slice:>> ", action.payload);
+        state.loading = false;
       }
     );
     builder.addCase(fetchCompanyByIdThunk.pending, (state) => {
@@ -227,5 +283,7 @@ export const companySlice = createSlice({
     });
   },
 });
+
+export const { updateReceptionVisitors } = companySlice.actions;
 
 export default companySlice.reducer;
