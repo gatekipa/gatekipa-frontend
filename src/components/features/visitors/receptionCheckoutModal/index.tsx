@@ -48,7 +48,10 @@ const ReceptionVisitorCheckoutModal: React.FC<
     <AlertDialog
       open={isOpen}
       onOpenChange={(open) => {
-        if (!open) onClose();
+        if (!open) {
+          setComments("");
+          onClose();
+        }
       }}
     >
       <AlertDialogContent>
