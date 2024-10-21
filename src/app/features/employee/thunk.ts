@@ -28,6 +28,7 @@ export interface IEmployee {
   companyId: string;
   isActive: boolean;
   designation: string;
+  avatar?: string;
   shift: IShift;
   employeeNo: string;
   dateOfBirth: Date;
