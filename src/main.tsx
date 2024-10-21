@@ -13,6 +13,7 @@ if (!otp || JSON.parse(otp).isVerified !== true) {
   localStorage.setItem("otp", JSON.stringify({ isVerified: false }));
 }
 
+// test commit
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
