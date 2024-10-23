@@ -204,7 +204,7 @@ const SettingsPage: React.FC = () => {
         </p>
       </CardHeader>
       <CardDescription className="text-center">
-        Gate Kipa is a secure platform. We take security seriously. Enable two
+        Gate Kipas is a secure platform. We take security seriously. Enable two
         factor authentication to secure your account.
       </CardDescription>
       <CardContent>
